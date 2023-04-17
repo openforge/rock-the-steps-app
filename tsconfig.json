@@ -18,15 +18,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@openforge/rock-the-steps/ionic/ui-buttons": [
-        "libs/rock-the-steps/ionic/ui-buttons/src/index.ts"
-      ],
-      "@openforge/rock-the-steps/ionic/ui-headers": [
-        "libs/rock-the-steps/ionic/ui-headers/src/index.ts"
-      ],
-      "@openforge/rock-the-steps/ionic/ui-modals": [
-        "libs/rock-the-steps/ionic/ui-modals/src/index.ts"
-      ],
       "@openforge/rock-the-steps/phaser/singleton": [
         "libs/rock-the-steps/phaser/singleton/src/index.ts"
       ],
