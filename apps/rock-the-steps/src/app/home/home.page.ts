@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Component, OnInit } from '@angular/core';
-import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 
 @Component({
     selector: 'openforge-home',
@@ -19,11 +16,5 @@ export class HomePageComponent implements OnInit {
      */
     async ngOnInit(): Promise<void> {
         console.log('HomePageComponent', 'ngOnInit');
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        setTimeout(this.init, 500);
-    }
-
-    async init(): Promise<void> {
-        await PhaserSingletonService.init();
     }
 }
