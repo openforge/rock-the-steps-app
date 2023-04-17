@@ -10,11 +10,9 @@ import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomePageComponent } from './home/home.page';
-import { ReversePipe } from './pipes/reverse.pipe';
-import { ShopPageComponent } from './shop/shop.component';
 
 @NgModule({
-    declarations: [AppComponent, ShopPageComponent, HomePageComponent, ReversePipe],
+    declarations: [AppComponent, HomePageComponent],
     imports: [BrowserModule, IonicModule.forRoot(), PhaserSingletonService.forRoot(), AppRoutingModule],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
     bootstrap: [AppComponent],
