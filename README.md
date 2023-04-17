@@ -11,14 +11,14 @@ This repository will give you a great starting point!
 3. Search + Replace all instances of 'example-app-"frameworkName"-e2e' with your app name (important to do this first)
 4. Search + Replace all instances of 'example-app-"frameworkName"' with your app name
 5. Change the folder names for example-app-frameworkName and example-app-frameworkName-e2e to what you named for steps #1 and #2
-6. Search + Replace all instances of 'openforge-ionic-monorepo-example' with your project name
-7. Search + Replace 'company-name' with your company name.  This is the NX project scope that allows you to import libraries using @company-name
+6. Search + Replace all instances of 'rock-the-steps' with your project name
+7. Search + Replace 'openforge' with your company name.  This is the NX project scope that allows you to import libraries using @openforge
 
 That's it for the renaming!  Now to test...
 
 ```npm install```
 
-```npx nx run example-app-angular:serve``` (where example-app-angular is the name you replaced with above)
+```npx nx run rock-the-steps:serve``` (where rock-the-steps is the name you replaced with above)
 
 You should now load your example app!
 
@@ -93,11 +93,11 @@ Run `nx g @nrwl/react:lib my-lib` to generate a library.
 
 > You can also use any of the plugins above to generate libraries as well.
 
-Libraries are shareable across libraries and applications. They can be imported from `@openforge-ionic-monorepo-example/mylib`.
+Libraries are shareable across libraries and applications. They can be imported from `@rock-the-steps/mylib`.
 
 ## Development server
 
-Run `npx nx run example-app-angular:serve` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+Run `npx nx run rock-the-steps:serve` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 

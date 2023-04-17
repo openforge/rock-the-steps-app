@@ -1,5 +1,5 @@
 {
-    "npmScope": "company-name",
+    "npmScope": "openforge",
     "affected": {
         "defaultBase": "develop"
     },
@@ -41,7 +41,7 @@
             }
         }
     },
-    "defaultProject": "example-app-angular",
+    "defaultProject": "rock-the-steps",
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
     "targetDefaults": {
         "build": {

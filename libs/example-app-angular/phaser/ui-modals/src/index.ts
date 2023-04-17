@@ -1,1 +1,1 @@
-export * from './lib/example-app-angular-phaser-ui-modals.module';
+export * from './lib/rock-the-steps-phaser-ui-modals.module';

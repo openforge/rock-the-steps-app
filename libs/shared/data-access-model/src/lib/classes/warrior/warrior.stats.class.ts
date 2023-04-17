@@ -1,4 +1,4 @@
-import { Level, Salary, Stat } from '@company-name/shared/data-access-model';
+import { Level, Salary, Stat } from '@openforge/shared/data-access-model';
 
 /**
  * * This class is a list of typed stats that the warrior has

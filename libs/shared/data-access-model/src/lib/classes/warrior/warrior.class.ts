@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable no-magic-numbers */
-import { PhaserSingletonService } from '@company-name/shared-phaser-singleton';
+import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 
 import { Human } from '../../primordials/human/human.primordial.class';
 import { WarriorStats } from './warrior.stats.class';

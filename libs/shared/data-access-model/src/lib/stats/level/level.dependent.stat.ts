@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Level, Stat } from '@company-name/shared/data-access-model';
+import { Level, Stat } from '@openforge/shared/data-access-model';
 
 /**
  * * LevelDependentStat's are stats that depend on the level

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable no-magic-numbers */
-import { Blacksmith, CheapSword, FancySword, Sword } from '@company-name/shared/data-access-model';
+import { Blacksmith, CheapSword, FancySword, Sword } from '@openforge/shared/data-access-model';
 import * as Phaser from 'phaser';
 
 import { ScrollManager } from '../utilities/scroll-manager';

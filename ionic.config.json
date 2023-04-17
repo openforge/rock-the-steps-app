@@ -1,13 +1,13 @@
 {
-  "defaultProject": "example-app-angular",
+  "defaultProject": "rock-the-steps",
   "projects": {
-    "example-app-angular": {
-      "name": "example-app-angular",
+    "rock-the-steps": {
+      "name": "rock-the-steps",
       "integrations": {
         "capacitor": {}
       },
       "type": "angular",
-      "root": "apps/example-app-angular"
+      "root": "apps/rock-the-steps"
     }
   }
 }

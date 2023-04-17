@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
-import { SwordTypeEnum } from '@company-name/shared/data-access-model';
+import { SwordTypeEnum } from '@openforge/shared/data-access-model';
 import * as Phaser from 'phaser';
 import { Subject } from 'rxjs';
 

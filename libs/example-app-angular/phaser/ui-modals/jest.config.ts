@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-    displayName: 'example-app-angular-phaser-ui-modals',
+    displayName: 'rock-the-steps-phaser-ui-modals',
 
     setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
     globals: {
@@ -9,7 +9,7 @@ export default {
             stringifyContentPathRegex: '\\.(html|svg)$',
         },
     },
-    coverageDirectory: '../../../../coverage/libs/example-app-angular/phaser/ui-modals',
+    coverageDirectory: '../../../../coverage/libs/rock-the-steps/phaser/ui-modals',
     transform: {
         '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
     },

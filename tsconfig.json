@@ -18,22 +18,22 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@company-name/example-app-angular/ionic/ui-buttons": [
-        "libs/example-app-angular/ionic/ui-buttons/src/index.ts"
+      "@openforge/rock-the-steps/ionic/ui-buttons": [
+        "libs/rock-the-steps/ionic/ui-buttons/src/index.ts"
       ],
-      "@company-name/example-app-angular/ionic/ui-headers": [
-        "libs/example-app-angular/ionic/ui-headers/src/index.ts"
+      "@openforge/rock-the-steps/ionic/ui-headers": [
+        "libs/rock-the-steps/ionic/ui-headers/src/index.ts"
       ],
-      "@company-name/example-app-angular/ionic/ui-modals": [
-        "libs/example-app-angular/ionic/ui-modals/src/index.ts"
+      "@openforge/rock-the-steps/ionic/ui-modals": [
+        "libs/rock-the-steps/ionic/ui-modals/src/index.ts"
       ],
-      "@company-name/example-app-angular/phaser/singleton": [
-        "libs/example-app-angular/phaser/singleton/src/index.ts"
+      "@openforge/rock-the-steps/phaser/singleton": [
+        "libs/rock-the-steps/phaser/singleton/src/index.ts"
       ],
-      "@company-name/example-app-angular/phaser/ui-modals": [
-        "libs/example-app-angular/phaser/ui-modals/src/index.ts"
+      "@openforge/rock-the-steps/phaser/ui-modals": [
+        "libs/rock-the-steps/phaser/ui-modals/src/index.ts"
       ],
-      "@company-name/shared/data-access-model": [
+      "@openforge/shared/data-access-model": [
         "libs/shared/data-access-model/src/index.ts"
       ]
     }

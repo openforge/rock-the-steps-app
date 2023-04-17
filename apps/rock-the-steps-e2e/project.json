@@ -1,0 +1,29 @@
+{
+    "name": "rock-the-steps-e2e",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/rock-the-steps-e2e/src",
+    "projectType": "application",
+    "targets": {
+        "e2e": {
+            "executor": "@nrwl/cypress:cypress",
+            "options": {
+                "cypressConfig": "apps/rock-the-steps-e2e/cypress.json",
+                "devServerTarget": "rock-the-steps:serve:development"
+            },
+            "configurations": {
+                "production": {
+                    "devServerTarget": "rock-the-steps:serve:production"
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["apps/rock-the-steps-e2e/**/*.{js,ts}"]
+            }
+        }
+    },
+    "tags": [],
+    "implicitDependencies": ["rock-the-steps"]
+}

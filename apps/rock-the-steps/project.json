@@ -1,0 +1,103 @@
+{
+    "name": "rock-the-steps",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "apps/rock-the-steps/src",
+    "prefix": "openforge",
+    "targets": {
+        "build": {
+            "executor": "@angular-devkit/build-angular:browser",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/apps/rock-the-steps",
+                "index": "apps/rock-the-steps/src/index.html",
+                "main": "apps/rock-the-steps/src/main.ts",
+                "polyfills": "apps/rock-the-steps/src/polyfills.ts",
+                "tsConfig": "apps/rock-the-steps/tsconfig.app.json",
+                "inlineStyleLanguage": "scss",
+                "assets": [
+                    "apps/rock-the-steps/src/assets",
+                    {
+                        "glob": "**/*.svg",
+                        "input": "node_modules/ionicons/dist/ionicons/svg",
+                        "output": "./svg"
+                    }
+                ],
+                "styles": ["apps/rock-the-steps/src/global.scss"],
+                "scripts": []
+            },
+            "configurations": {
+                "production": {
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "2mb",
+                            "maximumError": "3mb"
+                        },
+                        {
+                            "type": "anyComponentStyle",
+                            "maximumWarning": "2kb",
+                            "maximumError": "4kb"
+                        }
+                    ],
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/rock-the-steps/src/environments/environment.ts",
+                            "with": "apps/rock-the-steps/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "outputHashing": "all"
+                },
+                "development": {
+                    "buildOptimizer": false,
+                    "optimization": false,
+                    "vendorChunk": true,
+                    "extractLicenses": false,
+                    "sourceMap": true,
+                    "namedChunks": true
+                }
+            },
+            "defaultConfiguration": "production"
+        },
+        "serve": {
+            "executor": "@angular-devkit/build-angular:dev-server",
+            "configurations": {
+                "production": {
+                    "browserTarget": "rock-the-steps:build:production"
+                },
+                "development": {
+                    "browserTarget": "rock-the-steps:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+            "executor": "@angular-devkit/build-angular:extract-i18n",
+            "options": {
+                "browserTarget": "rock-the-steps:build"
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": ["apps/rock-the-steps/src/**/*.ts", "apps/rock-the-steps/src/**/*.html"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/apps/rock-the-steps"],
+            "options": {
+                "jestConfig": "apps/rock-the-steps/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "stylelint": {
+            "executor": "nx-stylelint:lint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["apps/rock-the-steps/**/*.css", "apps/rock-the-steps/**/*.scss"]
+            }
+        }
+    },
+    "tags": []
+}

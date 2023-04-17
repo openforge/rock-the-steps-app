@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import { Sword, SwordTypeEnum } from '@company-name/shared/data-access-model';
+import { Sword, SwordTypeEnum } from '@openforge/shared/data-access-model';
 
 export class CheapSword extends Phaser.GameObjects.Image implements Sword {
     public static imageAsset = 'assets/swords/cheap_sword.png'; // * The asset for the sword, relative to URL
