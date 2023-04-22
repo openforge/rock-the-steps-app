@@ -1,24 +1,18 @@
 // * Classes
+export * from './lib/classes/characters/character.class';
 
-export * from './lib/classes/blacksmith/blacksmith.class';
-export * from './lib/classes/warrior/warrior.class';
-export * from './lib/classes/cheap_sword/cheap_sword.class';
-export * from './lib/classes/fancy_sword/fancy_sword.class';
-
-// * Primordials
-
-export * from './lib/primordials/human/human.primordial.class';
-export * from './lib/primordials/sword/sword.enum';
-export * from './lib/primordials/sword/sword.primordial.class';
-export * from './lib/primordials/event/event.class';
-export * from './lib/primordials/stat/stat.class';
-export * from './lib/primordials/stat/stat.base.class';
-export * from './lib/primordials/stat/dependent-stat/dependent.stat.class';
-export * from './lib/primordials/stat/finalbonus/final-bonus.class';
-export * from './lib/primordials/stat/rawbonus/raw-bonus.class';
-
-// * Stats
-
-export * from './lib/stats/level/level.class';
-export * from './lib/stats/level/level.dependent.stat';
-export * from './lib/stats/salary/salary.class';
+// * Obstcales
+export * from './lib/classes/obstacles/apple.class';
+export * from './lib/classes/obstacles/bottle.class';
+export * from './lib/classes/obstacles/cheese-steak.class';
+export * from './lib/classes/obstacles/chinese-food.class';
+export * from './lib/classes/obstacles/cone.class';
+export * from './lib/classes/obstacles/ghost.class';
+export * from './lib/classes/obstacles/gloves.class';
+export * from './lib/classes/obstacles/hurdle.class';
+export * from './lib/classes/obstacles/liberty-bell.class';
+export * from './lib/classes/obstacles/pigeon.class';
+export * from './lib/classes/obstacles/poop.class';
+export * from './lib/classes/obstacles/pooping-pigeon.class';
+export * from './lib/classes/obstacles/tourist.class';
+export * from './lib/classes/obstacles/trashcan.class';

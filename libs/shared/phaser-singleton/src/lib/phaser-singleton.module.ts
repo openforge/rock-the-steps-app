@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
-import { SwordTypeEnum } from '@openforge/shared/data-access-model';
 import * as Phaser from 'phaser';
-import { Subject } from 'rxjs';
 
 import { WorldScene } from './scenes/world.scene';
 
@@ -20,7 +18,6 @@ export class PhaserSingletonService {
     public static activeGame: Phaser.Game;
     private static ngZone: NgZone;
     public static actionsHistory: string[] = []; // * Since phaser is a singleton, let's store the history of actions here for all components.
-    public static shopObservable: Subject<SwordTypeEnum> = new Subject<SwordTypeEnum>();
 
     constructor(private _ngZone: NgZone, @Optional() @SkipSelf() parentModule?: PhaserSingletonService) {
         if (parentModule) {
