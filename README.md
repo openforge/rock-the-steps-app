@@ -1,20 +1,4 @@
-# Mobile Game Template - Ionic & Phaser Monorepo
-
-This is a template project for all you aspiring video game developers out there! Want to use your web application skills for creating an awesome video game?
-
-This repository will give you a great starting point!
-
-# Instructions
-
-1. Clone the repository using 'Use template' (and don't forget to give us a Star / Follow on Github, please!)
-2. Select which framework from 'apps/' folder you are going to use and remove the others if necessary.
-3. Search + Replace all instances of 'example-app-"frameworkName"-e2e' with your app name (important to do this first)
-4. Search + Replace all instances of 'example-app-"frameworkName"' with your app name
-5. Change the folder names for example-app-frameworkName and example-app-frameworkName-e2e to what you named for steps #1 and #2
-6. Search + Replace all instances of 'rock-the-steps' with your project name
-7. Search + Replace 'openforge' with your company name.  This is the NX project scope that allows you to import libraries using @openforge
-
-That's it for the renaming!  Now to test...
+# Rock The Steps!
 
 ```npm install```
 
@@ -44,21 +28,6 @@ nx g nx-stylelint:configuration --project <projectName>
 The normal NX command to generate an app is `nx g @nrwl/react:app my-app` ; however, there are some special steps to generate an Ionic App.  These are defined well in [Eric Jeker's post here](https://medium.com/@eric.jeker/how-to-integrate-ionic-in-nrwl-nx-3493fcb7e85e)
 
 When using Nx, you can create multiple applications and libraries in the same workspace.
-
-## Generate a VUE application
-
-Since Nx doesn't *officially* support Vue, we configured this project to make it work for you 😎
-
-Nx supports Vite [Visit Nx Official docs for Vite](https://nx.dev/packages/vite) to learn more, and Vite supports Vue, so we used this configs to run Vue into our monorepos!
-
-1. Run `npm create vite@latest my-vue-app -- --template vue`.
-2. Run `cd my-vue-app && npm install`.
-3. Go to `apps/my-vue-app` and create a new `project.json`.
-4. Copy the `properties` from the `project.json` file from `apps/example-vue-app` and paste it inside the new `project.json` file generated for the new Vue application in the step 3.
-5. Inside the new `project.json` file generated, replace all `example-app-vue` instances with the name of your Vue app created in step 1.
-6. Now you just need to `extends` the `tsconfig.base.json` root file in your `tsconfig.json` Vue application file by adding `"extends": "../../tsconfig.base.json"` at the top of the array.
-
-And that's it! You will be able to run and serve your Vue application by running `nx serve your-app-name` (where your-app-name is the name of the application you created).
 
 ## Adding Capacitor to your application
 
@@ -95,17 +64,9 @@ Run `nx g @nrwl/react:lib my-lib` to generate a library.
 
 Libraries are shareable across libraries and applications. They can be imported from `@rock-the-steps/mylib`.
 
-## Development server
-
-Run `npx nx run rock-the-steps:serve` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
 ## Code scaffolding
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
-
-## Build
-
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `nx g @nrwl/angular:component my-component --project=my-app` to generate a new component.
 
 ## Running unit tests
 
