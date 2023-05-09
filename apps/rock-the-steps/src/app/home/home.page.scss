@@ -1,4 +1,18 @@
 .background-room {
   width: 100%;
   height: 100%;
+  background-image: url('/assets/initial-room.png');
+  background-size: 100% 100%;
+}
+
+.background-room-buttons {
+  position: absolute;
+  top: 12em;
+  width: 50%;
+  right: 0;
+  text-align: center;
+}
+
+.stage-select {
+  margin: auto;
 }

@@ -1,0 +1,12 @@
+// * App Global Custom SCSS
+.no-scroll {
+  --overflow: hidden;
+}
+
+ion-button {
+  --background: var(--rts-red);
+  --border-width: 0.2rem;
+  --border-style: solid;
+  color: var(--rts-basic-white);
+  text-transform: uppercase;
+}
