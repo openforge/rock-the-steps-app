@@ -1,7 +1,7 @@
 // * Classes
 export * from './lib/classes/characters/character.class';
 
-// * Obstcales
+// * Obstacles
 export * from './lib/classes/obstacles/apple.class';
 export * from './lib/classes/obstacles/bottle.class';
 export * from './lib/classes/obstacles/cheese-steak.class';
@@ -16,3 +16,7 @@ export * from './lib/classes/obstacles/poop.class';
 export * from './lib/classes/obstacles/pooping-pigeon.class';
 export * from './lib/classes/obstacles/tourist.class';
 export * from './lib/classes/obstacles/trashcan.class';
+
+// Enums
+export * from './lib/enums/levels.enum';
+export * from './lib/enums/screens.enum';

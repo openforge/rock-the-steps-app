@@ -1,0 +1,8 @@
+export enum LevelsEnum {
+    DAYTIME = 'DAYTIME',
+    SUNSET = 'SUNSET',
+    NIGHT = 'NIGHT',
+    KELLY_DRIVE = 'KELLY_DRIVE',
+    RITTEN_HOUSE = 'RITTEN_HOUSE',
+    CHINA_TOWN = 'CHINA_TOWN',
+}
