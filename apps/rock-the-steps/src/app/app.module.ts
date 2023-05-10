@@ -10,9 +10,10 @@ import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomePageComponent } from './home/home.page';
+import { StageSelectComponent } from './stage-select/stage-select.component';
 
 @NgModule({
-    declarations: [AppComponent, HomePageComponent],
+    declarations: [AppComponent, HomePageComponent, StageSelectComponent],
     imports: [BrowserModule, IonicModule.forRoot(), PhaserSingletonService.forRoot(), AppRoutingModule],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
     bootstrap: [AppComponent],
