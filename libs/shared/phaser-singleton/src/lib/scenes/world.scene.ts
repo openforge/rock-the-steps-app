@@ -5,11 +5,12 @@ import * as Phaser from 'phaser';
 import { ScrollManager } from '../utilities/scroll-manager';
 
 export class WorldScene extends Phaser.Scene {
-    private cityBackgroundKey = 'background-image'; // * Store the background image name
-    private skyBackgroundKey = 'citySky'; // * Store the background image name
+    private cityBackgroundKey = 'city-background'; // * Store the background image name
+    private skyBackgroundKey = 'sky-key'; // * Store the background image name
     private cityBackgroundAsset = 'assets/city-scene/city-day.png'; // * Asset url relative to the app itself
     private skyBackgroundAsset = 'assets/city-scene/sky-day.png'; // * Asset url relative to the app itself
-    private backgroundImage: Phaser.GameObjects.Image; // * Reference for the background image
+    private flatBackgroundAsset = 'assets/city-scene/flat-level-day.png'; // * Asset url relative to the app itself
+    private flatBackgroundKey = 'flat-key'; // * Store the background image name
     // private blackSmith: Blacksmith; // * We only have a single blacksmith in this game
     private scrollManager: ScrollManager; // * Custom openforge utility for handling scroll
 
@@ -23,9 +24,10 @@ export class WorldScene extends Phaser.Scene {
 
             // * Now load the sky image
             this.load.image(this.skyBackgroundKey, this.skyBackgroundAsset);
-
             // * Now load the city image
             this.load.image(this.cityBackgroundKey, this.cityBackgroundAsset);
+            // * Now load the flat image
+            this.load.image(this.flatBackgroundKey, this.flatBackgroundAsset);
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
@@ -43,12 +45,40 @@ export class WorldScene extends Phaser.Scene {
 
         // * Setup the Sky Background Image
         const cityBackground = this.add.image(400, 110, this.cityBackgroundKey);
+        cityBackground.setScale(2.3, 1.3);
+
+        // * Setup the Sky Background Image
+        const flatBackground = this.add.image(0, 500, this.flatBackgroundKey);
+        flatBackground.setDisplaySize(2500, 150);
         // * Register our custom scroll manager
         this.scrollManager = new ScrollManager(this);
         this.scrollManager.registerScrollingBackground(cityBackground);
         // * Set cameras to the correct position
         this.cameras.main.setZoom(0.6);
         this.scale.on('resize', this.resize, this);
+
+        // * Starting the city infinite movement
+        this.startInfiniteMovement(cityBackground);
+    }
+
+    /**
+     * * Function to start the infinite movement of an object
+     *
+     * @param cityBackground as Phaser.GameObjects.Image
+     * */
+    private startInfiniteMovement(cityBackground: Phaser.GameObjects.Image) {
+        const screenWidth = this.game.config.width as number;
+
+        // * Calculate the duration based on the desired speed of movement
+        const duration = screenWidth * 10;
+
+        this.tweens.add({
+            targets: cityBackground,
+            x: -screenWidth,
+            duration,
+            repeat: -1, // Repeat indefinitely
+            onCompleteScope: this,
+        });
     }
 
     /**
