@@ -5,8 +5,10 @@ import * as Phaser from 'phaser';
 import { ScrollManager } from '../utilities/scroll-manager';
 
 export class WorldScene extends Phaser.Scene {
-    private backgroundKey = 'background-image'; // * Store the background image name
-    private backgroundImageAsset = 'assets/blacksmith/blacksmith_bg.png'; // * Asset url relative to the app itself
+    private cityBackgroundKey = 'background-image'; // * Store the background image name
+    private skyBackgroundKey = 'citySky'; // * Store the background image name
+    private cityBackgroundAsset = 'assets/city-scene/city-day.png'; // * Asset url relative to the app itself
+    private skyBackgroundAsset = 'assets/city-scene/sky-day.png'; // * Asset url relative to the app itself
     private backgroundImage: Phaser.GameObjects.Image; // * Reference for the background image
     // private blackSmith: Blacksmith; // * We only have a single blacksmith in this game
     private scrollManager: ScrollManager; // * Custom openforge utility for handling scroll
@@ -19,25 +21,14 @@ export class WorldScene extends Phaser.Scene {
         try {
             console.log('world.scene.ts', 'Preloading Assets...');
 
-            // * Now load the background image
-            this.load.image(this.backgroundKey, this.backgroundImageAsset);
-            // * Now preload the sword images, even though we don't use it initially
-            // this.load.image(FancySword.key, FancySword.imageAsset);
-            // this.load.image(CheapSword.key, CheapSword.imageAsset);
-            // * Load the blacksmith sprites
-            await this.preloadBlacksmithCharacter();
+            // * Now load the sky image
+            this.load.image(this.skyBackgroundKey, this.skyBackgroundAsset);
+
+            // * Now load the city image
+            this.load.image(this.cityBackgroundKey, this.cityBackgroundAsset);
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
-    }
-
-    /**
-     * * Load the blacksmith sprites
-     */
-    preloadBlacksmithCharacter(): void {
-        // this.load.atlas(Blacksmith.idleKey, Blacksmith.spriteSheet, Blacksmith.atlast);
-        // this.load.atlas(Blacksmith.hammeringKey, Blacksmith.spriteSheet, Blacksmith.atlast);
-        // this.load.animation(this.backgroundKey, Blacksmith.animation);
     }
 
     /**
@@ -46,24 +37,17 @@ export class WorldScene extends Phaser.Scene {
     async create(): Promise<void> {
         console.log('forge.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height);
 
-        // * Setup the Background Image
-        this.backgroundImage = this.add.image(0, 0, this.backgroundKey);
+        // * Setup the Sky Background Image
+        const skyBackground = this.add.image(0, 0, this.skyBackgroundKey);
+        skyBackground.setScale(2, 10);
 
-        // * Setup the Blacksmith Character Sprite
-        // this.blackSmith = await Blacksmith.build(this);
-        // // * Because the blacksmith is a much smaller scale image than the background image, we need to scale it up.
-        // this.blackSmith.setScale(3);
-
-        // * Now handle scrolling
-        this.cameras.main.setBackgroundColor('0xEBF0F3');
-
+        // * Setup the Sky Background Image
+        const cityBackground = this.add.image(400, 110, this.cityBackgroundKey);
         // * Register our custom scroll manager
         this.scrollManager = new ScrollManager(this);
-        this.scrollManager.registerScrollingBackground(this.backgroundImage);
+        this.scrollManager.registerScrollingBackground(cityBackground);
         // * Set cameras to the correct position
-        this.cameras.main.setZoom(0.25);
-        this.scrollManager.scrollToCenter();
-
+        this.cameras.main.setZoom(0.6);
         this.scale.on('resize', this.resize, this);
     }
 
