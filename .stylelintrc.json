@@ -26,6 +26,7 @@
         "scss/selector-no-redundant-nesting-selector": true,
         "declaration-empty-line-before": null,
         "selector-pseudo-element-no-unknown": null,
-        "unit-disallowed-list": ["px"]
+        "unit-disallowed-list": ["px"],
+        "no-empty-source": null
     }
 }

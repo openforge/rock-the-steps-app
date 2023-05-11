@@ -5,10 +5,14 @@ import * as Phaser from 'phaser';
 import { ScrollManager } from '../utilities/scroll-manager';
 
 export class WorldScene extends Phaser.Scene {
-    private backgroundKey = 'background-image'; // * Store the background image name
-    private backgroundImageAsset = 'assets/blacksmith/blacksmith_bg.png'; // * Asset url relative to the app itself
-    private backgroundImage: Phaser.GameObjects.Image; // * Reference for the background image
-    // private blackSmith: Blacksmith; // * We only have a single blacksmith in this game
+    private cityBackgroundKey = 'city-background'; // * Store the background image name
+    private skyBackgroundKey = 'sky-key'; // * Store the background image name
+    private cityBackgroundAsset = 'assets/city-scene/city-day.png'; // * Asset url relative to the app itself
+    private skyBackgroundAsset = 'assets/city-scene/sky-day.png'; // * Asset url relative to the app itself
+    private flatBackgroundAsset = 'assets/city-scene/flat-level-day.png'; // * Asset url relative to the app itself
+    private flatBackgroundKey = 'flat-key'; // * Store the background image name
+    private bushesBackgroundAsset = 'assets/city-scene/bushes-day.png'; // * Asset url relative to the app itself
+    private bushesBackgroundKey = 'bushes-key'; // * Store the background image name
     private scrollManager: ScrollManager; // * Custom openforge utility for handling scroll
 
     constructor() {
@@ -19,25 +23,17 @@ export class WorldScene extends Phaser.Scene {
         try {
             console.log('world.scene.ts', 'Preloading Assets...');
 
-            // * Now load the background image
-            this.load.image(this.backgroundKey, this.backgroundImageAsset);
-            // * Now preload the sword images, even though we don't use it initially
-            // this.load.image(FancySword.key, FancySword.imageAsset);
-            // this.load.image(CheapSword.key, CheapSword.imageAsset);
-            // * Load the blacksmith sprites
-            await this.preloadBlacksmithCharacter();
+            // * Now load the sky image
+            this.load.image(this.skyBackgroundKey, this.skyBackgroundAsset);
+            // * Now load the city image
+            this.load.image(this.cityBackgroundKey, this.cityBackgroundAsset);
+            // * Now load the flat image
+            this.load.image(this.flatBackgroundKey, this.flatBackgroundAsset);
+            // * Now load the bushes image
+            this.load.image(this.bushesBackgroundKey, this.bushesBackgroundAsset);
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
-    }
-
-    /**
-     * * Load the blacksmith sprites
-     */
-    preloadBlacksmithCharacter(): void {
-        // this.load.atlas(Blacksmith.idleKey, Blacksmith.spriteSheet, Blacksmith.atlast);
-        // this.load.atlas(Blacksmith.hammeringKey, Blacksmith.spriteSheet, Blacksmith.atlast);
-        // this.load.animation(this.backgroundKey, Blacksmith.animation);
     }
 
     /**
@@ -46,25 +42,51 @@ export class WorldScene extends Phaser.Scene {
     async create(): Promise<void> {
         console.log('forge.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height);
 
-        // * Setup the Background Image
-        this.backgroundImage = this.add.image(0, 0, this.backgroundKey);
+        // * Setup the Sky Background Image
+        const skyBackground = this.add.image(0, 0, this.skyBackgroundKey);
+        skyBackground.setScale(2, 10);
 
-        // * Setup the Blacksmith Character Sprite
-        // this.blackSmith = await Blacksmith.build(this);
-        // // * Because the blacksmith is a much smaller scale image than the background image, we need to scale it up.
-        // this.blackSmith.setScale(3);
+        // * Setup the Sky Background Image
+        const cityBackground = this.add.image(400, 110, this.cityBackgroundKey);
+        cityBackground.setScale(2.3, 1.3);
+        cityBackground.setY(350);
 
-        // * Now handle scrolling
-        this.cameras.main.setBackgroundColor('0xEBF0F3');
+        // * Setup the Sky Background Image
+        const flatBackground = this.add.image(0, 500, this.flatBackgroundKey);
+        flatBackground.setDisplaySize(2500, 150);
 
+        // * Setup the bushes background Image
+        const bushesBackground = this.add.image(0, 360, this.bushesBackgroundKey);
+        bushesBackground.setDisplaySize(2500, 400);
         // * Register our custom scroll manager
         this.scrollManager = new ScrollManager(this);
-        this.scrollManager.registerScrollingBackground(this.backgroundImage);
+        this.scrollManager.registerScrollingBackground(cityBackground);
         // * Set cameras to the correct position
-        this.cameras.main.setZoom(0.25);
-        this.scrollManager.scrollToCenter();
-
+        this.cameras.main.setZoom(0.6);
         this.scale.on('resize', this.resize, this);
+
+        // * Starting the city infinite movement
+        this.startInfiniteMovement([cityBackground, bushesBackground]);
+    }
+
+    /**
+     * * Function to start the infinite movement of an object
+     *
+     * @param cityBackground as Phaser.GameObjects.Image
+     * */
+    private startInfiniteMovement(cityBackground: Phaser.GameObjects.Image[]) {
+        const screenWidth = this.game.config.width as number;
+
+        // * Calculate the duration based on the desired speed of movement
+        const duration = screenWidth * 10;
+
+        this.tweens.add({
+            targets: cityBackground,
+            x: -screenWidth,
+            duration,
+            repeat: -1, // Repeat indefinitely
+            onCompleteScope: this,
+        });
     }
 
     /**
