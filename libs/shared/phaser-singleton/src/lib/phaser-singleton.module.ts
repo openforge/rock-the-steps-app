@@ -80,6 +80,13 @@ export class PhaserSingletonService {
                         height: window.innerHeight,
                     },
                     parent: 'forge-main',
+                    physics: {
+                        default: 'arcade',
+                        arcade: {
+                            gravity: { y: 1000 },
+                            debug: false,
+                        },
+                    },
                     scene: [WorldScene],
                     plugins: {
                         global: [],

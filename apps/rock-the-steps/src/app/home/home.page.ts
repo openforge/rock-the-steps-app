@@ -20,6 +20,7 @@ export class HomePageComponent implements OnInit {
     constructor(private router: Router) {}
 
     async ngOnInit(): Promise<void> {
+        setTimeout(this.init, 500);
         console.log('HomePageComponent', 'ngOnInit');
     }
 
@@ -30,5 +31,10 @@ export class HomePageComponent implements OnInit {
      */
     public async goTo(screen: ScreensEnum): Promise<void> {
         await this.router.navigate([screen]);
+    }
+    async init(): Promise<void> {
+        // TODO Remove after development ends
+        // GameEngineSingleton.buildWorld(LevelsEnum.DAYTIME);
+        // await PhaserSingletonService.init();
     }
 }

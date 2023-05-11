@@ -2,11 +2,11 @@
 /* eslint-disable no-magic-numbers */
 import * as Phaser from 'phaser';
 
+import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/GameEngine.singletons';
 import { ScrollManager } from '../utilities/scroll-manager';
 
 export class WorldScene extends Phaser.Scene {
     private backgroundKey = 'background-image'; // * Store the background image name
-    private backgroundImageAsset = 'assets/blacksmith/blacksmith_bg.png'; // * Asset url relative to the app itself
     private backgroundImage: Phaser.GameObjects.Image; // * Reference for the background image
     // private blackSmith: Blacksmith; // * We only have a single blacksmith in this game
     private scrollManager: ScrollManager; // * Custom openforge utility for handling scroll
@@ -20,24 +20,13 @@ export class WorldScene extends Phaser.Scene {
             console.log('world.scene.ts', 'Preloading Assets...');
 
             // * Now load the background image
-            this.load.image(this.backgroundKey, this.backgroundImageAsset);
+            this.load.image(this.backgroundKey, 'assets/background/Stage-Select-Background.png');
             // * Now preload the sword images, even though we don't use it initially
-            // this.load.image(FancySword.key, FancySword.imageAsset);
-            // this.load.image(CheapSword.key, CheapSword.imageAsset);
-            // * Load the blacksmith sprites
-            await this.preloadBlacksmithCharacter();
+            // * Load the obstacles
+            this.load.atlas('spritesheet', `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
-    }
-
-    /**
-     * * Load the blacksmith sprites
-     */
-    preloadBlacksmithCharacter(): void {
-        // this.load.atlas(Blacksmith.idleKey, Blacksmith.spriteSheet, Blacksmith.atlast);
-        // this.load.atlas(Blacksmith.hammeringKey, Blacksmith.spriteSheet, Blacksmith.atlast);
-        // this.load.animation(this.backgroundKey, Blacksmith.animation);
     }
 
     /**
@@ -48,11 +37,9 @@ export class WorldScene extends Phaser.Scene {
 
         // * Setup the Background Image
         this.backgroundImage = this.add.image(0, 0, this.backgroundKey);
-
-        // * Setup the Blacksmith Character Sprite
-        // this.blackSmith = await Blacksmith.build(this);
-        // // * Because the blacksmith is a much smaller scale image than the background image, we need to scale it up.
-        // this.blackSmith.setScale(3);
+        // for await (const obstacle of GameEngineSingleton.world.obstacles) {
+        //     this.add.image(0, 100, 'spritesheet', 'apple');
+        // }
 
         // * Now handle scrolling
         this.cameras.main.setBackgroundColor('0xEBF0F3');
@@ -61,10 +48,25 @@ export class WorldScene extends Phaser.Scene {
         this.scrollManager = new ScrollManager(this);
         this.scrollManager.registerScrollingBackground(this.backgroundImage);
         // * Set cameras to the correct position
-        this.cameras.main.setZoom(0.25);
+        this.cameras.main.setZoom(0.5);
         this.scrollManager.scrollToCenter();
 
         this.scale.on('resize', this.resize, this);
+
+        // const pipes = this.physics.add.group();
+        // const spriteTexture = this.textures.get('spritesheet').getFrameNames();
+        // console.log('Frame name', spriteTexture);
+        // this.time.addEvent({ // crea nuevos obstáculos cada 2 segundos
+        //     delay: 2000,
+        //     loop: true,
+        //     callback: function() {
+        //         var appleBotom = pipes.create(100, 0, 'spritesheet', spriteTexture[0]).setScale(2); // Crea la tubería inferior
+        //         appleBotom.setVelocityX(-200);
+        //         appleBotom.setCollideWorldBounds(true);
+        //         appleBotom.setImmovable(true);
+        //         appleBotom.body.allowGravity = false;
+        //     }
+        // });
     }
 
     /**
