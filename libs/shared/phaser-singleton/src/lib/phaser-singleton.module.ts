@@ -79,14 +79,7 @@ export class PhaserSingletonService {
                         autoCenter: Phaser.Scale.CENTER_BOTH,
                         height: window.innerHeight,
                     },
-                    parent: 'forge-main',
-                    physics: {
-                        default: 'arcade',
-                        arcade: {
-                            gravity: { y: 1000 },
-                            debug: false,
-                        },
-                    },
+                    parent: 'stage-main',
                     scene: [WorldScene],
                     plugins: {
                         global: [],
@@ -97,6 +90,13 @@ export class PhaserSingletonService {
                     },
                     render: {
                         transparent: false,
+                    },
+                    physics: {
+                        default: 'arcade',
+                        arcade: {
+                            gravity: { y: 500 },
+                            debug: false,
+                        },
                     },
                 });
             }
