@@ -20,21 +20,15 @@ export class HomePageComponent implements OnInit {
     constructor(private router: Router) {}
 
     async ngOnInit(): Promise<void> {
-        setTimeout(this.init, 500);
         console.log('HomePageComponent', 'ngOnInit');
     }
 
     /**
-     * Method used to navigate from the main screen
+     * * Method used to navigate from the main screen
      *
      * @param screen Where the player is going to be navigated
      */
     public async goTo(screen: ScreensEnum): Promise<void> {
         await this.router.navigate([screen]);
-    }
-    async init(): Promise<void> {
-        // TODO Remove after development ends
-        // GameEngineSingleton.buildWorld(LevelsEnum.DAYTIME);
-        // await PhaserSingletonService.init();
     }
 }

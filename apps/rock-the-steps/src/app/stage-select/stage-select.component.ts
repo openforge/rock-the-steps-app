@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 
+import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/GameEngine.singletons';
+
 @Component({
     selector: 'openforge-stage-select',
     templateUrl: './stage-select.component.html',
@@ -19,9 +21,11 @@ export class StageSelectComponent {
      *
      * @param level selected level
      */
-    public selectLevel(level: LevelsEnum): void {
+    public async selectLevel(level: LevelsEnum): Promise<void> {
         console.log(`Selected ${level}`);
         // * Here load the level
+        GameEngineSingleton.buildWorld(level);
+        await this.router.navigate(['play-stage']);
     }
 
     /**
