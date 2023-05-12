@@ -1,8 +1,8 @@
 import { LevelsEnum } from '../../enums/levels.enum';
-import { Obstacle } from './obstacle.class';
+import { Healer } from './healer.class';
 
-export class Tourist extends Obstacle {
-    name = 'tourist';
+export class Gloves extends Healer {
+    name = 'gloves';
     constructor(level: LevelsEnum) {
         super();
         try {

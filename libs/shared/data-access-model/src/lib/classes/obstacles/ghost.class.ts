@@ -1,13 +1,29 @@
-export class Ghost {
-    constructor() {}
+import { LevelsEnum } from '../../enums/levels.enum';
+import { Obstacle } from './obstacle.class';
 
-    private static async build(): Promise<Ghost> {
-        console.log('ghost.class.ts', 'build()');
-        const tmpObject = new Ghost();
+export class Ghost extends Obstacle {
+    name = 'ghost';
+    constructor(level: LevelsEnum) {
+        super();
         try {
-            return tmpObject;
+            this.level = level;
+            [this.spritePositionX, this.spritePositionY] = this.getSpritePositions(level);
         } catch (error) {
-            console.error('Error building Ghost obstacle', error);
+            console.error(`Error building obstacle ${this.name}`, error);
+        }
+    }
+
+    /**
+     * Method used to retrieve their coords in sprite file
+     *
+     * @param level Asset to be analyzed
+     */
+    public getSpritePositions(level: LevelsEnum): [number, number] {
+        switch (level) {
+            case LevelsEnum.DAYTIME:
+                // eslint-disable-next-line no-magic-numbers
+                return [32, 32];
+                break;
         }
     }
 }

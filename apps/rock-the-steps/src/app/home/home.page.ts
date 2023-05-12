@@ -24,7 +24,7 @@ export class HomePageComponent implements OnInit {
     }
 
     /**
-     * Method used to navigate from the main screen
+     * * Method used to navigate from the main screen
      *
      * @param screen Where the player is going to be navigated
      */

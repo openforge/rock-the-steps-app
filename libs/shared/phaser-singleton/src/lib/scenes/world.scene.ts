@@ -2,6 +2,7 @@
 /* eslint-disable no-magic-numbers */
 import * as Phaser from 'phaser';
 
+import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/GameEngine.singletons';
 import { ScrollManager } from '../utilities/scroll-manager';
 
 export class WorldScene extends Phaser.Scene {
@@ -31,6 +32,8 @@ export class WorldScene extends Phaser.Scene {
             this.load.image(this.flatBackgroundKey, this.flatBackgroundAsset);
             // * Now load the bushes image
             this.load.image(this.bushesBackgroundKey, this.bushesBackgroundAsset);
+            // * Load the obstacles
+            this.load.atlas('spritesheet', `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
