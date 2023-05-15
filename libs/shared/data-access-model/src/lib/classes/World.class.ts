@@ -1,5 +1,4 @@
-import { Apple, Bottle, ChesseSteak, ChineseFood, Cone, Gloves, LibertyBell, Pigeon, PoopingPigeon, Tourist, Trashcan } from '../..';
-import { LevelsEnum } from '../enums/levels.enum';
+import { Apple, Bottle, ChesseSteak, ChineseFood, Cone, Gloves, LevelsEnum, LibertyBell, Pigeon, PoopingPigeon, Tourist, Trashcan } from '../..';
 import { Healer } from './healers/healer.class';
 import { Obstacle } from './obstacles/obstacle.class';
 
@@ -9,7 +8,7 @@ import { Obstacle } from './obstacles/obstacle.class';
 export class World {
     public obstacles: Obstacle[] = []; // * Obtacles to be shown in the world
     public healers: Healer[] = []; // * Obtacles to be shown in the world
-    public worldType: LevelsEnum; // * Location where the world level will be located
+    public worldType: LevelsEnum = LevelsEnum.DAYTIME; // * Location where the world level will be located
     constructor() {}
 
     public static build(worldType: LevelsEnum): World {
