@@ -14,7 +14,7 @@ import { World } from '../World.class';
     imports: [CommonModule],
 })
 export class GameEngineSingleton {
-    public static world: World; //* World were all the obstacles are created
+    public static world: World = new World(); //* World were all the obstacles are created
 
     /**
      * Method used to initialize the world game and the objects

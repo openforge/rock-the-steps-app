@@ -9,7 +9,9 @@ export class World {
     public obstacles: Obstacle[] = []; // * Obtacles to be shown in the world
     public healers: Healer[] = []; // * Obtacles to be shown in the world
     public worldType: LevelsEnum = LevelsEnum.DAYTIME; // * Location where the world level will be located
-    constructor() {}
+    constructor() {
+        World.createDayLevel(this);
+    }
 
     public static build(worldType: LevelsEnum): World {
         const tmp_world = new World();
