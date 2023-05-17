@@ -28,3 +28,14 @@
 /* Custom theme */
 @import './theme/theme.scss';
 @import './theme/custom.scss';
+ion-modal {
+  --border-radius: 1rem;
+  .ion-page {
+    overflow-y: auto;
+  }
+}
+
+ion-modal.difficult-modal {
+  --height: 30vh;
+  --width: 40vw;
+}

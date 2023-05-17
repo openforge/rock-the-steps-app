@@ -6,6 +6,7 @@ import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import * as Phaser from 'phaser';
 
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/GameEngine.singletons';
+import { ScrollManager } from '../utilities/scroll-manager';
 
 export class WorldScene extends Phaser.Scene {
     private cityBackgroundKey = 'city-background'; // * Store the background image name
@@ -27,8 +28,9 @@ export class WorldScene extends Phaser.Scene {
     private isJumping: boolean = false; // * Flag to detect is character is pressing jump button
     private isOnFloor: boolean = false; // * Flag to detect is character is on floor
     private nextObstaclePixelFlag = 0; // * Pixels flag to know if newxt obstacle needs to be drawn
-    private points = 0; // * NUmber of points accomplished'
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
+    private scrollManager: ScrollManager; // * Custom openforge utility for handling scroll
+
     constructor() {
         super({ key: 'preloader' });
     }
@@ -61,8 +63,7 @@ export class WorldScene extends Phaser.Scene {
         }
     }
 
-    /**
-     * * Phaser will only call create after all assets in Preload have been loaded
+    /**     * * Phaser will only call create after all assets in Preload have been loaded
      */
     async create(): Promise<void> {
         console.log('forge.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height, PhaserSingletonService.activeGame);
@@ -82,7 +83,6 @@ export class WorldScene extends Phaser.Scene {
         this.player.anims.play('walking', true);
         // Display the points
         this.pointsText = this.add.text(100, 100, '0', { fontSize: '3rem', color: 'black' });
-
         // * Set cameras to the correct position
         this.scale.on('resize', this.resize, this);
     }
@@ -148,21 +148,27 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     update() {
-        this.points += 2;
-        this.pointsText.setText(`${this.points}`);
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+        GameEngineSingleton.points += 2;
+        this.pointsText.setText(`${GameEngineSingleton.points}`);
         this.showInfiniteBackgrounds();
         this.evaluateMovement();
         this.avoidOutOfBounds();
         this.obstacleDetection();
     }
 
+    /**
+     * Method in progress to create the obstacles and create the collisions
+     *
+     * @private
+     */
     private obstacleDetection(): void {
         // console.log(this.points , this.nextObstaclePixelFlag)
-        if (this.points > this.nextObstaclePixelFlag) {
+        if (GameEngineSingleton.points > this.nextObstaclePixelFlag) {
             const obstacleNumber = Math.floor(Math.random() * GameEngineSingleton.world.obstacles.length);
             const obstacle = GameEngineSingleton.world.obstacles[obstacleNumber];
             const obstacleObj = this.physics.add.image(window.innerWidth + 140, 620, obstacle.name);
-            obstacleObj.setVelocityX(-200);
+            obstacleObj.setVelocityX(-200 * GameEngineSingleton.difficult);
             this.obstaclesGroup.add(obstacleObj);
             this.obstaclesGroup.setVelocityX(-150);
             this.physics.add.collider(this.floorGroup, this.obstaclesGroup);
@@ -179,8 +185,8 @@ export class WorldScene extends Phaser.Scene {
     private avoidOutOfBounds(): void {
         const personajeWidth = this.player.width;
 
-        const xMin = personajeWidth / 2; // Límite izquierdo
-        const xMax = window.innerWidth - personajeWidth / 2; // Límite derecho
+        const xMin = personajeWidth / 2; // Left limit
+        const xMax = window.innerWidth - personajeWidth / 2; // right limit
 
         this.player.x = Phaser.Math.Clamp(this.player.x, xMin, xMax);
     }
@@ -212,14 +218,14 @@ export class WorldScene extends Phaser.Scene {
             citySprite.x -= 2;
             // IF an sprite go out completely from screen then add it at the end
             if (citySprite.x <= -citySprite.width) {
-                citySprite.x += citySprite.width * this.floorGroup.getLength();
+                citySprite.x += (citySprite.width / 2.5) * this.floorGroup.getLength();
             }
         });
         this.bushesGroup.children.iterate((bushesSprite: Phaser.GameObjects.Sprite) => {
             bushesSprite.x -= 2;
             // IF an sprite go out completely from screen then add it at the end
             if (bushesSprite.x <= -bushesSprite.width) {
-                bushesSprite.x += bushesSprite.width * this.floorGroup.getLength();
+                bushesSprite.x += (bushesSprite.width / 2.5) * this.floorGroup.getLength();
             }
         });
     }

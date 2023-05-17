@@ -20,3 +20,6 @@ export * from './lib/classes/obstacles/trashcan.class';
 // Enums
 export * from './lib/enums/levels.enum';
 export * from './lib/enums/screens.enum';
+
+// Constants
+export * from './lib/constants/game.constants';
