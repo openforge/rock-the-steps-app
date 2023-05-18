@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { LevelsEnum } from '@openforge/shared/data-access-model';
+import { DifficultEnum, LevelsEnum } from '@openforge/shared/data-access-model';
+import { Subject } from 'rxjs';
 
 import { World } from '../World.class';
 
@@ -14,7 +15,11 @@ import { World } from '../World.class';
     imports: [CommonModule],
 })
 export class GameEngineSingleton {
-    public static world: World; //* World were all the obstacles are created
+    public static world: World = new World(); //* World were all the obstacles are created
+    // eslint-disable-next-line no-magic-numbers
+    public static difficult = DifficultEnum.HARD; // * Difficult for the velocity of the game
+    public static points = 0; // * Number of points accomplished
+    public static gameEventBus = new Subject();
 
     /**
      * Method used to initialize the world game and the objects

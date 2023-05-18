@@ -3,6 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 import { HomePageComponent } from './home/home.page';
 import { PlayStageComponent } from './play-stage/play-stage.component';
+import { ResultScreenComponent } from './result-screen/result-screen.component';
 import { StageSelectComponent } from './stage-select/stage-select.component';
 
 const routes: Routes = [
@@ -18,6 +19,10 @@ const routes: Routes = [
     {
         path: 'play-stage',
         component: PlayStageComponent,
+    },
+    {
+        path: 'result-screen',
+        component: ResultScreenComponent,
     },
     {
         path: '',
