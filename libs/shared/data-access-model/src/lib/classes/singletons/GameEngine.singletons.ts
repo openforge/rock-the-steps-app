@@ -15,7 +15,7 @@ import { World } from '../World.class';
     imports: [CommonModule],
 })
 export class GameEngineSingleton {
-    public static world: World = new World(); //* World were all the obstacles are created
+    public static world: World = new World(); //* World were all the worldObjects are created
     // eslint-disable-next-line no-magic-numbers
     public static difficult = DifficultEnum.HARD; // * Difficult for the velocity of the game
     public static points = 0; // * Number of points accomplished
