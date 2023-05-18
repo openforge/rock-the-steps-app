@@ -17,7 +17,6 @@ export class WorldScene extends Phaser.Scene {
     private bushesBackgroundAsset = 'assets/city-scene/bushes-day.png'; // * Asset url relative to the app itself
     private bushesBackgroundKey = 'bushes-key'; // * Store the background image name
     private floorGroup: Phaser.Physics.Arcade.StaticGroup; // * Group of sprites for the floor
-    private bushesGroup: Phaser.Physics.Arcade.StaticGroup; // * Group of sprites for the bushes background
     private obstaclesGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private playerGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
@@ -160,7 +159,7 @@ export class WorldScene extends Phaser.Scene {
         this.showInfiniteBackgrounds();
         this.evaluateMovement();
         this.avoidOutOfBounds();
-        // this.obstaclesCreation();
+        this.obstaclesCreation();
         this.obstacleDetectionAndCleanUp();
     }
 
