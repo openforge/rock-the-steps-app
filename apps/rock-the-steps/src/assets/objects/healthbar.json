@@ -1,0 +1,119 @@
+{
+  "frames": [
+    {
+      "filename": "healthbar00",
+      "frame": {
+        "x": 1,
+        "y": 3,
+        "w": 238,
+        "h": 26
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 238,
+        "h": 26
+      },
+      "sourceSize": {
+        "w": 238,
+        "h": 26
+      }
+    },
+    {
+      "filename": "healthbar01",
+      "frame": {
+        "x": 1,
+        "y": 35,
+        "w": 206,
+        "h": 26
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 206,
+        "h": 26
+      },
+      "sourceSize": {
+        "w": 206,
+        "h": 26
+      }
+    },
+    {
+      "filename": "healthbar02",
+      "frame": {
+        "x": 2,
+        "y": 67,
+        "w": 159,
+        "h": 26
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 159,
+        "h": 26
+      },
+      "sourceSize": {
+        "w": 159,
+        "h": 26
+      }
+    },
+    {
+      "filename": "healthbar03",
+      "frame": {
+        "x": 2,
+        "y": 99,
+        "w": 108,
+        "h": 26
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 108,
+        "h": 26
+      },
+      "sourceSize": {
+        "w": 108,
+        "h": 26
+      }
+    },
+    {
+      "filename": "healthbar04",
+      "frame": {
+        "x": 2,
+        "y": 130,
+        "w": 60,
+        "h": 27
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 60,
+        "h": 27
+      },
+      "sourceSize": {
+        "w": 60,
+        "h": 27
+      }
+    }
+  ],
+  "meta": {
+    "app": "https://www.leshylabs.com/apps/sstool/",
+    "version": "Leshy SpriteSheet Tool v0.8.4",
+    "image": "spritesheet.png",
+    "size": {
+      "w": 240,
+      "h": 160
+    },
+    "scale": 1
+  }
+}

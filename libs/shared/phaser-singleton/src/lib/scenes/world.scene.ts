@@ -2,12 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable no-magic-numbers */
+import { GameEnum } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import * as Phaser from 'phaser';
 
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/GameEngine.singletons';
-import { ScrollManager } from '../utilities/scroll-manager';
-
 export class WorldScene extends Phaser.Scene {
     private cityBackgroundKey = 'city-background'; // * Store the background image name
     private skyBackgroundKey = 'sky-key'; // * Store the background image name
@@ -26,11 +25,12 @@ export class WorldScene extends Phaser.Scene {
     private isMovingLeft: boolean = false; // * Flag to detect if character is pressing left button
     private isMovingRight: boolean = false; // * Flag to detect is character is pressing right button
     private isJumping: boolean = false; // * Flag to detect is character is pressing jump button
-    private isOnFloor: boolean = false; // * Flag to detect is character is on floor
-    private nextObstaclePixelFlag = 0; // * Pixels flag to know if newxt obstacle needs to be drawn
+    private isDamaged: boolean = false; // * Flag to detect is character is being damaged
+    private nextObstaclePixelFlag = 300; // * Pixels flag to know if newxt obstacle needs to be drawn
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
-    private scrollManager: ScrollManager; // * Custom openforge utility for handling scroll
-
+    private damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
+    private healthbar: Phaser.GameObjects.Sprite; // * Healthbar used to show the remaining life of the player
+    private damageValue = 0; // * Amount of damaged received by obstacles
     constructor() {
         super({ key: 'preloader' });
     }
@@ -58,6 +58,7 @@ export class WorldScene extends Phaser.Scene {
             //load buttons
             this.load.image('jump', `assets/buttons/jump.png`);
             this.load.atlas('controls', `assets/buttons/controls.png`, `assets/buttons/controls.json`);
+            this.load.atlas('healthbar', `assets/objects/healthbar.png`, `assets/objects/healthbar.json`);
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
@@ -77,6 +78,7 @@ export class WorldScene extends Phaser.Scene {
         this.playerGroup = this.physics.add.group();
         // We add the sprite into the scene
         this.player = this.physics.add.sprite(50, 420, 'character-sprite');
+        this.healthbar = this.add.sprite(200, 50, 'healthbar', 'healthbar00');
         this.player.setScale(2);
         this.playerGroup.add(this.player);
         this.physics.add.collider(this.player, this.floorGroup);
@@ -119,7 +121,7 @@ export class WorldScene extends Phaser.Scene {
                 end: 3,
                 zeroPad: 3,
             }),
-            frameRate: 5,
+            frameRate: 6,
             repeat: -1,
         });
         this.anims.create({
@@ -139,7 +141,8 @@ export class WorldScene extends Phaser.Scene {
                 end: 0,
                 zeroPad: 3,
             }),
-            repeat: -1,
+            frameRate: 1,
+            repeat: 0,
         });
     }
     /**
@@ -154,7 +157,27 @@ export class WorldScene extends Phaser.Scene {
         this.showInfiniteBackgrounds();
         this.evaluateMovement();
         this.avoidOutOfBounds();
-        this.obstacleDetection();
+        this.obstaclesCreation();
+        this.obstacleDetectionAndCleanUp();
+    }
+
+    /**
+     * Method used to initialize the obstacles of the current World level
+     *
+     * @return void
+     */
+    private obstaclesCreation(): void {
+        if (GameEngineSingleton.points > this.nextObstaclePixelFlag) {
+            const obstacleNumber = Math.floor(Math.random() * GameEngineSingleton.world.obstacles.length + 1);
+            const obstacle = GameEngineSingleton.world.obstacles[obstacleNumber];
+            console.log('ADD OBSTACLE', obstacle);
+
+            const obstacleObj: Phaser.Types.Physics.Arcade.ImageWithDynamicBody = this.physics.add.sprite(window.innerWidth + 140, 620, 'objects-sprite', obstacle.name);
+            this.obstaclesGroup.add(obstacleObj);
+            this.obstaclesGroup.setVelocityX(-150 * GameEngineSingleton.difficult);
+            this.physics.add.collider(this.floorGroup, this.obstaclesGroup);
+            this.nextObstaclePixelFlag += 200;
+        }
     }
 
     /**
@@ -162,18 +185,50 @@ export class WorldScene extends Phaser.Scene {
      *
      * @private
      */
-    private obstacleDetection(): void {
-        // console.log(this.points , this.nextObstaclePixelFlag)
-        if (GameEngineSingleton.points > this.nextObstaclePixelFlag) {
-            const obstacleNumber = Math.floor(Math.random() * GameEngineSingleton.world.obstacles.length);
-            const obstacle = GameEngineSingleton.world.obstacles[obstacleNumber];
-            const obstacleObj = this.physics.add.image(window.innerWidth + 140, 620, obstacle.name);
-            obstacleObj.setVelocityX(-200 * GameEngineSingleton.difficult);
-            this.obstaclesGroup.add(obstacleObj);
-            this.obstaclesGroup.setVelocityX(-150);
-            this.physics.add.collider(this.floorGroup, this.obstaclesGroup);
-            this.physics.collide(this.playerGroup, this.obstaclesGroup, this.collisionObstacle);
-            this.nextObstaclePixelFlag += 200;
+    private obstacleDetectionAndCleanUp(): void {
+        if (this.obstaclesGroup.getChildren().length > 0) {
+            this.obstaclesGroup.children.iterate((obstacle: Phaser.GameObjects.Image) => {
+                if (obstacle) {
+                    const obstacleYAbove = obstacle.y - obstacle.height / 2;
+                    const playerYBelow = this.player.y + this.player.height / 2;
+                    const playerXStart = this.player.x - this.player.width / 2;
+                    const playerXEnd = this.player.x + this.player.width / 2;
+                    const obstacleXStart = obstacle.x - obstacle.width / 2;
+                    const obstacleXEnd = obstacle.x + obstacle.width / 2;
+                    if (playerXStart >= obstacleXStart && playerXEnd <= obstacleXEnd && playerYBelow >= obstacleYAbove) {
+                        this.damageValue++;
+                        //if no more damage is allowed send out the player!
+                        if (this.damageValue === 5) {
+                            GameEngineSingleton.gameEventBus.next(GameEnum.LOOSE);
+                        }
+                        //logic damage
+                        // console.log('DAMAGE', playerXStart >= obstacleXStart , playerXEnd <= obstacleXEnd , playerYBelow >= obstacleYAbove);
+                        console.log('DAMAGE', playerXStart, obstacleXStart, playerXEnd, obstacleXEnd, playerYBelow, obstacleYAbove);
+                        // Set damaged flag so no other animations break damaged animation
+                        this.isDamaged = true;
+                        // Play damage animation
+                        this.healthbar.setTexture('healthbar', `healthbar0${this.damageValue}`);
+                        // Stop and Delete previous same timer (IF EXISTS)
+                        if (this.damageTimer) {
+                            this.damageTimer.destroy();
+                        }
+
+                        //INITS the damage timer with a duration of 2sec (2000 ms)
+                        this.damageTimer = this.time.addEvent({
+                            delay: 400,
+                            callback: () => (this.isDamaged = false),
+                            callbackScope: this,
+                            loop: false,
+                        });
+                    }
+                }
+                //cleanup
+                if (obstacle && obstacle.x + obstacle.width < 0 - obstacle.width) {
+                    //console removing object
+                    obstacle.destroy();
+                    this.obstaclesGroup.remove(obstacle);
+                }
+            });
         }
     }
 
@@ -242,9 +297,11 @@ export class WorldScene extends Phaser.Scene {
         } else if (this.isMovingRight) {
             this.player.flipX = false;
             this.player.setVelocityX(200);
+        } else if (this.isDamaged) {
+            this.player.play('damaged');
         } else {
             if (this.player.body.touching.down) {
-                this.player.setVelocityX(0);
+                this.player.setVelocityX(-100);
                 this.player.play('walking', true);
             }
         }
