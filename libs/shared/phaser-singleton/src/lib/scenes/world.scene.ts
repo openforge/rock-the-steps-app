@@ -6,6 +6,7 @@ import { GameEnum } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import * as Phaser from 'phaser';
 
+// eslint-disable-next-line import/no-cycle
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/GameEngine.singletons';
 import { POINTS_TO_END_LEVEL } from '../../../../data-access-model/src/lib/constants/game.constants';
 export class WorldScene extends Phaser.Scene {
@@ -38,7 +39,7 @@ export class WorldScene extends Phaser.Scene {
     private invulnerableTimer: Phaser.Time.TimerEvent; // Timer for the gloves invulnerability
     private invulnerableFlag: boolean = false; // Flag to detect gloves invulnerability
     constructor() {
-        super({ key: 'preloader' });
+        super('WorldScene');
     }
 
     /**
@@ -66,6 +67,7 @@ export class WorldScene extends Phaser.Scene {
             this.load.atlas('controls', `assets/buttons/controls.png`, `assets/buttons/controls.json`);
             this.load.atlas('healthbar', `assets/objects/healthbar.png`, `assets/objects/healthbar.json`);
             this.load.image('end', 'assets/objects/end.png');
+            this.load.image('pauseButton', 'assets/buttons/pause-button.png');
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
@@ -81,6 +83,10 @@ export class WorldScene extends Phaser.Scene {
         this.createButtons();
         this.initializeBasicWorld();
         this.createAnimationsCharacter();
+        // if (localStorage.getItem('restart') === 'true') {
+        //     localStorage.removeItem('restart');
+        //     this.scene.restart();
+        // }
         // * Set cameras to the correct position
         this.scale.on('resize', this.resize, this);
     }
@@ -124,6 +130,24 @@ export class WorldScene extends Phaser.Scene {
         buttonJump.setInteractive();
         buttonJump.on('pointerdown', () => (this.isJumping = true), this);
         buttonJump.on('pointerup', () => (this.isJumping = false), this);
+        const pauseButton = this.add
+            .image(this.sys.canvas.width - 30, 30, 'pauseButton')
+            .setScale(0.1, 0.1)
+            .setOrigin(1, 0)
+            .setInteractive();
+        pauseButton.on('pointerdown', this.showPauseModal, this);
+    }
+
+    /**
+     * Method used to display pause modal
+     *
+     * @private
+     */
+    private showPauseModal(): void {
+        // Pause the game
+        GameEngineSingleton.scene = this.scene;
+        this.scene.pause();
+        this.scene.run('PauseScene');
     }
     /**
      * Method used to generate the animations of the player
@@ -274,7 +298,7 @@ export class WorldScene extends Phaser.Scene {
                             this.healUp(worldObject);
                         } else if (worldObject.name === 'end') {
                             // If the end is tuched send to winning screen
-                            GameEngineSingleton.gameEventBus.next(GameEnum.WIN);
+                            this.endGame(GameEnum.WIN);
                         } else if (worldObject.name === 'gloves') {
                             this.makeInvulnerable(worldObject);
                         } else if (!this.isDamaged && !this.invulnerableFlag) {
@@ -284,6 +308,13 @@ export class WorldScene extends Phaser.Scene {
                 }
             });
         }
+    }
+
+    private endGame(result: GameEnum): void {
+        this.scene.stop(); // Delete modal scene
+        PhaserSingletonService.activeGame.destroy(true);
+        PhaserSingletonService.activeGame = undefined;
+        GameEngineSingleton.gameEventBus.next(result);
     }
 
     /**
@@ -352,7 +383,7 @@ export class WorldScene extends Phaser.Scene {
         this.invulnerableFlag = true;
         //if no more damage is allowed send out the player!
         if (this.damageValue === 5) {
-            GameEngineSingleton.gameEventBus.next(GameEnum.LOOSE);
+            this.endGame(GameEnum.LOOSE);
         }
         this.healthbar.setTexture('healthbar', `healthbar0${this.damageValue}`);
         // Set damaged flag so no other animations break damaged animation

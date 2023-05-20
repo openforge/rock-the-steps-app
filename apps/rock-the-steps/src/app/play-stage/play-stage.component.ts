@@ -15,18 +15,23 @@ export class PlayStageComponent implements OnInit {
     constructor(private router: Router) {}
     async ngOnInit(): Promise<void> {
         //* Inits phaser scene
-        setTimeout(this.initStageScene, 500);
+        if (!PhaserSingletonService.activeGame) {
+            GameEngineSingleton.points = 0;
+            setTimeout(this.initStageScene, 500);
+        }
         // * Listen for game bus to know if the user looses or won
         GameEngineSingleton.gameEventBus.subscribe(async (value: GameEnum) => {
             if (GameEnum.WIN === value) {
-                await this.router.navigate(['/finish'], { queryParams: { r: GameEnum.WIN } });
+                await this.router.navigate(['/finish'], { queryParams: { r: GameEnum.WIN }, replaceUrl: true });
+            } else if (GameEnum.EXIT === value) {
+                await this.router.navigate(['/home'], { replaceUrl: true });
             } else {
-                await this.router.navigate(['/finish'], { queryParams: { r: GameEnum.LOOSE } });
+                await this.router.navigate(['/finish'], { queryParams: { r: GameEnum.LOOSE }, replaceUrl: true });
             }
         });
     }
 
-    async initStageScene(): Promise<void> {
+    private async initStageScene(): Promise<void> {
         await PhaserSingletonService.init();
     }
 }

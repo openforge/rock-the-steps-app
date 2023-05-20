@@ -1,4 +1,7 @@
-import { Apple, Bottle, ChesseSteak, ChineseFood, Cone, Gloves, LevelsEnum, LibertyBell, Pigeon, PoopingPigeon, Tourist, Trashcan } from '../..';
+import { Anvil, Apple, BigPoo, Bottle, ChesseSteak, ChineseFood, Cone, Flowers, Ghost, Gloves, Hurdle, LevelsEnum, LibertyBell, Tourist, Trashcan, Wind } from '../..';
+import { Crater } from './obstacles/crater.class';
+import { Stand } from './obstacles/stand.class';
+import { Tomb } from './obstacles/tomb.class';
 import { WorldObject } from './obstacles/world-object.class';
 
 /**
@@ -51,45 +54,50 @@ export class World {
         world.worldObjects.push(new Trashcan(world.worldType));
         world.worldObjects.push(new Cone(world.worldType));
         world.worldObjects.push(new Tourist(world.worldType));
-        world.worldObjects.push(new Pigeon(world.worldType));
-        world.worldObjects.push(new PoopingPigeon(world.worldType));
+        // world.worldObjects.push(new Pigeon(world.worldType));
+        // world.worldObjects.push(new PoopingPigeon(world.worldType));
     }
     public static createSunsetLevel(world: World): void {
-        // It has trashcan, hurdle, gloves, anvil, poop, cheese steak, tourist, pigeon, pigeon poop, bell
+        // It has gloves, cheese steak, trashcan, hurdle, anvil, bigpoo, tourist, bell, pigeon, pigeon poop
         world.worldObjects.push(new Gloves(world.worldType));
         world.worldObjects.push(new ChesseSteak(world.worldType));
 
-        // world.worldObjects.push(new Apple(world.worldType)); // HURDLE
-        // world.worldObjects.push(new Apple(world.worldType)); // ANVIL
-        // world.worldObjects.push(new Apple(world.worldType)); // POOP
         world.worldObjects.push(new Trashcan(world.worldType));
         world.worldObjects.push(new Tourist(world.worldType));
-        world.worldObjects.push(new Pigeon(world.worldType));
-        world.worldObjects.push(new PoopingPigeon(world.worldType));
+        world.worldObjects.push(new Hurdle(world.worldType));
+        world.worldObjects.push(new Anvil(world.worldType));
+        world.worldObjects.push(new BigPoo(world.worldType));
         world.worldObjects.push(new LibertyBell(world.worldType));
+        // world.worldObjects.push(new Pigeon(world.worldType));
+        // world.worldObjects.push(new PoopingPigeon(world.worldType));
     }
     public static createNightLevel(world: World): void {
-        // It has ghost, hurdle, gloves, anvil, tomb, cheese steak, tourist, pigeon, pigeon poop, bell
+        // It has gloves, cheese steak, ghost, hurdle,  anvil, tomb, bell, tourist, pigeon, pigeon poop
         world.worldObjects.push(new Gloves(world.worldType));
         world.worldObjects.push(new ChesseSteak(world.worldType));
 
         world.worldObjects.push(new Tourist(world.worldType));
-        world.worldObjects.push(new Pigeon(world.worldType));
-        world.worldObjects.push(new PoopingPigeon(world.worldType));
+        world.worldObjects.push(new Anvil(world.worldType));
+        world.worldObjects.push(new Hurdle(world.worldType));
+        world.worldObjects.push(new Tomb(world.worldType));
+        world.worldObjects.push(new Ghost(world.worldType));
         world.worldObjects.push(new LibertyBell(world.worldType));
+        // world.worldObjects.push(new Pigeon(world.worldType));
+        // world.worldObjects.push(new PoopingPigeon(world.worldType));
     }
     public static createChinaLevel(world: World): void {
         // It has ken, gloves, bell, crater, chinese food, cheese steak, cone, tourist, pigeon, pigeon poop
         world.worldObjects.push(new Gloves(world.worldType));
         world.worldObjects.push(new ChesseSteak(world.worldType));
-        // world.worldObjects.push(new Apple(world.worldType)); // KEN
+
+        world.worldObjects.push(new Crater(world.worldType));
         world.worldObjects.push(new Apple(world.worldType));
         world.worldObjects.push(new LibertyBell(world.worldType));
         world.worldObjects.push(new ChineseFood(world.worldType));
         world.worldObjects.push(new Cone(world.worldType));
         world.worldObjects.push(new Tourist(world.worldType));
-        world.worldObjects.push(new Pigeon(world.worldType));
-        world.worldObjects.push(new PoopingPigeon(world.worldType));
+        // world.worldObjects.push(new Pigeon(world.worldType));
+        // world.worldObjects.push(new PoopingPigeon(world.worldType));
     }
     public static createRittenLevel(world: World): void {
         // It has apple, gloves, bell, bottle, trashcan, cheese steak, stand, tourist, pigeon, pigeon poop
@@ -98,9 +106,12 @@ export class World {
 
         world.worldObjects.push(new Apple(world.worldType));
         world.worldObjects.push(new Tourist(world.worldType));
-        world.worldObjects.push(new Pigeon(world.worldType));
-        world.worldObjects.push(new PoopingPigeon(world.worldType));
+        world.worldObjects.push(new Trashcan(world.worldType));
         world.worldObjects.push(new LibertyBell(world.worldType));
+        world.worldObjects.push(new Bottle(world.worldType));
+        world.worldObjects.push(new Stand(world.worldType));
+        // world.worldObjects.push(new Pigeon(world.worldType));
+        // world.worldObjects.push(new PoopingPigeon(world.worldType));
     }
     public static createKellyLevel(world: World): void {
         // It has apple, gloves, bell, wind, flowers, cheese steak, cone, tourist, pigeon, pigeon poop
@@ -108,9 +119,12 @@ export class World {
         world.worldObjects.push(new ChesseSteak(world.worldType));
 
         world.worldObjects.push(new Apple(world.worldType));
+        world.worldObjects.push(new Wind(world.worldType));
+        world.worldObjects.push(new Flowers(world.worldType));
         world.worldObjects.push(new Tourist(world.worldType));
-        world.worldObjects.push(new Pigeon(world.worldType));
-        world.worldObjects.push(new PoopingPigeon(world.worldType));
+        world.worldObjects.push(new Cone(world.worldType));
         world.worldObjects.push(new LibertyBell(world.worldType));
+        // world.worldObjects.push(new Pigeon(world.worldType));
+        // world.worldObjects.push(new PoopingPigeon(world.worldType));
     }
 }
