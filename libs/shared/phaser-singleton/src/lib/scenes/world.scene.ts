@@ -18,10 +18,8 @@ export class WorldScene extends Phaser.Scene {
     private bushesBackgroundAsset = 'assets/city-scene/bushes-day.png'; // * Asset url relative to the app itself
     private bushesBackgroundKey = 'bushes-key'; // * Store the background image name
     private floorGroup: Phaser.Physics.Arcade.StaticGroup; // * Group of sprites for the floor
-    private cityGroup: Phaser.Physics.Arcade.StaticGroup; // * Group of sprites for the city background
-    private bushesGroup: Phaser.Physics.Arcade.StaticGroup; // * Group of sprites for the bushes background
-    private worldObjectGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the worldObjects
-    private playerGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the worldObjects
+    private worldObjectGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
+    private playerGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
     private isMovingLeft: boolean = false; // * Flag to detect if character is pressing left button
     private isMovingRight: boolean = false; // * Flag to detect is character is pressing right button
@@ -31,7 +29,9 @@ export class WorldScene extends Phaser.Scene {
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
     private damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
     private healthbar: Phaser.GameObjects.Sprite; // * Healthbar used to show the remaining life of the player
-    private damageValue = 0; // * Amount of damaged received by worldObjects
+    private damageValue = 0; // * Amount of damaged received by obstacles
+    public cityBackgroundTileSprite: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
+    public bushesTileSprite: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // Cursos keys to move the player in pc
     private endDisplayedFlag: boolean = false; // Boolean to distinguish if the end has been shown
     private endReachedFlag: boolean = false; // Boolean to distinguish if the end has been reached
@@ -183,9 +183,8 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private calculatePoints(): void {
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         if (!this.endReachedFlag) {
-            GameEngineSingleton.points += 2;
+            GameEngineSingleton.points++;
             this.pointsText.setText(`${GameEngineSingleton.points}`);
         }
     }
@@ -249,7 +248,7 @@ export class WorldScene extends Phaser.Scene {
         console.log(
             `Objects ${this.worldObjectGroup
                 .getChildren()
-                .map(value => value.name)
+                .map((value: Phaser.GameObjects.Image) => value.name)
                 .join(',')}`
         );
         if (this.worldObjectGroup.getChildren().length > 0) {
@@ -398,26 +397,14 @@ export class WorldScene extends Phaser.Scene {
     private showInfiniteBackgrounds(): void {
         // While the end has not reached do the scrolling of level
         if (!this.endDisplayedFlag) {
+            this.cityBackgroundTileSprite.tilePositionX += 1;
+            this.bushesTileSprite.tilePositionX += 1;
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
             this.floorGroup.children.iterate((floorSprite: Phaser.GameObjects.Sprite) => {
                 floorSprite.x -= 2;
                 // IF an sprite go out completely from screen then add it at the end
                 if (floorSprite.x <= -floorSprite.width) {
                     floorSprite.x += floorSprite.width * this.floorGroup.getLength();
-                }
-            });
-            this.cityGroup.children.iterate((citySprite: Phaser.GameObjects.Sprite) => {
-                citySprite.x -= 2;
-                // IF an sprite go out completely from screen then add it at the end
-                if (citySprite.x <= -citySprite.width) {
-                    citySprite.x += (citySprite.width / 2.5) * this.floorGroup.getLength();
-                }
-            });
-            this.bushesGroup.children.iterate((bushesSprite: Phaser.GameObjects.Sprite) => {
-                bushesSprite.x -= 2;
-                // IF an sprite go out completely from screen then add it at the end
-                if (bushesSprite.x <= -bushesSprite.width) {
-                    bushesSprite.x += (bushesSprite.width / 2.5) * this.floorGroup.getLength();
                 }
             });
         }
@@ -478,34 +465,27 @@ export class WorldScene extends Phaser.Scene {
     private setBackgrounds(): void {
         // * Setup the Sky Background Image
         const skyBackground = this.add.image(0, 0, this.skyBackgroundKey);
-        // const scaleX = window.innerWidth / skyBackground.width;
-        // const scaleY = window.innerHeight / skyBackground.height;
         skyBackground.setScale(2.5, 12);
-        // * Setup the City Background Image
-        const cityWidth = this.textures.get(this.cityBackgroundKey).getSourceImage().width;
-        const cityHeight = this.textures.get(this.cityBackgroundKey).getSourceImage().height;
-        this.cityGroup = this.physics.add.staticGroup();
-        const numCitySprites = Math.ceil(window.innerWidth / cityWidth);
-        for (let i = 0; i < numCitySprites; i++) {
-            const citySprite = this.cityGroup.create(i * cityWidth * 1.2, (PhaserSingletonService.activeGame.config.height as number) - cityHeight * 1.3, this.cityBackgroundKey);
-            citySprite.setScale(1.2, 3.3);
-            citySprite.setOrigin(0, 0.3);
-            citySprite.setImmovable(true);
-        }
 
-        // * Setup the bushes background Image
-        const bushesWidth = this.textures.get(this.bushesBackgroundKey).getSourceImage().width;
-        const bushesHeight = this.textures.get(this.bushesBackgroundKey).getSourceImage().height;
-        // const bushesScaleX = window.innerWidth / bushesWidth;
-        // const bushesScaleY = window.innerHeight / bushesHeight;
-        this.bushesGroup = this.physics.add.staticGroup();
-        const numBushesSprites = Math.ceil(window.innerWidth / bushesWidth);
-        for (let i = 0; i < numBushesSprites; i++) {
-            const bushesSprite = this.bushesGroup.create(i * bushesWidth, (PhaserSingletonService.activeGame.config.height as number) - bushesHeight, this.bushesBackgroundKey);
-            bushesSprite.setOrigin(0, 0.3);
-            bushesSprite.setScale(1.5);
-            bushesSprite.setImmovable(true);
-        }
+        // * Setup the City Background Image
+        const screenWidth = this.sys.canvas.width; // * To get the width of the current screen
+        const screenHeight = this.sys.canvas.height; // * To get the height of the current screen
+        const totalWidth = screenWidth * 2; // * We need to adjust this based on the desired scrolling speed
+
+        // * Creating the tileSprite of the city background
+        this.cityBackgroundTileSprite = this.add.tileSprite(0, 0, totalWidth, screenHeight, this.cityBackgroundKey);
+        this.cityBackgroundTileSprite.setOrigin(0, 0.1);
+        // * We need to set the size to avoid duplications
+        this.cityBackgroundTileSprite.setSize(screenWidth, screenHeight);
+        this.cityBackgroundTileSprite.setPosition(0, screenHeight / 2);
+
+        // * Creating the tileSprite of the bushes
+        this.bushesTileSprite = this.add.tileSprite(0, 0, totalWidth, screenHeight, this.bushesBackgroundKey);
+        this.bushesTileSprite.setOrigin(0, 0.05);
+        // * We need to set the size to avoid duplications
+        this.bushesTileSprite.setSize(screenWidth, screenHeight);
+        // * Set the position of the image to the bottom to simulate that is on the floor
+        this.bushesTileSprite.setPosition(0, screenHeight / 2);
     }
 
     /**
