@@ -16,11 +16,13 @@ export * from './lib/classes/obstacles/poop.class';
 export * from './lib/classes/obstacles/pooping-pigeon.class';
 export * from './lib/classes/obstacles/tourist.class';
 export * from './lib/classes/obstacles/trashcan.class';
+export * from './lib/classes/obstacles/wind.class';
+export * from './lib/classes/obstacles/flowers.class';
+export * from './lib/classes/obstacles/hurdle.class';
+export * from './lib/classes/obstacles/anvil.class';
+export * from './lib/classes/obstacles/bigpoo.class';
 
 // Enums
 export * from './lib/enums/levels.enum';
 export * from './lib/enums/screens.enum';
 export * from './lib/enums/game.enum';
-
-// Constants
-export * from './lib/constants/game.constants';

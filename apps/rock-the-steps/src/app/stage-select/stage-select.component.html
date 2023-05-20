@@ -11,28 +11,28 @@
                             [src]="'/assets/stages/stage1.png'" alt="image_stage_1">
                 </div>
                 <div class="stage">
-                    <img (click)="selectLevel(levelsEnum.SUNSET)" [ngClass]="{'selectable': numberPoints > 1000}"
-                         [src]="numberPoints > 1000 ? '/assets/stages/stage2.png' : '/assets/stages/stage2locked.png'" alt="image_stage_2">
+                    <img (click)="selectLevel(levelsEnum.SUNSET)" [ngClass]="{'selectable': gameEngineSingleton.points > 1000}"
+                         [src]="gameEngineSingleton.points > 1000 ? '/assets/stages/stage2.png' : '/assets/stages/stage2locked.png'" alt="image_stage_2">
 
                 </div>
                 <div class="stage">
-                    <img (click)="selectLevel(levelsEnum.NIGHT)" [ngClass]="{'selectable': numberPoints > 2000}"
-                         [src]="numberPoints > 2000 ? '/assets/stages/stage3.png' : '/assets/stages/stage3locked.png'" alt="image_stage_3">
+                    <img (click)="selectLevel(levelsEnum.NIGHT)" [ngClass]="{'selectable': gameEngineSingleton.points > 2000}"
+                         [src]="gameEngineSingleton.points > 2000 ? '/assets/stages/stage3.png' : '/assets/stages/stage3locked.png'" alt="image_stage_3">
 
                 </div>
                 <div (click)="selectLevel(levelsEnum.KELLY_DRIVE)" class="stage">
-                    <img [ngClass]="{'selectable': numberPoints > 3000}"
-                         [src]="numberPoints > 3000 ? '/assets/stages/stage4.png' : '/assets/stages/stage4locked.png'" alt="image_stage_4">
+                    <img [ngClass]="{'selectable': gameEngineSingleton.points > 3000}"
+                         [src]="gameEngineSingleton.points > 3000 ? '/assets/stages/stage4.png' : '/assets/stages/stage4locked.png'" alt="image_stage_4">
 
                 </div>
                 <div (click)="selectLevel(levelsEnum.RITTEN_HOUSE)" class="stage">
-                    <img [ngClass]="{'selectable': numberPoints > 4000}"
-                         [src]="numberPoints > 4000 ? '/assets/stages/stage5.png' : '/assets/stages/stage5locked.png'" alt="image_stage_5">
+                    <img [ngClass]="{'selectable': gameEngineSingleton.points > 4000}"
+                         [src]="gameEngineSingleton.points > 4000 ? '/assets/stages/stage5.png' : '/assets/stages/stage5locked.png'" alt="image_stage_5">
 
                 </div>
                 <div (click)="selectLevel(levelsEnum.CHINA_TOWN)" class="stage">
-                    <img [ngClass]="{'selectable': numberPoints > 5000}"
-                         [src]="numberPoints > 5000 ? '/assets/stages/stage6.png' : '/assets/stages/stage6locked.png'" alt="image_stage_6">
+                    <img [ngClass]="{'selectable': gameEngineSingleton.points > 5000}"
+                         [src]="gameEngineSingleton.points > 5000 ? '/assets/stages/stage6.png' : '/assets/stages/stage6locked.png'" alt="image_stage_6">
                 </div>
             </div>
         </div>

@@ -1,3 +1,6 @@
 export const DIFFICULT_EASY = 1;
 export const DIFFICULT_MEDIUM = 1.4;
 export const DIFFICULT_HARD = 1.6;
+export const POINTS_TO_END_LEVEL = 800;
+export const INITIAL_X_REGULAR_ASSET_START = 140;
+export const TIMEOUT_REDIRECTION_TO_HOME_SCREEN = 3000;

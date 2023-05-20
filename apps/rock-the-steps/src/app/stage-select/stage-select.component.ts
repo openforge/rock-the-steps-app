@@ -12,7 +12,7 @@ import { DifficultSelectModalComponent } from './difficult-select-modal/difficul
     styleUrls: ['./stage-select.component.scss'],
 })
 export class StageSelectComponent {
-    public numberPoints: number = 0; // * Property used to measure user points and unlock levels
+    public gameEngineSingleton = GameEngineSingleton; // * Singleton used to measure user points and unlock levels
     public levelsEnum = LevelsEnum; // * Enum used to distinguish level selection from user
     public screensEnums = ScreensEnum; // * Enum used to navigate across the screens
 

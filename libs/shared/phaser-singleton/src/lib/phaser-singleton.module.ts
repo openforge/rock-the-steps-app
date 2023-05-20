@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
 import * as Phaser from 'phaser';
 
+import { PauseScene } from './scenes/pause.scene';
 import { WorldScene } from './scenes/world.scene';
 
 /**
@@ -80,7 +81,7 @@ export class PhaserSingletonService {
                         height: window.innerHeight,
                     },
                     parent: 'stage-main',
-                    scene: [WorldScene],
+                    scene: [WorldScene, PauseScene],
                     plugins: {
                         global: [],
                         scene: [],

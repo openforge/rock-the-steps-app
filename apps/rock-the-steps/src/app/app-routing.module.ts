@@ -21,7 +21,7 @@ const routes: Routes = [
         component: PlayStageComponent,
     },
     {
-        path: 'result-screen',
+        path: 'finish',
         component: ResultScreenComponent,
     },
     {
