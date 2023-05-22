@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GameServices } from '@openforge/capacitor-game-services';
 import { ScreensEnum } from '@openforge/shared/data-access-model';
 
 @Component({
@@ -21,6 +22,7 @@ export class HomePageComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         console.log('HomePageComponent', 'ngOnInit');
+        await GameServices.signIn();
     }
 
     /**
