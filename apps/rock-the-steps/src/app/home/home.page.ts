@@ -22,7 +22,6 @@ export class HomePageComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         console.log('HomePageComponent', 'ngOnInit');
-        await GameServices.signIn();
     }
 
     /**
@@ -32,5 +31,13 @@ export class HomePageComponent implements OnInit {
      */
     public async goTo(screen: ScreensEnum): Promise<void> {
         await this.router.navigate([screen]);
+    }
+
+    public async signInGameServices(): Promise<void> {
+        await GameServices.signIn();
+    }
+
+    public async showLeaderboards(): Promise<void> {
+        await GameServices.showLeaderboard({ leaderboardId: 'openforge.rockthesteps.leaderboard.io' });
     }
 }

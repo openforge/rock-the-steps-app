@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -314,7 +316,7 @@ export class WorldScene extends Phaser.Scene {
     private async endGame(result: GameEnum): Promise<void> {
         this.scene.stop(); // Delete modal scene
         if (result === GameEnum.WIN) {
-            await GameServices.submitScore({ leaderboardId: 'leaderboardId', score: GameEngineSingleton.points });
+            await GameServices.submitScore({ leaderboardId: 'openforge.rockthesteps.leaderboard.io', score: GameEngineSingleton.points });
         }
         PhaserSingletonService.activeGame.destroy(true);
         PhaserSingletonService.activeGame = undefined;
