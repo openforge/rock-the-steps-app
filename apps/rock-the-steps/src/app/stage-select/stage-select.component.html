@@ -1,8 +1,13 @@
 <ion-content class="no-scroll">
     <div class="background">
+        <div class="stage-select-container">
+            <div class="stage-select">
+                STAGE SELECT
+            </div>
+        </div>
         <div class="container-buttons">
-            <img (click)="goTo(screensEnums.MAIN_MENU)" src="/assets/buttons/Back-Button.png" alt="navigate_to_main_menu"/>
-            <img (click)="goTo(screensEnums.LEADERBOARDS)" src="/assets/buttons/Leaderboard-Button.png" alt="navigate_to_leaderboards"/>
+            <img class="buttons-navigations" (click)="goTo(screensEnums.MAIN_MENU)" src="/assets/buttons/Back-Button.png" alt="navigate_to_main_menu"/>
+            <img class="buttons-navigations" (click)="goTo(screensEnums.LEADERBOARDS)" src="/assets/buttons/Leaderboard-Button.png" alt="navigate_to_leaderboards"/>
         </div>
         <div class="container-stages">
             <div class="row">
