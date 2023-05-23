@@ -15,13 +15,9 @@ import { POINTS_TO_END_LEVEL } from '../../../../data-access-model/src/lib/const
 export class WorldScene extends Phaser.Scene {
     private cityBackgroundKey = 'city-background'; // * Store the background image name
     private skyBackgroundKey = 'sky-key'; // * Store the background image name
-    private cityBackgroundAsset = 'assets/city-scene/city-day.png'; // * Asset url relative to the app itself
-    private skyBackgroundAsset = 'assets/city-scene/sky-day.png'; // * Asset url relative to the app itself
     private flatBackgroundAsset = 'assets/city-scene/flat-level-day.png'; // * Asset url relative to the app itself
     private flatBackgroundKey = 'flat-key'; // * Store the background image name
-    private bushesBackgroundAsset = 'assets/city-scene/bushes-day.png'; // * Asset url relative to the app itself
     private bushesBackgroundKey = 'bushes-key'; // * Store the background image name
-    private floorGroup: Phaser.Physics.Arcade.StaticGroup; // * Group of sprites for the floor
     private worldObjectGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private playerGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
@@ -36,6 +32,7 @@ export class WorldScene extends Phaser.Scene {
     private damageValue = 0; // * Amount of damaged received by obstacles
     public cityBackgroundTileSprite: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
     public bushesTileSprite: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
+    public floorTileSprite: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // Cursos keys to move the player in pc
     private endDisplayedFlag: boolean = false; // Boolean to distinguish if the end has been shown
     private endReachedFlag: boolean = false; // Boolean to distinguish if the end has been reached
@@ -55,13 +52,13 @@ export class WorldScene extends Phaser.Scene {
             console.log('world.scene.ts', 'Preloading Assets...');
 
             // * Now load the sky image
-            this.load.image(this.skyBackgroundKey, this.skyBackgroundAsset);
+            this.load.image(this.skyBackgroundKey, `assets/city-scene/bg-${GameEngineSingleton.world.worldType}.png`);
             // * Now load the city image
-            this.load.image(this.cityBackgroundKey, this.cityBackgroundAsset);
+            this.load.image(this.cityBackgroundKey, `assets/city-scene/city-${GameEngineSingleton.world.worldType}.png`);
             // * Now load the floor image
             this.load.image(this.flatBackgroundKey, this.flatBackgroundAsset);
             // * Now load the bushes image
-            this.load.image(this.bushesBackgroundKey, this.bushesBackgroundAsset);
+            this.load.image(this.bushesBackgroundKey, `assets/city-scene/bushes-${GameEngineSingleton.world.worldType}.png`);
             // * Load the worldObjects and the player
             this.load.atlas('objects-sprite', `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
             this.load.atlas('character-sprite', `assets/character/character-sprite.png`, `assets/character/character-sprite.json`);
@@ -82,14 +79,9 @@ export class WorldScene extends Phaser.Scene {
         console.log('forge.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height, PhaserSingletonService.activeGame);
 
         this.setBackgrounds();
-        this.createFloor();
         this.createButtons();
         this.initializeBasicWorld();
         this.createAnimationsCharacter();
-        // if (localStorage.getItem('restart') === 'true') {
-        //     localStorage.removeItem('restart');
-        //     this.scene.restart();
-        // }
         // * Set cameras to the correct position
         this.scale.on('resize', this.resize, this);
     }
@@ -105,11 +97,11 @@ export class WorldScene extends Phaser.Scene {
         this.playerGroup = this.physics.add.group();
         // We add the sprite into the scene
         this.damageValue = 0;
-        this.player = this.physics.add.sprite(50, 420, 'character-sprite');
+        this.player = this.physics.add.sprite(50, 220, 'character-sprite');
         this.healthbar = this.add.sprite(200, 50, 'healthbar', 'healthbar00');
-        this.player.setScale(2);
+        // this.player.setScale(2);
         this.playerGroup.add(this.player);
-        this.physics.add.collider(this.player, this.floorGroup);
+        this.physics.add.collider(this.player, this.floorTileSprite);
         this.player.anims.play('walking', true);
         // Display the points
         this.pointsText = this.add.text(100, 100, '0', { fontSize: '3rem', color: 'black' });
@@ -223,14 +215,15 @@ export class WorldScene extends Phaser.Scene {
      */
     private objectsCreation(): void {
         // Generates objects while the level does not end
+        let initialX: number = this.sys.canvas.width;
+        let initialY = 0;
         if (GameEngineSingleton.points > this.nextWorldObjectPixelFlag && GameEngineSingleton.points < POINTS_TO_END_LEVEL) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.worldObjects.length);
             const worldObject = GameEngineSingleton.world.worldObjects[worldObjectNumber];
-            let initialX = window.innerWidth + worldObject.spritePositionX;
-            let initialY = 620;
+            initialX = this.sys.canvas.width + worldObject.spritePositionX;
             if (worldObject.name === 'bell') {
                 // Some random X of the width screen + 400 by the decreasing velocity
-                initialX = Math.floor(Math.random() * window.innerWidth) + 400;
+                initialX = this.sys.canvas.width + this.sys.canvas.width / 2;
                 initialY = -this.textures.get('bell').getSourceImage().height;
             }
             const worldObjectSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody = this.physics.add.sprite(initialX, initialY, 'objects-sprite', worldObject.name);
@@ -249,21 +242,20 @@ export class WorldScene extends Phaser.Scene {
                 worldObjectSprite.anims.play('standing', true);
             }
             worldObjectSprite.setName(worldObject.name);
-            worldObjectSprite.setScale(2);
             this.worldObjectGroup.add(worldObjectSprite);
 
             this.nextWorldObjectPixelFlag += 200;
         }
         // Draw the museum if the goal points has been reached
         if (GameEngineSingleton.points > POINTS_TO_END_LEVEL && !this.endReachedFlag) {
-            const worldObjectObj: Phaser.Types.Physics.Arcade.ImageWithDynamicBody = this.physics.add.image(window.innerWidth + 200, 320, 'end');
+            const worldObjectObj: Phaser.Types.Physics.Arcade.ImageWithDynamicBody = this.physics.add.image(initialX, initialY, 'end');
             worldObjectObj.setName('end');
             worldObjectObj.setScale(2);
             this.worldObjectGroup.add(worldObjectObj);
             this.endReachedFlag = true;
         }
         this.worldObjectGroup.setVelocityX(-150 * GameEngineSingleton.difficult);
-        this.physics.add.collider(this.floorGroup, this.worldObjectGroup);
+        this.physics.add.collider(this.floorTileSprite, this.worldObjectGroup);
     }
 
     /**
@@ -434,16 +426,10 @@ export class WorldScene extends Phaser.Scene {
     private showInfiniteBackgrounds(): void {
         // While the end has not reached do the scrolling of level
         if (!this.endDisplayedFlag) {
+            // Move the ground to the left of the screen and once it is off of screen adds it next the current one
             this.cityBackgroundTileSprite.tilePositionX += 1;
             this.bushesTileSprite.tilePositionX += 1;
-            // Move the ground to the left of the screen and once it is off of screen adds it next the current one
-            this.floorGroup.children.iterate((floorSprite: Phaser.GameObjects.Sprite) => {
-                floorSprite.x -= 2;
-                // IF an sprite go out completely from screen then add it at the end
-                if (floorSprite.x <= -floorSprite.width) {
-                    floorSprite.x += floorSprite.width * this.floorGroup.getLength();
-                }
-            });
+            this.floorTileSprite.tilePositionX += 1;
         }
     }
 
@@ -474,27 +460,6 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to create the infinite ground
-     *
-     * @return void
-     */
-    private createFloor(): void {
-        // Create a group of sprites to represent the infinite ground
-        this.floorGroup = this.physics.add.staticGroup();
-        const textureWidth = this.textures.get(this.flatBackgroundKey).getSourceImage().width;
-        const textureHeight = this.textures.get(this.flatBackgroundKey).getSourceImage().height;
-        // Calculates the amount of sprites needed to cover the screen
-        const numSprites = Math.ceil(window.innerWidth / textureWidth);
-        // Adds the sprites individually to the group and configs them as immutables
-        for (let i = 0; i < numSprites; i++) {
-            const floorSprite = this.floorGroup.create(i * textureWidth, (PhaserSingletonService.activeGame.config.height as number) - textureHeight * 4, this.flatBackgroundKey);
-            floorSprite.setScale(4.6);
-            floorSprite.setOrigin(0, 0.13);
-            floorSprite.setImmovable(true);
-        }
-    }
-
-    /**
      * Method used to setup the backgrounds to be displayed in each level
      *
      * @returns Phaser.GameObjects.Image[] returns the city and the bushes
@@ -508,7 +473,8 @@ export class WorldScene extends Phaser.Scene {
         const screenWidth = this.sys.canvas.width; // * To get the width of the current screen
         const screenHeight = this.sys.canvas.height; // * To get the height of the current screen
         const totalWidth = screenWidth * 2; // * We need to adjust this based on the desired scrolling speed
-
+        // const bushesWidth = this.textures.get(this.flatBackgroundKey).getSourceImage().width;
+        const bushesHeight = this.textures.get(this.flatBackgroundKey).getSourceImage().height;
         // * Creating the tileSprite of the city background
         this.cityBackgroundTileSprite = this.add.tileSprite(0, 0, totalWidth, screenHeight, this.cityBackgroundKey);
         this.cityBackgroundTileSprite.setOrigin(0, 0.1);
@@ -523,6 +489,15 @@ export class WorldScene extends Phaser.Scene {
         this.bushesTileSprite.setSize(screenWidth, screenHeight);
         // * Set the position of the image to the bottom to simulate that is on the floor
         this.bushesTileSprite.setPosition(0, screenHeight / 2);
+
+        // * Creating the tileSprite of the floor
+        this.floorTileSprite = this.add.tileSprite(0, 0, totalWidth, bushesHeight, this.flatBackgroundKey);
+        this.floorTileSprite.setOrigin(0, 0);
+        // * We need to set the size to avoid duplications
+        this.floorTileSprite.setSize(screenWidth, screenHeight);
+        // * Set the position of the image to the bottom to simulate that is on the floor
+        this.floorTileSprite.setPosition(0, screenHeight - bushesHeight);
+        this.physics.add.existing(this.floorTileSprite, true);
     }
 
     /**

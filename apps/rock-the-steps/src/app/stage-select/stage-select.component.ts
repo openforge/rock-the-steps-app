@@ -33,12 +33,14 @@ export class StageSelectComponent {
         await modal.present();
 
         await modal.onWillDismiss().then(async (action: { role: string; data: number }) => {
-            console.log('Modal response', action);
-            GameEngineSingleton.difficult = action.data;
+            if (action.role !== 'backdrop') {
+                console.log('Modal response', action);
+                GameEngineSingleton.difficult = action.data;
 
-            // * Here load the level
-            GameEngineSingleton.buildWorld(level);
-            await this.router.navigate(['play-stage']);
+                // * Here load the level
+                GameEngineSingleton.buildWorld(level);
+                await this.router.navigate(['play-stage']);
+            }
         });
     }
 
