@@ -1,7 +1,7 @@
 .buttons-container {
   display: flex;
   align-items: center;
-  margin: 3rem 0 0 0;
+  margin: 1rem 0 0 0;
   width: 100%;
   justify-content: space-between;
   padding: 0 2rem;
@@ -18,4 +18,8 @@
   height: 100%;
   border: 0.5rem solid var(--gray-base);
   border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }

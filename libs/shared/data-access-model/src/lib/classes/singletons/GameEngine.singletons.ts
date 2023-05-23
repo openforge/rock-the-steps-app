@@ -18,7 +18,7 @@ export class GameEngineSingleton {
     public static world: World = new World(); //* World were all the worldObjects are created
     // eslint-disable-next-line no-magic-numbers
     public static difficult = DifficultEnum.HARD; // * Difficult for the velocity of the game
-    public static points = 0; // * Number of points accomplished
+    public static points = 10000; // * Number of points accomplished
     public static gameEventBus = new Subject<GameEnum>();
     public static scene: Phaser.Scenes.ScenePlugin; // * MainScene used to restart the games
     /**
