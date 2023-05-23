@@ -307,12 +307,12 @@ export class WorldScene extends Phaser.Scene {
 
     private async endGame(result: GameEnum): Promise<void> {
         this.scene.stop(); // Delete modal scene
-        if (result === GameEnum.WIN) {
-            await GameServices.submitScore({ leaderboardId: 'openforge.rockthesteps.leaderboard.io', score: GameEngineSingleton.points });
-        }
         PhaserSingletonService.activeGame.destroy(true);
         PhaserSingletonService.activeGame = undefined;
         GameEngineSingleton.gameEventBus.next(result);
+        if (result === GameEnum.WIN) {
+            await GameServices.submitScore({ leaderboardId: 'openforge.rockthesteps.leaderboard.io', score: GameEngineSingleton.points });
+        }
     }
 
     /**
