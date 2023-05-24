@@ -26,3 +26,6 @@ export * from './lib/classes/obstacles/bigpoo.class';
 export * from './lib/enums/levels.enum';
 export * from './lib/enums/screens.enum';
 export * from './lib/enums/game.enum';
+
+// * Models
+export * from './lib/models/leaderboards.model';

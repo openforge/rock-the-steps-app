@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable no-magic-numbers */
+import { GameServices } from '@openforge/capacitor-game-services';
 import { GameEnum } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import * as Phaser from 'phaser';
@@ -290,7 +293,7 @@ export class WorldScene extends Phaser.Scene {
                             this.healUp(worldObject);
                         } else if (worldObject.name === 'end') {
                             // If the end is tuched send to winning screen
-                            this.endGame(GameEnum.WIN);
+                            void this.endGame(GameEnum.WIN);
                         } else if (worldObject.name === 'gloves') {
                             this.makeInvulnerable(worldObject);
                         } else if (!this.isDamaged && !this.invulnerableFlag) {
@@ -302,11 +305,14 @@ export class WorldScene extends Phaser.Scene {
         }
     }
 
-    private endGame(result: GameEnum): void {
+    private async endGame(result: GameEnum): Promise<void> {
         this.scene.stop(); // Delete modal scene
         PhaserSingletonService.activeGame.destroy(true);
         PhaserSingletonService.activeGame = undefined;
         GameEngineSingleton.gameEventBus.next(result);
+        if (result === GameEnum.WIN) {
+            await GameServices.submitScore({ leaderboardId: 'openforge.rockthesteps.leaderboard.io', score: GameEngineSingleton.points });
+        }
     }
 
     /**
@@ -375,7 +381,7 @@ export class WorldScene extends Phaser.Scene {
         this.invulnerableFlag = true;
         //if no more damage is allowed send out the player!
         if (this.damageValue === 5) {
-            this.endGame(GameEnum.LOOSE);
+            void this.endGame(GameEnum.LOOSE);
         }
         this.healthbar.setTexture('healthbar', `healthbar0${this.damageValue}`);
         // Set damaged flag so no other animations break damaged animation
