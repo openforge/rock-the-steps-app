@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { GameServices } from '@openforge/capacitor-game-services';
 import { LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/GameEngine.singletons';
@@ -48,6 +49,10 @@ export class StageSelectComponent {
      * Method used to navigate to other screens
      */
     public async goTo(screen: ScreensEnum): Promise<void> {
-        await this.router.navigate([screen]);
+        if (screen === this.screensEnums.LEADERBOARDS) {
+            await GameServices.showLeaderboard({ leaderboardId: 'openforge.rockthesteps.leaderboard.io' });
+        } else {
+            await this.router.navigate([screen]);
+        }
     }
 }
