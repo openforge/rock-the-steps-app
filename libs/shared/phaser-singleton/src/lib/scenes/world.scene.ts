@@ -121,7 +121,7 @@ export class WorldScene extends Phaser.Scene {
         buttonRight.setInteractive();
         buttonRight.on('pointerdown', () => (this.isMovingRight = true), this);
         buttonRight.on('pointerup', () => (this.isMovingRight = false), this);
-        const buttonJump = this.add.sprite(window.innerWidth - 200, window.innerHeight - 100, 'jump');
+        const buttonJump = this.add.sprite(window.innerWidth - window.innerWidth * 0.2, window.innerHeight - 100, 'jump');
         buttonJump.setInteractive();
         buttonJump.on('pointerdown', () => (this.isJumping = true), this);
         buttonJump.on('pointerup', () => (this.isJumping = false), this);
@@ -474,29 +474,31 @@ export class WorldScene extends Phaser.Scene {
         const screenHeight = this.sys.canvas.height; // * To get the height of the current screen
         const totalWidth = screenWidth * 2; // * We need to adjust this based on the desired scrolling speed
         // const bushesWidth = this.textures.get(this.flatBackgroundKey).getSourceImage().width;
-        const bushesHeight = this.textures.get(this.flatBackgroundKey).getSourceImage().height;
+        const floorHeight = this.textures.get(this.flatBackgroundKey).getSourceImage().height;
+        const bushesHeight = this.textures.get(this.bushesBackgroundKey).getSourceImage().height;
         // * Creating the tileSprite of the city background
         this.cityBackgroundTileSprite = this.add.tileSprite(0, 0, totalWidth, screenHeight, this.cityBackgroundKey);
-        this.cityBackgroundTileSprite.setOrigin(0, 0.1);
+        this.cityBackgroundTileSprite.setOrigin(0, 0);
         // * We need to set the size to avoid duplications
         this.cityBackgroundTileSprite.setSize(screenWidth, screenHeight);
-        this.cityBackgroundTileSprite.setPosition(0, screenHeight / 2);
+        this.cityBackgroundTileSprite.setPosition(0, screenHeight - bushesHeight + floorHeight);
 
         // * Creating the tileSprite of the bushes
         this.bushesTileSprite = this.add.tileSprite(0, 0, totalWidth, screenHeight, this.bushesBackgroundKey);
-        this.bushesTileSprite.setOrigin(0, 0.05);
+        this.bushesTileSprite.setOrigin(0, 0);
         // * We need to set the size to avoid duplications
         this.bushesTileSprite.setSize(screenWidth, screenHeight);
         // * Set the position of the image to the bottom to simulate that is on the floor
-        this.bushesTileSprite.setPosition(0, screenHeight / 2);
+        console.log('bushes heiht', screenHeight, floorHeight, bushesHeight);
+        this.bushesTileSprite.setPosition(0, screenHeight - floorHeight - bushesHeight * 0.6);
 
         // * Creating the tileSprite of the floor
-        this.floorTileSprite = this.add.tileSprite(0, 0, totalWidth, bushesHeight, this.flatBackgroundKey);
+        this.floorTileSprite = this.add.tileSprite(0, 0, totalWidth, floorHeight, this.flatBackgroundKey);
         this.floorTileSprite.setOrigin(0, 0);
         // * We need to set the size to avoid duplications
         this.floorTileSprite.setSize(screenWidth, screenHeight);
         // * Set the position of the image to the bottom to simulate that is on the floor
-        this.floorTileSprite.setPosition(0, screenHeight - bushesHeight);
+        this.floorTileSprite.setPosition(0, screenHeight - floorHeight);
         this.physics.add.existing(this.floorTileSprite, true);
     }
 
