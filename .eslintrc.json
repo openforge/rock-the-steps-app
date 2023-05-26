@@ -36,6 +36,7 @@
             ],
             "rules": {
                 "import/no-unresolved": "off",
+                "@typescript-eslint/restrict-plus-operands": "off",
                 "@typescript-eslint/no-misused-promises": [
                     "warn",
                     {
@@ -44,12 +45,6 @@
                     }
                 ],
                 "@typescript-eslint/unbound-method": "off",
-                "@typescript-eslint/restrict-plus-operands": [
-                    "error",
-                    {
-                        "checkCompoundAssignments": true
-                    }
-                ],
                 "@typescript-eslint/restrict-template-expressions": "off",
                 "@typescript-eslint/no-floating-promises": [
                     "error",

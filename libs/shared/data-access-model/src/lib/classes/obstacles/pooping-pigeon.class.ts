@@ -1,8 +1,9 @@
 import { LevelsEnum } from '../../enums/levels.enum';
+import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
 
 export class PoopingPigeon extends WorldObject {
-    name = 'pooping-pigeon';
+    name = Objects.POOPINGPIGEON;
     constructor(level: LevelsEnum) {
         super();
         try {
