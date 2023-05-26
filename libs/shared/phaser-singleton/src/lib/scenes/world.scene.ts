@@ -45,7 +45,7 @@ import {
     PAUSE_BUTTON_X,
     PAUSE_BUTTON_Y,
     PAUSE_SCENE,
-    PIXEL_FLAG_LONGITUDE,
+    PIXEL_X_OBSTACLE_FREQUENCY,
     PLAYER_POS_X,
     PLAYER_POS_Y,
     POINTER_DOWN_EVENT,
@@ -73,7 +73,6 @@ import {
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import * as Phaser from 'phaser';
 
-// eslint-disable-next-line import/no-cycle
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/GameEngine.singletons';
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 
@@ -303,7 +302,7 @@ export class WorldScene extends Phaser.Scene {
             worldObjectSprite.setName(worldObject.name);
             this.worldObjectGroup.add(worldObjectSprite);
 
-            this.nextWorldObjectPixelFlag += PIXEL_FLAG_LONGITUDE;
+            this.nextWorldObjectPixelFlag += PIXEL_X_OBSTACLE_FREQUENCY;
         }
         // Draw the museum if the goal points has been reached
         if (GameEngineSingleton.points > POINTS_TO_END_LEVEL && !this.endReachedFlag) {

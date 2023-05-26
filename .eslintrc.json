@@ -136,13 +136,7 @@
                     }
                 ],
                 "no-underscore-dangle": "off",
-                "import/no-cycle": [
-                    "error",
-                    {
-                        "maxDepth": 10,
-                        "ignoreExternal": true
-                    }
-                ],
+                "import/no-cycle": "off",
                 "import/no-self-import": "error",
                 "import/named": 2,
                 "import/namespace": 2,
