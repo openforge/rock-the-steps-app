@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { GameServices } from '@openforge/capacitor-game-services';
-import { LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
+import { GameServicesActions, LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/GameEngine.singletons';
 import { DifficultSelectModalComponent } from './difficult-select-modal/difficult-select-modal.component';
@@ -16,6 +15,7 @@ export class StageSelectComponent {
     public gameEngineSingleton = GameEngineSingleton; // * Singleton used to measure user points and unlock levels
     public levelsEnum = LevelsEnum; // * Enum used to distinguish level selection from user
     public screensEnums = ScreensEnum; // * Enum used to navigate across the screens
+    private gameServicesActions: GameServicesActions = new GameServicesActions();
 
     constructor(private router: Router, private modalCtrl: ModalController) {}
 
@@ -50,7 +50,7 @@ export class StageSelectComponent {
      */
     public async goTo(screen: ScreensEnum): Promise<void> {
         if (screen === this.screensEnums.LEADERBOARDS) {
-            await GameServices.showLeaderboard({ leaderboardId: 'openforge.rockthesteps.leaderboard.io' });
+            await this.gameServicesActions.openLeaderboards();
         } else {
             await this.router.navigate([screen]);
         }

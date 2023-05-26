@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable no-magic-numbers */
 import { GameServices } from '@openforge/capacitor-game-services';
-import { GameEnum } from '@openforge/shared/data-access-model';
+import { GameEnum, GameServicesEnum } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import * as Phaser from 'phaser';
 
@@ -311,7 +311,7 @@ export class WorldScene extends Phaser.Scene {
         PhaserSingletonService.activeGame = undefined;
         GameEngineSingleton.gameEventBus.next(result);
         if (result === GameEnum.WIN) {
-            await GameServices.submitScore({ leaderboardId: 'openforge.rockthesteps.leaderboard.io', score: GameEngineSingleton.points });
+            await GameServices.submitScore({ leaderboardId: GameServicesEnum.LEADERBOARDS_ID, score: GameEngineSingleton.points });
         }
     }
 

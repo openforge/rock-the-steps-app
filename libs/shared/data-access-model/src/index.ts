@@ -1,6 +1,8 @@
 // * Classes
 export * from './lib/classes/characters/character.class';
-//Healers
+export * from './lib/classes/GameServicesActions.class';
+
+// * Healers
 export * from './lib/classes/healers/cheese-steak.class';
 export * from './lib/classes/healers/gloves.class';
 
@@ -22,10 +24,8 @@ export * from './lib/classes/obstacles/hurdle.class';
 export * from './lib/classes/obstacles/anvil.class';
 export * from './lib/classes/obstacles/bigpoo.class';
 
-// Enums
+// * Enums
 export * from './lib/enums/levels.enum';
 export * from './lib/enums/screens.enum';
 export * from './lib/enums/game.enum';
-
-// * Models
-export * from './lib/models/leaderboards.model';
+export * from './lib/enums/game-services.enum';
