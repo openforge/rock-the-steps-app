@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GameEnum } from '@openforge/shared/data-access-model';
 
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/GameEngine.singletons';
-import { TIMEOUT_REDIRECTION_TO_HOME_SCREEN } from '../../../../../libs/shared/data-access-model/src/lib/constants/game.constants';
+import { TIMEOUT_REDIRECTION_TO_HOME_SCREEN } from '../../../../../libs/shared/data-access-model/src/lib/constants/game-units.constants';
 
 @Component({
     selector: 'openforge-result-screen',
