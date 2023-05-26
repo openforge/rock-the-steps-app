@@ -29,3 +29,6 @@ export * from './lib/enums/game.enum';
 
 // * Models
 export * from './lib/models/leaderboards.model';
+//constants
+export * from './lib/constants/game-keys.constants';
+export * from './lib/constants/game-units.constants';
