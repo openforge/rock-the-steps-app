@@ -1,6 +1,6 @@
 import { LevelsEnum } from '../../enums/levels.enum';
+import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
-import {Objects} from "../../enums/objects.enum";
 
 export class BigPoo extends WorldObject {
     name = Objects.BIGPOO;

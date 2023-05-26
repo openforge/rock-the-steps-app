@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ScreensEnum } from '@openforge/shared/data-access-model';
+import { GameServicesActions, GameServicesEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 
 @Component({
     selector: 'openforge-home',
@@ -9,6 +9,7 @@ import { ScreensEnum } from '@openforge/shared/data-access-model';
 })
 export class HomePageComponent implements OnInit {
     public screensEnum = ScreensEnum; // * Enum used for the navigation screen type safe
+    private gameServicesActions: GameServicesActions = new GameServicesActions();
     /**
      * * On Init, initilize the Phaser Singleton instance
      * The initialisation is delayed by 500ms to give the HomePage the chance to render
@@ -30,5 +31,13 @@ export class HomePageComponent implements OnInit {
      */
     public async goTo(screen: ScreensEnum): Promise<void> {
         await this.router.navigate([screen]);
+    }
+
+    public async openAchievements(): Promise<void> {
+        await this.gameServicesActions.showAchievements();
+    }
+
+    public async completeAchievement(): Promise<void> {
+        await this.gameServicesActions.unlockAchievement(GameServicesEnum.FIRST_ACHIEVEMENT_ID);
     }
 }

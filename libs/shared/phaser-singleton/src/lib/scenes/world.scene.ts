@@ -25,6 +25,7 @@ import {
     FRAME_RATE_JUMP,
     FRAME_RATE_WALK,
     GameEnum,
+    GameServicesEnum,
     HALF_DIVIDER,
     HEALTHBAR_KEY,
     HEALTHBAR_TEXTURE_PREFIX,
@@ -37,7 +38,6 @@ import {
     JUMP_KEY,
     JUMP_PREFIX,
     JUMPING_ANIMATION,
-    LEADERBOARD_ID,
     LEFT_KEY,
     MOVING_X_BACKGROUNDS,
     OBJECTS_SPRITE_KEY,
@@ -376,7 +376,7 @@ export class WorldScene extends Phaser.Scene {
         PhaserSingletonService.activeGame = undefined;
         GameEngineSingleton.gameEventBus.next(result);
         if (result === GameEnum.WIN) {
-            await GameServices.submitScore({ leaderboardId: LEADERBOARD_ID, score: GameEngineSingleton.points });
+            await GameServices.submitScore({ leaderboardId: GameServicesEnum.LEADERBOARDS_ID, score: GameEngineSingleton.points });
         }
     }
 

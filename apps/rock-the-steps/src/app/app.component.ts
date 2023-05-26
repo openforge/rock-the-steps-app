@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { GameServices } from '@openforge/capacitor-game-services';
+import { GameServicesActions } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 
 @Component({
@@ -8,10 +8,11 @@ import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
     styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnDestroy, OnInit {
+    private gameServicesActions: GameServicesActions = new GameServicesActions();
     constructor(public phaserInstance: PhaserSingletonService) {}
 
     async ngOnInit(): Promise<void> {
-        await GameServices.signIn();
+        await this.signInGameServices();
     }
 
     /**
@@ -20,7 +21,7 @@ export class AppComponent implements OnDestroy, OnInit {
      *
      */
     public async signInGameServices(): Promise<void> {
-        await GameServices.signIn();
+        await this.gameServicesActions.signIn();
     }
 
     /**
