@@ -1,6 +1,6 @@
 import { LevelsEnum } from '@openforge/shared/data-access-model';
 
-import { INITIAL_X_REGULAR_ASSET_START } from '../../constants/game.constants';
+import { INITIAL_X_REGULAR_ASSET_START } from '../../constants/game-units.constants';
 import { PrimordialObject } from '../PrimordialObject.class';
 
 /**
