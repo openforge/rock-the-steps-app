@@ -16,3 +16,43 @@
 .stage-select {
   margin: auto;
 }
+
+.menu-button {
+  margin: auto;
+  right: 2rem;
+  top: 1rem;
+  position: fixed;
+}
+
+.menu-button-icon {
+  font-size: 2rem;
+}
+
+.rts-menu {
+  --width: 100%;
+}
+
+.rts-menu-content {
+  --background: var(--rts-red);
+}
+
+.menu-items {
+  --background: transparent;
+  --color: var(--rts-basic-white);
+  margin: 3rem auto;
+  width: 70%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+}
+
+.menu-items-legal {
+  display: flex;
+  justify-content: space-around;
+}
+
+.menu-items-legal > a {
+  color: var(--rts-basic-white);
+  text-decoration: underline;
+}

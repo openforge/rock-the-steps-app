@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GameServicesActions, GameServicesEnum, ScreensEnum } from '@openforge/shared/data-access-model';
+import { GameServicesActions, ScreensEnum } from '@openforge/shared/data-access-model';
 
 @Component({
     selector: 'openforge-home',
@@ -33,11 +36,26 @@ export class HomePageComponent implements OnInit {
         await this.router.navigate([screen]);
     }
 
+    /**
+     * * Function to open the achievements interface from game services
+     *
+     */
     public async openAchievements(): Promise<void> {
         await this.gameServicesActions.showAchievements();
     }
 
-    public async completeAchievement(): Promise<void> {
-        await this.gameServicesActions.unlockAchievement(GameServicesEnum.FIRST_ACHIEVEMENT_ID);
+    /**
+     * * Function to open the leaderboard interface from game services
+     */
+    public async openLeaderboard(): Promise<void> {
+        await this.gameServicesActions.openLeaderboards();
+    }
+
+    /**
+     * * Function to login a user to game center
+     *
+     */
+    public async gameCenterLogin(): Promise<void> {
+        await this.gameServicesActions.signIn();
     }
 }
