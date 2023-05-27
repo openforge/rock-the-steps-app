@@ -1,43 +1,54 @@
 <ion-content class="no-scroll">
     <div class="background">
-        <div class="stage-select-container">
-            <div class="stage-select">
-                STAGE SELECT
+        <div class="stage-header">
+            <div class="stage-header-back" (click)="goTo(screensEnums.MAIN_MENU)">
+                <ion-icon name="arrow-back-outline"></ion-icon>
+                <a class="stage-header-actions">Back</a>
             </div>
-        </div>
-        <div class="container-buttons">
-            <img class="buttons-navigations" (click)="goTo(screensEnums.MAIN_MENU)" src="/assets/buttons/Back-Button.png" alt="navigate_to_main_menu"/>
-            <img class="buttons-navigations" (click)="goTo(screensEnums.LEADERBOARDS)" src="/assets/buttons/Leaderboard-Button.png" alt="navigate_to_leaderboards"/>
+            <a class="stage-header-title">Stage Select</a>
+            <a class="stage-header-actions" (click)="goTo(screensEnums.LEADERBOARDS)">Leaderboard</a>
         </div>
         <div class="container-stages">
             <div class="row">
                 <div class="stage">
-                    <img (click)="selectLevel(levelsEnum.DAYTIME)"
-                            [src]="'/assets/stages/stage1.png'" alt="image_stage_1">
+                    <img (click)="selectLevel(levelsEnum.DAYTIME)" [src]="'/assets/stages/stage1.png'" alt="image_stage_1" />
                 </div>
                 <div class="stage">
-                    <img (click)="selectLevel(levelsEnum.SUNSET)" [ngClass]="{'selectable': gameEngineSingleton.points > 1000}"
-                         [src]="gameEngineSingleton.points > 1000 ? '/assets/stages/stage2.png' : '/assets/stages/stage2locked.png'" alt="image_stage_2">
-
+                    <img
+                        (click)="selectLevel(levelsEnum.SUNSET)"
+                        [ngClass]="{ selectable: gameEngineSingleton.points > 1000 }"
+                        [src]="gameEngineSingleton.points > 1000 ? '/assets/stages/stage2.png' : '/assets/stages/stage2locked.png'"
+                        alt="image_stage_2"
+                    />
                 </div>
                 <div class="stage">
-                    <img (click)="selectLevel(levelsEnum.NIGHT)" [ngClass]="{'selectable': gameEngineSingleton.points > 2000}"
-                         [src]="gameEngineSingleton.points > 2000 ? '/assets/stages/stage3.png' : '/assets/stages/stage3locked.png'" alt="image_stage_3">
-
+                    <img
+                        (click)="selectLevel(levelsEnum.NIGHT)"
+                        [ngClass]="{ selectable: gameEngineSingleton.points > 2000 }"
+                        [src]="gameEngineSingleton.points > 2000 ? '/assets/stages/stage3.png' : '/assets/stages/stage3locked.png'"
+                        alt="image_stage_3"
+                    />
                 </div>
                 <div (click)="selectLevel(levelsEnum.KELLY_DRIVE)" class="stage">
-                    <img [ngClass]="{'selectable': gameEngineSingleton.points > 3000}"
-                         [src]="gameEngineSingleton.points > 3000 ? '/assets/stages/stage4.png' : '/assets/stages/stage4locked.png'" alt="image_stage_4">
-
+                    <img
+                        [ngClass]="{ selectable: gameEngineSingleton.points > 3000 }"
+                        [src]="gameEngineSingleton.points > 3000 ? '/assets/stages/stage4.png' : '/assets/stages/stage4locked.png'"
+                        alt="image_stage_4"
+                    />
                 </div>
                 <div (click)="selectLevel(levelsEnum.RITTEN_HOUSE)" class="stage">
-                    <img [ngClass]="{'selectable': gameEngineSingleton.points > 4000}"
-                         [src]="gameEngineSingleton.points > 4000 ? '/assets/stages/stage5.png' : '/assets/stages/stage5locked.png'" alt="image_stage_5">
-
+                    <img
+                        [ngClass]="{ selectable: gameEngineSingleton.points > 4000 }"
+                        [src]="gameEngineSingleton.points > 4000 ? '/assets/stages/stage5.png' : '/assets/stages/stage5locked.png'"
+                        alt="image_stage_5"
+                    />
                 </div>
                 <div (click)="selectLevel(levelsEnum.CHINA_TOWN)" class="stage">
-                    <img [ngClass]="{'selectable': gameEngineSingleton.points > 5000}"
-                         [src]="gameEngineSingleton.points > 5000 ? '/assets/stages/stage6.png' : '/assets/stages/stage6locked.png'" alt="image_stage_6">
+                    <img
+                        [ngClass]="{ selectable: gameEngineSingleton.points > 5000 }"
+                        [src]="gameEngineSingleton.points > 5000 ? '/assets/stages/stage6.png' : '/assets/stages/stage6locked.png'"
+                        alt="image_stage_6"
+                    />
                 </div>
             </div>
         </div>
