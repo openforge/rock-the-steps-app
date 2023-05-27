@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { GameServices } from '@openforge/capacitor-game-services';
 import {
     BG_SCALE_X,
@@ -497,7 +499,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method to that performs behaviors of player depending on flags
+     * * Method that performs behaviors of player depending on flags
      *
      * @return void
      */
