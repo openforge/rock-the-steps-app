@@ -10,6 +10,7 @@ import { WorldObject } from './obstacles/world-object.class';
 export class World {
     public worldObjects: WorldObject[] = []; // * WorldObjects to be shown in the world
     public worldType: LevelsEnum = LevelsEnum.DAYTIME; // * Location where the world level will be located
+    public pointsToEndLevel = 0; // * Points to end level
     constructor() {
         World.createDayLevel(this);
     }
@@ -54,8 +55,7 @@ export class World {
         world.worldObjects.push(new Trashcan(world.worldType));
         world.worldObjects.push(new Cone(world.worldType));
         world.worldObjects.push(new Tourist(world.worldType));
-        // world.worldObjects.push(new Pigeon(world.worldType));
-        // world.worldObjects.push(new PoopingPigeon(world.worldType));
+        world.pointsToEndLevel = 999;
     }
     public static createSunsetLevel(world: World): void {
         // It has gloves, cheese steak, trashcan, hurdle, anvil, bigpoo, tourist, bell, pigeon, pigeon poop
@@ -68,8 +68,7 @@ export class World {
         world.worldObjects.push(new Anvil(world.worldType));
         world.worldObjects.push(new BigPoo(world.worldType));
         world.worldObjects.push(new LibertyBell(world.worldType));
-        // world.worldObjects.push(new Pigeon(world.worldType));
-        // world.worldObjects.push(new PoopingPigeon(world.worldType));
+        world.pointsToEndLevel = 1999;
     }
     public static createNightLevel(world: World): void {
         // It has gloves, cheese steak, ghost, hurdle,  anvil, tomb, bell, tourist, pigeon, pigeon poop
@@ -82,8 +81,7 @@ export class World {
         world.worldObjects.push(new Tomb(world.worldType));
         world.worldObjects.push(new Ghost(world.worldType));
         world.worldObjects.push(new LibertyBell(world.worldType));
-        // world.worldObjects.push(new Pigeon(world.worldType));
-        // world.worldObjects.push(new PoopingPigeon(world.worldType));
+        world.pointsToEndLevel = 2999;
     }
     public static createChinaLevel(world: World): void {
         // It has ken, gloves, bell, crater, chinese food, cheese steak, cone, tourist, pigeon, pigeon poop
@@ -96,8 +94,7 @@ export class World {
         world.worldObjects.push(new ChineseFood(world.worldType));
         world.worldObjects.push(new Cone(world.worldType));
         world.worldObjects.push(new Tourist(world.worldType));
-        // world.worldObjects.push(new Pigeon(world.worldType));
-        // world.worldObjects.push(new PoopingPigeon(world.worldType));
+        world.pointsToEndLevel = 3499;
     }
     public static createRittenLevel(world: World): void {
         // It has apple, gloves, bell, bottle, trashcan, cheese steak, stand, tourist, pigeon, pigeon poop
@@ -110,8 +107,7 @@ export class World {
         world.worldObjects.push(new LibertyBell(world.worldType));
         world.worldObjects.push(new Bottle(world.worldType));
         world.worldObjects.push(new Stand(world.worldType));
-        // world.worldObjects.push(new Pigeon(world.worldType));
-        // world.worldObjects.push(new PoopingPigeon(world.worldType));
+        world.pointsToEndLevel = 3899;
     }
     public static createKellyLevel(world: World): void {
         // It has apple, gloves, bell, wind, flowers, cheese steak, cone, tourist, pigeon, pigeon poop
@@ -124,7 +120,6 @@ export class World {
         world.worldObjects.push(new Tourist(world.worldType));
         world.worldObjects.push(new Cone(world.worldType));
         world.worldObjects.push(new LibertyBell(world.worldType));
-        // world.worldObjects.push(new Pigeon(world.worldType));
-        // world.worldObjects.push(new PoopingPigeon(world.worldType));
+        world.pointsToEndLevel = 4499;
     }
 }
