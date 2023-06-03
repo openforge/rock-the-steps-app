@@ -9,8 +9,10 @@ import { DifficultEnum } from '@openforge/shared/data-access-model';
 })
 export class DifficultSelectModalComponent {
     public difficultEnum = DifficultEnum; // * Difficult enum used to select the difficulty from template
+
     constructor(private modalController: ModalController) {}
-    dismissModal(difficult: DifficultEnum) {
-        void this.modalController.dismiss(difficult, 'confirm');
+
+    public async dismissModal(difficult: DifficultEnum): Promise<void> {
+        await this.modalController.dismiss(difficult, 'confirm');
     }
 }

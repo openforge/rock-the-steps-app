@@ -47,7 +47,6 @@ import {
     PAUSE_BUTTON_X,
     PAUSE_BUTTON_Y,
     PAUSE_SCENE,
-    PIXEL_X_OBSTACLE_FREQUENCY,
     PLAYER_POS_X,
     PLAYER_POS_Y,
     POINTER_DOWN_EVENT,
@@ -303,7 +302,7 @@ export class WorldScene extends Phaser.Scene {
             worldObjectSprite.setName(worldObject.name);
             this.worldObjectGroup.add(worldObjectSprite);
 
-            this.nextWorldObjectPixelFlag += PIXEL_X_OBSTACLE_FREQUENCY;
+            this.nextWorldObjectPixelFlag += GameEngineSingleton.world.pixelForNextObstacle;
         }
         // Draw the museum if the goal points has been reached
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.endReachedFlag) {

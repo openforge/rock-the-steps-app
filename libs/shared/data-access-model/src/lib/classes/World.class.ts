@@ -1,4 +1,4 @@
-import { Anvil, Apple, BigPoo, Bottle, ChesseSteak, ChineseFood, Cone, Flowers, Ghost, Gloves, Hurdle, LevelsEnum, LibertyBell, Tourist, Trashcan, Wind } from '../..';
+import { Anvil, Apple, BigPoo, Bottle, ChesseSteak, ChineseFood, Cone, DifficultEnum, Flowers, Ghost, Gloves, Hurdle, LevelsEnum, LibertyBell, Tourist, Trashcan, Wind } from '../..';
 import { Crater } from './obstacles/crater.class';
 import { Stand } from './obstacles/stand.class';
 import { Tomb } from './obstacles/tomb.class';
@@ -11,13 +11,16 @@ export class World {
     public worldObjects: WorldObject[] = []; // * WorldObjects to be shown in the world
     public worldType: LevelsEnum = LevelsEnum.DAYTIME; // * Location where the world level will be located
     public pointsToEndLevel = 0; // * Points to end level
+    public pixelForNextObstacle = 0; // * Pixel to create next obstacle;
+    public difficultyLevel: DifficultEnum;
     constructor() {
         World.createDayLevel(this);
     }
 
-    public static build(worldType: LevelsEnum): World {
+    public static build(worldType: LevelsEnum, difficulty: DifficultEnum): World {
         const tmp_world = new World();
         tmp_world.worldType = worldType;
+        tmp_world.difficultyLevel = difficulty;
         try {
             switch (worldType) {
                 case LevelsEnum.DAYTIME:
@@ -39,6 +42,7 @@ export class World {
                     this.createKellyLevel(tmp_world);
                     break;
             }
+            this.setWorldDifficultObjects(tmp_world, difficulty);
             return tmp_world;
         } catch (e) {
             console.error(e);
@@ -121,5 +125,32 @@ export class World {
         world.worldObjects.push(new Cone(world.worldType));
         world.worldObjects.push(new LibertyBell(world.worldType));
         world.pointsToEndLevel = 4499;
+    }
+
+    /**
+     * * Function to set the obstacles difficulty for the world
+     *
+     * @param world as World
+     * @param difficult as DifficultEnum
+     */
+    private static setWorldDifficultObjects(world: World, difficult: DifficultEnum): void {
+        switch (difficult) {
+            case DifficultEnum.EASY: {
+                world.pixelForNextObstacle = 130;
+                break;
+            }
+            case DifficultEnum.MEDIUM: {
+                world.pixelForNextObstacle = 100;
+                break;
+            }
+            case DifficultEnum.HARD: {
+                world.pixelForNextObstacle = 80;
+                break;
+            }
+            default: {
+                world.pixelForNextObstacle = 130;
+                break;
+            }
+        }
     }
 }
