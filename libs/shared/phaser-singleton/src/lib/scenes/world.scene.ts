@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { GameServices } from '@openforge/capacitor-game-services';
 import {
     BG_SCALE_X,
@@ -45,12 +47,10 @@ import {
     PAUSE_BUTTON_X,
     PAUSE_BUTTON_Y,
     PAUSE_SCENE,
-    PIXEL_X_OBSTACLE_FREQUENCY,
     PLAYER_POS_X,
     PLAYER_POS_Y,
     POINTER_DOWN_EVENT,
     POINTER_UP_EVENT,
-    POINTS_TO_END_LEVEL,
     REPEAT_FRAME,
     RESIZE_EVENT,
     RIGHT_KEY,
@@ -275,7 +275,7 @@ export class WorldScene extends Phaser.Scene {
         // Generates objects while the level does not end
         let initialX: number = this.sys.canvas.width;
         let initialY = 0;
-        if (GameEngineSingleton.points > this.nextWorldObjectPixelFlag && GameEngineSingleton.points < POINTS_TO_END_LEVEL) {
+        if (GameEngineSingleton.points > this.nextWorldObjectPixelFlag && GameEngineSingleton.points < GameEngineSingleton.world.pointsToEndLevel) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.worldObjects.length);
             const worldObject = GameEngineSingleton.world.worldObjects[worldObjectNumber];
             initialX = this.sys.canvas.width + worldObject.spritePositionX;
@@ -302,10 +302,10 @@ export class WorldScene extends Phaser.Scene {
             worldObjectSprite.setName(worldObject.name);
             this.worldObjectGroup.add(worldObjectSprite);
 
-            this.nextWorldObjectPixelFlag += PIXEL_X_OBSTACLE_FREQUENCY;
+            this.nextWorldObjectPixelFlag += GameEngineSingleton.world.pixelForNextObstacle;
         }
         // Draw the museum if the goal points has been reached
-        if (GameEngineSingleton.points > POINTS_TO_END_LEVEL && !this.endReachedFlag) {
+        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.endReachedFlag) {
             const worldObjectObj: Phaser.Types.Physics.Arcade.ImageWithDynamicBody = this.physics.add.image(initialX, initialY, END_KEY);
             worldObjectObj.setName(END_KEY);
             worldObjectObj.setScale(END_OBJECT_SCALE);
@@ -497,7 +497,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method to that performs behaviors of player depending on flags
+     * * Method that performs behaviors of player depending on flags
      *
      * @return void
      */

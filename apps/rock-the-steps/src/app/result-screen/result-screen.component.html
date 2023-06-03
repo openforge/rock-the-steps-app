@@ -1,13 +1,13 @@
 <div class="result-screen" [ngClass]="displayWinBackground ? 'win-background all-center' : 'loose-background'">
-    <p *ngIf="displayWinBackground" class="win-points">{{gameSingleton.points}}</p>
+    <p *ngIf="displayWinBackground" class="win-points">{{ gameSingleton.points }}</p>
     <div *ngIf="!displayWinBackground" class="container-buttons">
-        <div (click)="replayLevel()" class="div-button">
-            <ion-icon color="white" name="refresh-outline"></ion-icon>
-            <p>REPLAY</p>
-        </div>
-        <div (click)="gotoMainMenu()" class="div-button">
-            <ion-icon color="white" name="menu-outline"></ion-icon>
-            <p>MAIN MENU</p>
-        </div>
+        <ion-button (click)="replayLevel()">
+            <ion-icon name="refresh-outline"></ion-icon>
+            Replay</ion-button
+        >
+        <ion-button (click)="gotoMainMenu()">
+            <ion-icon name="arrow-back-outline"></ion-icon>
+            Main Menu</ion-button
+        >
     </div>
 </div>
