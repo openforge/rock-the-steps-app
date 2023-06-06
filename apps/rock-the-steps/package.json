@@ -10,6 +10,6 @@
         "@openforge/capacitor-game-services": "file:../../../capacitor-game-services"
     },
     "devDependencies": {
-        "@capacitor/cli": "^4.7.0"
+        "@capacitor/cli": "^4.8.0"
     }
 }
