@@ -1,6 +1,5 @@
 export const HEALTHBAR_TEXTURE_PREFIX = 'healthbar0';
 export const HEALTHBAR_KEY = 'healthbar';
-export const LEADERBOARD_ID = 'openforge.rockthesteps.leaderboard.io';
 export const OBJECTS_SPRITE_KEY = 'objects-sprite';
 export const CHARACTER_SPRITE_KEY = 'character-sprite';
 export const DAMAGED_ANIMATION = 'damaged';
