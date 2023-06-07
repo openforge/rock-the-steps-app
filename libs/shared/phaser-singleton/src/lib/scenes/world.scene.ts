@@ -18,6 +18,7 @@ import {
     DAMAGE_PREFIX,
     DAMAGE_TIMER,
     DAMAGED_ANIMATION,
+    DOWN_EVENT,
     DURATION_INVULNERABLE_REP,
     END_FRAME_WALK,
     END_KEY,
@@ -63,6 +64,7 @@ import {
     TORUIST_FRAME_KEY,
     TORUIST_FRAME_RATE,
     TOURIST_STANDING_FRAME,
+    UP_EVENT,
     VELOCITY_PLAYER,
     VELOCITY_PLAYER_WHEN_MOVING,
     WALK_PREFIX,
@@ -99,6 +101,8 @@ export class WorldScene extends Phaser.Scene {
     private endDisplayedFlag: boolean = false; // Boolean to distinguish if the end has been shown
     private endReachedFlag: boolean = false; // Boolean to distinguish if the end has been reached
     private invulnerableFlag: boolean = false; // Flag to detect gloves invulnerability
+    private spaceBarKey: Phaser.Input.Keyboard.Key; // Spacebar key to move the player in pc
+
     constructor() {
         super(WORLD_SCENE);
     }
@@ -140,8 +144,8 @@ export class WorldScene extends Phaser.Scene {
         console.log('forge.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height, PhaserSingletonService.activeGame);
 
         this.setBackgrounds();
-        this.createButtons();
         this.initializeBasicWorld();
+        this.createButtons();
         this.createAnimationsCharacter();
         // * Set cameras to the correct position
         this.scale.on(RESIZE_EVENT, this.resize, this);
@@ -157,6 +161,7 @@ export class WorldScene extends Phaser.Scene {
         this.worldObjectGroup = this.physics.add.group();
         this.playerGroup = this.physics.add.group();
         // We add the sprite into the scene
+        this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.damageValue = 0;
         this.player = this.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
         this.healthbar = this.add.sprite(INITIAL_HEALTHBAR_X, INITIAL_HEALTHBAR_Y, HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}0`);
@@ -185,6 +190,8 @@ export class WorldScene extends Phaser.Scene {
         buttonJump.setInteractive();
         buttonJump.on(POINTER_DOWN_EVENT, () => (this.isJumping = true), this);
         buttonJump.on(POINTER_UP_EVENT, () => (this.isJumping = false), this);
+        this.spaceBarKey.on(DOWN_EVENT, () => (this.isJumping = true), this);
+        this.spaceBarKey.on(UP_EVENT, () => (this.isJumping = false), this);
         const pauseButton = this.add
             .image(this.sys.canvas.width - PAUSE_BUTTON_X, PAUSE_BUTTON_Y, PAUSE_BUTTON)
             .setScale(SCALE_PAUSE_BUTTON, SCALE_PAUSE_BUTTON)
@@ -324,12 +331,6 @@ export class WorldScene extends Phaser.Scene {
      * @private
      */
     private objectsDetection(): void {
-        console.log(
-            `Objects ${this.worldObjectGroup
-                .getChildren()
-                .map((value: Phaser.GameObjects.Image) => value.name)
-                .join(',')}`
-        );
         if (this.worldObjectGroup.getChildren().length > 0) {
             this.worldObjectGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
                 if (worldObject) {
@@ -393,7 +394,6 @@ export class WorldScene extends Phaser.Scene {
         this.worldObjectGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
             //cleanup
             if (worldObject && worldObject.x + worldObject.width < 0 - worldObject.width) {
-                //console removing object
                 worldObject.destroy();
                 this.worldObjectGroup.remove(worldObject);
             }
@@ -523,6 +523,7 @@ export class WorldScene extends Phaser.Scene {
         }
         if (this.isJumping && this.player.body.touching.down) {
             this.player.setVelocityY(-HEIGHT_OF_JUMP);
+            this.player.setVelocityX(0);
             this.player.play(JUMPING_ANIMATION);
         }
     }
