@@ -6,6 +6,11 @@
 
 You should now load your example app!
 
+# LICENSE
+
+For more detailed information on licensing, see the LICENSE.md file included in the repository
+
+https://wiki.wesnoth.org/Wesnoth:Copyrights
 # Checking Licenses
 
 To run the license checker, use

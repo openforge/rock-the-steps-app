@@ -20,7 +20,7 @@ export class PlayStageComponent implements OnInit {
             GameEngineSingleton.points = 0;
             await this.initStageScene();
         }
-        // * Listen for game bus to know if the user looses or won
+        // * Listen for gameEventBus to know if the user looses or won
         GameEngineSingleton.gameEventBus.subscribe(async (value: GameEnum) => {
             if (GameEnum.WIN === value) {
                 await this.router.navigate(['/finish'], { queryParams: { r: GameEnum.WIN }, replaceUrl: true });

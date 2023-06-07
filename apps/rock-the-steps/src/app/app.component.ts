@@ -13,7 +13,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
     async ngOnInit(): Promise<void> {
         this.setScreenOrientation();
-        await this.signInGameServices();
+        await this.signInGameServices(); // here is where the plugin is called
     }
 
     /**

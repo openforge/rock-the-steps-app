@@ -17,6 +17,14 @@ export class World {
         World.createDayLevel(this);
     }
 
+    /**
+     * * Depending on user selection, we are either going to construct different levels dynamically
+     * * in the phaser scene
+     *
+     * @param worldType LevelsEnum
+     * @param difficulty DifficultEnum
+     * @returns World
+     */
     public static build(worldType: LevelsEnum, difficulty: DifficultEnum): World {
         const tmp_world = new World();
         tmp_world.worldType = worldType;

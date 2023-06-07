@@ -46,6 +46,10 @@ export class PauseScene extends Phaser.Scene {
         this.scene.resume('WorldScene');
     }
 
+    /**
+     * * Here is where we switch between scenes based on User Selection.
+     * * If User opens Pause Menu, it will switch.
+     */
     private goToMainMenu(): void {
         this.scene.stop(); // Delete modal scene
         PhaserSingletonService.activeGame.destroy(true);

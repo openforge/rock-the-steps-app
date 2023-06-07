@@ -108,7 +108,8 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method to preload images for phaser
+     * * Method to preload images for phaser
+     * * this is a Phaser required function
      *
      * @return void
      */
@@ -138,10 +139,11 @@ export class WorldScene extends Phaser.Scene {
         }
     }
 
-    /**     * * Phaser will only call create after all assets in Preload have been loaded
+    /**
+     * * Phaser will only call create after all assets in Preload have been loaded
      */
     async create(): Promise<void> {
-        console.log('forge.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height, PhaserSingletonService.activeGame);
+        console.log('world.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height, PhaserSingletonService.activeGame);
 
         this.setBackgrounds();
         this.initializeBasicWorld();
@@ -152,7 +154,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to initialize the groups, player, animations,texts.
+     * * Method used to initialize the groups, player, animations,texts.
      *
      * @return void
      */
@@ -249,7 +251,7 @@ export class WorldScene extends Phaser.Scene {
         });
     }
     /**
-     * Method to used by PHASER to execute every frame refresh
+     * * Method to used by PHASER to execute every frame refresh
      *
      * @return void
      */
@@ -295,6 +297,7 @@ export class WorldScene extends Phaser.Scene {
             }
             const worldObjectSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody = this.physics.add.sprite(initialX, initialY, OBJECTS_SPRITE_KEY, worldObject.name);
 
+            // * This is an obstacle!  Don't hit the tourists :)
             if (worldObject.name === Objects.TOURIST) {
                 worldObjectSprite.anims.create({
                     key: TOURIST_STANDING_FRAME,
@@ -345,8 +348,8 @@ export class WorldScene extends Phaser.Scene {
                         this.worldObjectGroup.setVelocityX(0);
                         this.endDisplayedFlag = true;
                     }
-                    // console.log(`COLLISION ${worldObject.name}`, playerXEnd >= worldObjectXStart, playerXStart <= worldObjectXEnd, playerYBelow >= worldObjectYAbove);
-                    // console.log('DAMAGE BOUNDS', playerXEnd, worldObjectXStart, playerXStart, worldObjectXEnd, playerYBelow, worldObjectYAbove);
+                    console.log(`COLLISION ${worldObject.name}`, playerXEnd >= worldObjectXStart, playerXStart <= worldObjectXEnd, playerYBelow >= worldObjectYAbove);
+                    console.log('DAMAGE BOUNDS', playerXEnd, worldObjectXStart, playerXStart, worldObjectXEnd, playerYBelow, worldObjectYAbove);
                     if (playerXEnd >= worldObjectXStart && playerXStart <= worldObjectXEnd && playerYBelow >= worldObjectYAbove) {
                         //logic damage
 
