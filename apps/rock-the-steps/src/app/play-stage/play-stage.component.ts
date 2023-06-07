@@ -13,11 +13,12 @@ import { GameEngineSingleton } from '../../../../../libs/shared/data-access-mode
 })
 export class PlayStageComponent implements OnInit {
     constructor(private router: Router) {}
+
     async ngOnInit(): Promise<void> {
         //* Inits phaser scene
         if (!PhaserSingletonService.activeGame) {
             GameEngineSingleton.points = 0;
-            setTimeout(this.initStageScene, 500);
+            await this.initStageScene();
         }
         // * Listen for game bus to know if the user looses or won
         GameEngineSingleton.gameEventBus.subscribe(async (value: GameEnum) => {
@@ -31,6 +32,10 @@ export class PlayStageComponent implements OnInit {
         });
     }
 
+    /**
+     * * Function to init Phaser Singleton
+     *
+     */
     private async initStageScene(): Promise<void> {
         await PhaserSingletonService.init();
     }
