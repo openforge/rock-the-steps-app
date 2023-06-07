@@ -12,6 +12,7 @@ export class AppComponent implements OnDestroy, OnInit {
     constructor(public phaserInstance: PhaserSingletonService) {}
 
     async ngOnInit(): Promise<void> {
+        this.setScreenOrientation();
         await this.signInGameServices();
     }
 
@@ -22,6 +23,14 @@ export class AppComponent implements OnDestroy, OnInit {
      */
     public async signInGameServices(): Promise<void> {
         await this.gameServicesActions.signIn();
+    }
+
+    /**
+     * * Function to set screen orientation to only use landscape
+     *
+     */
+    private setScreenOrientation(): void {
+        void window.screen.orientation.lock('landscape');
     }
 
     /**
