@@ -1,3 +1,5 @@
+/* eslint-disable no-magic-numbers */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -42,7 +44,7 @@ export class StageSelectComponent {
 
                 // * Here load the level
                 GameEngineSingleton.buildWorld(level, action.data);
-                await this.router.navigate(['play-stage']);
+                await this.goTo(ScreensEnum.PLAY_STAGE);
             }
         });
     }

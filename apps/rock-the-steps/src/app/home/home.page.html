@@ -6,9 +6,6 @@
             </ion-button>
         </ion-menu-toggle>
 
-        <ion-item class="menu-items" (click)="goTo(screensEnum.STAGE_SELECTION)">
-            <ion-label> Stage Select </ion-label>
-        </ion-item>
         <ion-item class="menu-items" (click)="openLeaderboard()">
             <ion-label> Leaderboard </ion-label>
         </ion-item>
@@ -33,7 +30,7 @@
         <div class="background-room-buttons">
             <ion-row>
                 <ion-col size="10" class="stage-select">
-                    <ion-button expand="block" (click)="gameCenterLogin()">Login</ion-button>
+                    <ion-button expand="block" (click)="goTo(screensEnum.STAGE_SELECTION)">Stage Select</ion-button>
                 </ion-col>
             </ion-row>
         </div>
