@@ -32,6 +32,8 @@ export * from './lib/enums/game-services.enum';
 
 // * Models
 export * from './lib/models/leaderboards.model';
-//constants
+
+// * Constants
 export * from './lib/constants/game-keys.constants';
 export * from './lib/constants/game-units.constants';
+export * from './lib/constants/game-services-keys.constant';

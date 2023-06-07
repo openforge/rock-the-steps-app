@@ -22,6 +22,7 @@ import {
     END_FRAME_WALK,
     END_KEY,
     END_OBJECT_SCALE,
+    FIRST_ACHIEVEMENT_ID,
     FLOOR_KEY,
     FRAME_RATE_DAMAGE,
     FRAME_RATE_JUMP,
@@ -41,6 +42,7 @@ import {
     JUMP_PREFIX,
     JUMPING_ANIMATION,
     LEFT_KEY,
+    LevelsEnum,
     MOVING_X_BACKGROUNDS,
     OBJECTS_SPRITE_KEY,
     PAUSE_BUTTON,
@@ -376,6 +378,9 @@ export class WorldScene extends Phaser.Scene {
         GameEngineSingleton.gameEventBus.next(result);
         if (result === GameEnum.WIN) {
             await GameServices.submitScore({ leaderboardId: GameServicesEnum.LEADERBOARDS_ID, score: GameEngineSingleton.points });
+            if (GameEngineSingleton.world.worldType === LevelsEnum.DAYTIME) {
+                await GameServices.unlockAchievement({ achievementID: FIRST_ACHIEVEMENT_ID });
+            }
         }
     }
 
