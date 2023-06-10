@@ -9,7 +9,7 @@ export class Gloves extends WorldObject {
         try {
             this.level = level;
         } catch (error) {
-            console.error(`Error building obstacle ${this.name}`, error);
+            console.error(`Error building healer ${this.name}`, error);
         }
     }
 }
