@@ -1,12 +1,12 @@
 import { Anvil, Apple, BigPoo, Bottle, CheeseSteak, ChineseFood, Cone, Flowers, Ghost, Gloves, Hurdle, LibertyBell, Tourist, Trashcan, Wind } from '../..';
-import { DifficultEnum, LevelsEnum } from '../enums/levels.enum';
+import { DifficultyEnum, LevelsEnum } from '../enums/levels.enum';
 import { Crater } from './obstacles/crater.class';
 import { Stand } from './obstacles/stand.class';
 import { Tomb } from './obstacles/tomb.class';
 import { WorldObject } from './obstacles/world-object.class';
 
 /**
- * World class is the one in charge to build all the elements related to the world game objects, character, heals, etc.
+ * * World class is the one in charge to build all the elements related to the world game objects, character, heals, etc.
  */
 export class World {
     public objects: WorldObject[] = []; // * WorldObjects to be shown in the world
@@ -14,7 +14,7 @@ export class World {
     public pointsToEndLevel = 0; // * Points to end level
     public pointsTillSteps = 200; // * number of points need to reach until steps are created
     public pixelForNextObstacle = 0; // * Pixel to create next obstacle;
-    public difficultyLevel: DifficultEnum;
+    public difficultyLevel: DifficultyEnum;
     constructor() {}
 
     /**
@@ -22,10 +22,10 @@ export class World {
      * * in the phaser scene
      *
      * @param worldType LevelsEnum
-     * @param difficulty DifficultEnum
+     * @param difficulty DifficultyEnum
      * @returns World
      */
-    public static build(worldType: LevelsEnum, difficulty: DifficultEnum): World {
+    public static build(worldType: LevelsEnum, difficulty: DifficultyEnum): World {
         const tmp_world = new World();
         tmp_world.worldType = worldType;
         tmp_world.difficultyLevel = difficulty;
@@ -122,7 +122,6 @@ export class World {
         world.pointsToEndLevel = 3899;
     }
     public static createKellyLevel(world: World): void {
-        // It has apple, gloves, bell, wind, flowers, cheese steak, cone, tourist, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
         world.objects.push(new CheeseSteak(world.worldType));
 
@@ -136,22 +135,22 @@ export class World {
     }
 
     /**
-     * * Function to set the obstacles difficulty for the world
+     * * The lower the value, the more frequently objects appear.  This increases the difficulty
      *
      * @param world as World
-     * @param difficult as DifficultEnum
+     * @param difficult as DifficultyEnum
      */
-    private static setWorldDifficultObjects(world: World, difficult: DifficultEnum): void {
+    private static setWorldDifficultObjects(world: World, difficult: DifficultyEnum): void {
         switch (difficult) {
-            case DifficultEnum.EASY: {
+            case DifficultyEnum.EASY: {
                 world.pixelForNextObstacle = 130;
                 break;
             }
-            case DifficultEnum.MEDIUM: {
+            case DifficultyEnum.MEDIUM: {
                 world.pixelForNextObstacle = 100;
                 break;
             }
-            case DifficultEnum.HARD: {
+            case DifficultyEnum.HARD: {
                 world.pixelForNextObstacle = 80;
                 break;
             }

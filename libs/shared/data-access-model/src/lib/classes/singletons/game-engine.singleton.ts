@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { DifficultEnum, GameEnum, LevelsEnum } from '@openforge/shared/data-access-model';
+import { DifficultyEnum, GameEnum, LevelsEnum } from '@openforge/shared/data-access-model';
 import * as Phaser from 'phaser';
 import { Subject } from 'rxjs';
 
@@ -17,7 +17,7 @@ import { World } from '../world.class';
 })
 export class GameEngineSingleton {
     public static world = new World(); //* World were all the objects are created
-    public static difficult: DifficultEnum; // * Difficult for the velocity of the game
+    public static difficult: DifficultyEnum; // * Difficult for the velocity of the game
     public static points = 10000; // * Number of points accomplished
     public static gameEventBus = new Subject<GameEnum>();
     public static scene: Phaser.Scenes.ScenePlugin; // * MainScene used to restart the games
@@ -26,7 +26,7 @@ export class GameEngineSingleton {
      *
      * @param level Level to be loaded
      */
-    public static buildWorld(level: LevelsEnum, difficulty: DifficultEnum): void {
+    public static buildWorld(level: LevelsEnum, difficulty: DifficultyEnum): void {
         this.world = World.build(level, difficulty);
     }
 }
