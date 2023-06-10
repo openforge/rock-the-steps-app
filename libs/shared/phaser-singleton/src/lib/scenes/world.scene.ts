@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { GameServices } from '@openforge/capacitor-game-services';
 import {
     BG_SCALE_X,
@@ -15,19 +13,14 @@ import {
     CITY_ORIGIN_Y,
     CONTROLS_KEY,
     DAMAGE_MAX_VALUE,
-    DAMAGE_PREFIX,
     DAMAGE_TIMER,
     DAMAGED_ANIMATION,
     DOWN_EVENT,
     DURATION_INVULNERABLE_REP,
-    END_FRAME_WALK,
     END_KEY,
     END_OBJECT_SCALE,
     FIRST_ACHIEVEMENT_ID,
     FLOOR_KEY,
-    FRAME_RATE_DAMAGE,
-    FRAME_RATE_JUMP,
-    FRAME_RATE_WALK,
     GameEnum,
     GameServicesEnum,
     HALF_DIVIDER,
@@ -40,7 +33,6 @@ import {
     INITIAL_POINTS_Y,
     INVULNERABLE_REPS,
     JUMP_KEY,
-    JUMP_PREFIX,
     JUMPING_ANIMATION,
     LEFT_KEY,
     LevelsEnum,
@@ -67,11 +59,9 @@ import {
     UP_EVENT,
     VELOCITY_PLAYER,
     VELOCITY_PLAYER_WHEN_MOVING,
-    WALK_PREFIX,
     WALKING_ANIMATION,
     WORLD_OBJECTS_VELOCITY,
     WORLD_SCENE,
-    ZERO_PAD_PLAYER,
     ZERO_PAD_TOURIST,
 } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
@@ -79,6 +69,8 @@ import * as Phaser from 'phaser';
 
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/GameEngine.singletons';
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
+import { createAnimationsCharacter } from '../utilities/character-animation';
+import { createBell } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
     private flatBackgroundAsset = 'assets/city-scene/flat-level-day.png'; // * Asset url relative to the app itself
@@ -144,13 +136,11 @@ export class WorldScene extends Phaser.Scene {
      */
     async create(): Promise<void> {
         console.log('world.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height, PhaserSingletonService.activeGame);
-
         this.setBackgrounds();
         this.initializeBasicWorld();
         this.createButtons();
-        this.createAnimationsCharacter();
-        // * Set cameras to the correct position
-        this.scale.on(RESIZE_EVENT, this.resize, this);
+        createAnimationsCharacter(this.player);
+        this.scale.on(RESIZE_EVENT, this.resize, this); // * Set cameras to the correct position
     }
 
     /**
@@ -162,7 +152,6 @@ export class WorldScene extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         this.worldObjectGroup = this.physics.add.group();
         this.playerGroup = this.physics.add.group();
-        // We add the sprite into the scene
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.damageValue = 0;
         this.player = this.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
@@ -175,7 +164,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to create the buttons of movement and jump
+     * * Method used to create the buttons of movement and jump
      *
      * @private
      */
@@ -213,43 +202,7 @@ export class WorldScene extends Phaser.Scene {
         this.scene.pause();
         this.scene.run(PAUSE_SCENE);
     }
-    /**
-     * Method used to generate the animations of the player
-     *
-     * @return void
-     */
-    private createAnimationsCharacter(): void {
-        this.player.anims.create({
-            key: WALKING_ANIMATION,
-            frames: this.anims.generateFrameNames(CHARACTER_SPRITE_KEY, {
-                prefix: WALK_PREFIX,
-                end: END_FRAME_WALK,
-                zeroPad: ZERO_PAD_PLAYER,
-            }),
-            frameRate: FRAME_RATE_WALK,
-            repeat: REPEAT_FRAME,
-        });
-        this.player.anims.create({
-            key: JUMPING_ANIMATION,
-            frames: this.anims.generateFrameNames(CHARACTER_SPRITE_KEY, {
-                prefix: JUMP_PREFIX,
-                end: 0,
-                zeroPad: ZERO_PAD_PLAYER,
-            }),
-            frameRate: FRAME_RATE_JUMP,
-            repeat: 0,
-        });
-        this.player.anims.create({
-            key: DAMAGED_ANIMATION,
-            frames: this.anims.generateFrameNames(CHARACTER_SPRITE_KEY, {
-                prefix: DAMAGE_PREFIX,
-                end: 0,
-                zeroPad: ZERO_PAD_PLAYER,
-            }),
-            frameRate: FRAME_RATE_DAMAGE,
-            repeat: 0,
-        });
-    }
+
     /**
      * * Method to used by PHASER to execute every frame refresh
      *
@@ -278,27 +231,27 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to initialize the worldObjects of the current World level
+     * * Method used to initialize the worldObjects of the current World level
      *
      * @return void
      */
     private objectsCreation(): void {
         // Generates objects while the level does not end
         let initialX: number = this.sys.canvas.width;
-        let initialY = 0;
+        const initialY = 0;
         if (GameEngineSingleton.points > this.nextWorldObjectPixelFlag && GameEngineSingleton.points < GameEngineSingleton.world.pointsToEndLevel) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.worldObjects.length);
             const worldObject = GameEngineSingleton.world.worldObjects[worldObjectNumber];
             initialX = this.sys.canvas.width + worldObject.spritePositionX;
+
+            let worldObjectSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // *set the type explicitly
             if (worldObject.name === Objects.BELL) {
-                // Some random X of the width screen + 400 by the decreasing velocity
-                initialX = this.sys.canvas.width + this.sys.canvas.width / HALF_DIVIDER;
-                initialY = -this.textures.get(Objects.BELL).getSourceImage().height;
+                worldObjectSprite = createBell(worldObject, this);
             }
-            const worldObjectSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody = this.physics.add.sprite(initialX, initialY, OBJECTS_SPRITE_KEY, worldObject.name);
 
             // * This is an obstacle!  Don't hit the tourists :)
             if (worldObject.name === Objects.TOURIST) {
+                console.log('worldObject.name === Objects.TOURIST');
                 worldObjectSprite.anims.create({
                     key: TOURIST_STANDING_FRAME,
                     frames: this.anims.generateFrameNames(OBJECTS_SPRITE_KEY, {

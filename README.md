@@ -1,16 +1,18 @@
 # Rock The Steps!
 
 ```npm install```
-
 ```npx nx run rock-the-steps:serve``` (where rock-the-steps is the name you replaced with above)
 
 You should now load your example app!
+
+# Architecture
+
+This project uses Ionic Framework for the majority of screens and overlays; and uses Phaser for the gameplay itself.  Please see corresponding documentation on their respective websites.
 
 # LICENSE
 
 For more detailed information on licensing, see the LICENSE.md file included in the repository
 
-https://wiki.wesnoth.org/Wesnoth:Copyrights
 # Checking Licenses
 
 To run the license checker, use
