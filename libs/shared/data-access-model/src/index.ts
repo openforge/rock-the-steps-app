@@ -28,10 +28,7 @@ export * from './lib/classes/obstacles/anvil.class';
 export * from './lib/classes/obstacles/bigpoo.class';
 
 // * Enums
-export * from './lib/enums/levels.enum';
-export * from './lib/enums/screens.enum';
-export * from './lib/enums/game.enum';
-export * from './lib/enums/game-services.enum';
+export * from './lib/enums/index';
 
 // * Models
 export * from './lib/models/leaderboards.model';

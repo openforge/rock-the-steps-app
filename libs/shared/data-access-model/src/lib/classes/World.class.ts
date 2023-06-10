@@ -1,4 +1,5 @@
-import { Anvil, Apple, BigPoo, Bottle, CheeseSteak, ChineseFood, Cone, DifficultEnum, Flowers, Ghost, Gloves, Hurdle, LevelsEnum, LibertyBell, Tourist, Trashcan, Wind } from '../..';
+import { Anvil, Apple, BigPoo, Bottle, CheeseSteak, ChineseFood, Cone, Flowers, Ghost, Gloves, Hurdle, LibertyBell, Tourist, Trashcan, Wind } from '../..';
+import { DifficultEnum, LevelsEnum } from '../enums/levels.enum';
 import { Crater } from './obstacles/crater.class';
 import { Stand } from './obstacles/stand.class';
 import { Tomb } from './obstacles/tomb.class';
@@ -13,9 +14,7 @@ export class World {
     public pointsToEndLevel = 0; // * Points to end level
     public pixelForNextObstacle = 0; // * Pixel to create next obstacle;
     public difficultyLevel: DifficultEnum;
-    constructor() {
-        World.createDayLevel(this);
-    }
+    constructor() {}
 
     /**
      * * Depending on user selection, we are either going to construct different levels dynamically
