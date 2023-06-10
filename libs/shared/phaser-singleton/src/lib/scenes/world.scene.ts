@@ -111,7 +111,7 @@ export class WorldScene extends Phaser.Scene {
             this.load.image(FLOOR_KEY, this.flatBackgroundAsset);
             // * Now load the bushes image
             this.load.image(BUSHES_KEY, `assets/city-scene/bushes-${GameEngineSingleton.world.worldType}.png`);
-            // * Load the worldObjects and the player
+            // * Load the objects and the player
             this.load.atlas(OBJECTS_SPRITE_KEY, `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
             this.load.atlas(CHARACTER_SPRITE_KEY, `assets/character/character-sprite.png`, `assets/character/character-sprite.json`);
             //load buttons
@@ -225,7 +225,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * * Method used to initialize the worldObjects of the current World level
+     * * Method used to initialize the objects of the current World level
      *
      * @return void
      */
@@ -234,8 +234,8 @@ export class WorldScene extends Phaser.Scene {
         let initialX: number = this.sys.canvas.width;
         const initialY = 0;
         if (GameEngineSingleton.points > this.nextWorldObjectPixelFlag && GameEngineSingleton.points < GameEngineSingleton.world.pointsToEndLevel) {
-            const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.worldObjects.length);
-            const worldObject = GameEngineSingleton.world.worldObjects[worldObjectNumber];
+            const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
+            const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
             initialX = this.sys.canvas.width + worldObject.spritePositionX;
 
             createObjects(worldObject, this, initialX, initialY, this.worldObjectGroup);
@@ -255,7 +255,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method in progress to create the worldObjects and create the collisions
+     * Method in progress to create the objects and create the collisions
      *
      * @private
      */
