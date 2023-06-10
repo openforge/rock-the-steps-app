@@ -46,23 +46,17 @@ import {
     PLAYER_POS_Y,
     POINTER_DOWN_EVENT,
     POINTER_UP_EVENT,
-    REPEAT_FRAME,
     RESIZE_EVENT,
     RIGHT_KEY,
     SCALE_PAUSE_BUTTON,
     SKY_KEY,
     STARTER_PIXEL_FLAG,
-    TORUIST_END_FRAME,
-    TORUIST_FRAME_KEY,
-    TORUIST_FRAME_RATE,
-    TOURIST_STANDING_FRAME,
     UP_EVENT,
     VELOCITY_PLAYER,
     VELOCITY_PLAYER_WHEN_MOVING,
     WALKING_ANIMATION,
     WORLD_OBJECTS_VELOCITY,
     WORLD_SCENE,
-    ZERO_PAD_TOURIST,
 } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import * as Phaser from 'phaser';
@@ -70,7 +64,7 @@ import * as Phaser from 'phaser';
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/GameEngine.singletons';
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 import { createAnimationsCharacter } from '../utilities/character-animation';
-import { createBell } from '../utilities/object-creation-helper';
+import { createObjects } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
     private flatBackgroundAsset = 'assets/city-scene/flat-level-day.png'; // * Asset url relative to the app itself
@@ -244,28 +238,7 @@ export class WorldScene extends Phaser.Scene {
             const worldObject = GameEngineSingleton.world.worldObjects[worldObjectNumber];
             initialX = this.sys.canvas.width + worldObject.spritePositionX;
 
-            let worldObjectSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // *set the type explicitly
-            if (worldObject.name === Objects.BELL) {
-                worldObjectSprite = createBell(worldObject, this);
-            }
-
-            // * This is an obstacle!  Don't hit the tourists :)
-            if (worldObject.name === Objects.TOURIST) {
-                console.log('worldObject.name === Objects.TOURIST');
-                worldObjectSprite.anims.create({
-                    key: TOURIST_STANDING_FRAME,
-                    frames: this.anims.generateFrameNames(OBJECTS_SPRITE_KEY, {
-                        prefix: TORUIST_FRAME_KEY,
-                        end: TORUIST_END_FRAME,
-                        zeroPad: ZERO_PAD_TOURIST,
-                    }),
-                    frameRate: TORUIST_FRAME_RATE,
-                    repeat: REPEAT_FRAME,
-                });
-                worldObjectSprite.anims.play(TOURIST_STANDING_FRAME, true);
-            }
-            worldObjectSprite.setName(worldObject.name);
-            this.worldObjectGroup.add(worldObjectSprite);
+            createObjects(worldObject, this, initialX, initialY, this.worldObjectGroup);
 
             this.nextWorldObjectPixelFlag += GameEngineSingleton.world.pixelForNextObstacle;
         }
@@ -301,11 +274,10 @@ export class WorldScene extends Phaser.Scene {
                         this.worldObjectGroup.setVelocityX(0);
                         this.endDisplayedFlag = true;
                     }
-                    console.log(`COLLISION ${worldObject.name}`, playerXEnd >= worldObjectXStart, playerXStart <= worldObjectXEnd, playerYBelow >= worldObjectYAbove);
-                    console.log('DAMAGE BOUNDS', playerXEnd, worldObjectXStart, playerXStart, worldObjectXEnd, playerYBelow, worldObjectYAbove);
+                    // console.log(`COLLISION ${worldObject.name}`, playerXEnd >= worldObjectXStart, playerXStart <= worldObjectXEnd, playerYBelow >= worldObjectYAbove);
+                    // console.log('DAMAGE BOUNDS', playerXEnd, worldObjectXStart, playerXStart, worldObjectXEnd, playerYBelow, worldObjectYAbove);
                     if (playerXEnd >= worldObjectXStart && playerXStart <= worldObjectXEnd && playerYBelow >= worldObjectYAbove) {
                         //logic damage
-
                         if (worldObject.name === Objects.CHEESESTEAK) {
                             this.healUp(worldObject);
                         } else if (worldObject.name === END_KEY) {
