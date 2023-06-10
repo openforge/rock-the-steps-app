@@ -1,5 +1,4 @@
 // * Classes
-export * from './lib/classes/characters/character.class';
 export * from './lib/classes/GameServicesActions.class';
 
 // * Healers
