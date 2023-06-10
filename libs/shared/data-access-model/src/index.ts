@@ -1,6 +1,9 @@
+// * Singletons
+export * from './lib/classes/singletons/game-engine.singleton';
+
 // * Classes
-export * from './lib/classes/characters/character.class';
-export * from './lib/classes/GameServicesActions.class';
+export * from './lib/classes/game-services-actions.class';
+export * from './lib/classes/character/character';
 
 // * Healers
 export * from './lib/classes/healers/cheese-steak.class';
@@ -25,10 +28,7 @@ export * from './lib/classes/obstacles/anvil.class';
 export * from './lib/classes/obstacles/bigpoo.class';
 
 // * Enums
-export * from './lib/enums/levels.enum';
-export * from './lib/enums/screens.enum';
-export * from './lib/enums/game.enum';
-export * from './lib/enums/game-services.enum';
+export * from './lib/enums/index';
 
 // * Models
 export * from './lib/models/leaderboards.model';

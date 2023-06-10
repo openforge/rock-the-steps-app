@@ -3,7 +3,7 @@ import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
 
 export class Anvil extends WorldObject {
-    name = Objects.ANVIL;
+    public name = Objects.ANVIL;
     constructor(level: LevelsEnum) {
         super();
         try {
