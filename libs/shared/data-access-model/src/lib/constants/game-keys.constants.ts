@@ -27,3 +27,4 @@ export const SKY_KEY = 'sky-key';
 export const FLOOR_KEY = 'flat-key';
 export const BUSHES_KEY = 'bushes-key';
 export const END_KEY = 'end';
+export const STEPS_KEY = 'steps-key';

@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 
-import { DAMAGED_ANIMATION, JUMPING_ANIMATION, WALKING_ANIMATION } from '../../constants/game-keys.constants';
-import { DURATION_INVULNERABLE_REP, HEIGHT_OF_JUMP, INVULNERABLE_REPS, VELOCITY_PLAYER, VELOCITY_PLAYER_WHEN_MOVING } from '../../constants/game-units.constants';
+import { CHARACTER_SPRITE_KEY, DAMAGED_ANIMATION, JUMPING_ANIMATION, WALKING_ANIMATION } from '../../constants/game-keys.constants';
+import { DURATION_INVULNERABLE_REP, HEIGHT_OF_JUMP, INVULNERABLE_REPS, PLAYER_POS_X, PLAYER_POS_Y, VELOCITY_PLAYER, VELOCITY_PLAYER_WHEN_MOVING } from '../../constants/game-units.constants';
 
 export class Character {
     public name = 'character';
@@ -12,7 +12,12 @@ export class Character {
     public isDamaged: boolean = false; // * Flag to detect is character is being damaged
     public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
 
-    constructor() {
+    constructor(scene: Scene, playerGroup: Phaser.Physics.Arcade.Group, floorTileSprite: Phaser.GameObjects.TileSprite) {
+        this.sprite = scene.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
+        this.sprite.anims.play(WALKING_ANIMATION, true);
+        playerGroup.add(this.sprite);
+        // add collider to the floor tile so we sit on top
+        scene.physics.add.collider(this.sprite, floorTileSprite);
         try {
             //
         } catch (error) {
