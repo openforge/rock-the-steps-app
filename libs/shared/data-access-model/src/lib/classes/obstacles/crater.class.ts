@@ -3,7 +3,7 @@ import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
 
 export class Crater extends WorldObject {
-    name = Objects.CRATER;
+    public name = Objects.CRATER;
     constructor(level: LevelsEnum) {
         super();
         try {

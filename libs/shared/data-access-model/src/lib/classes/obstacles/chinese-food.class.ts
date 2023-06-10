@@ -3,7 +3,7 @@ import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
 
 export class ChineseFood extends WorldObject {
-    name = Objects.CHINESEFOOD;
+    public name = Objects.CHINESEFOOD;
     constructor(level: LevelsEnum) {
         super();
         try {

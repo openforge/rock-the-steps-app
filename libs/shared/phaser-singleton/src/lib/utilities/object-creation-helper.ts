@@ -14,7 +14,7 @@ import { Scene } from 'phaser';
 
 // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 export function createObjects(worldObject: WorldObject, scene: Scene, initialX: number, initialY: number, worldObjectGroup: Phaser.Physics.Arcade.Group) {
-    console.log('Creating Bell');
+    console.log('createObjects:', worldObject.name);
 
     // If it's a BELL, Modify how it displays
     if (worldObject.name === Objects.BELL) {
@@ -27,7 +27,6 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
 
     // * This is an obstacle!  Don't hit the tourists :)
     if (worldObject.name === Objects.TOURIST) {
-        console.log('worldObject.name === Objects.TOURIST');
         worldObjectSprite.anims.create({
             key: TOURIST_STANDING_FRAME,
             frames: scene.anims.generateFrameNames(OBJECTS_SPRITE_KEY, {

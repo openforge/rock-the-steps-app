@@ -1,4 +1,4 @@
-import { Anvil, Apple, BigPoo, Bottle, ChesseSteak, ChineseFood, Cone, DifficultEnum, Flowers, Ghost, Gloves, Hurdle, LevelsEnum, LibertyBell, Tourist, Trashcan, Wind } from '../..';
+import { Anvil, Apple, BigPoo, Bottle, CheeseSteak, ChineseFood, Cone, DifficultEnum, Flowers, Ghost, Gloves, Hurdle, LevelsEnum, LibertyBell, Tourist, Trashcan, Wind } from '../..';
 import { Crater } from './obstacles/crater.class';
 import { Stand } from './obstacles/stand.class';
 import { Tomb } from './obstacles/tomb.class';
@@ -59,7 +59,7 @@ export class World {
     public static createDayLevel(world: World): void {
         // It has apple, gloves, bell, bottle, trashcan, cheese steak, cone, tourist, pigeon, pigeon poop
         world.worldObjects.push(new Gloves(world.worldType));
-        world.worldObjects.push(new ChesseSteak(world.worldType));
+        world.worldObjects.push(new CheeseSteak(world.worldType));
 
         world.worldObjects.push(new Apple(world.worldType));
         world.worldObjects.push(new LibertyBell(world.worldType));
@@ -72,7 +72,7 @@ export class World {
     public static createSunsetLevel(world: World): void {
         // It has gloves, cheese steak, trashcan, hurdle, anvil, bigpoo, tourist, bell, pigeon, pigeon poop
         world.worldObjects.push(new Gloves(world.worldType));
-        world.worldObjects.push(new ChesseSteak(world.worldType));
+        world.worldObjects.push(new CheeseSteak(world.worldType));
 
         world.worldObjects.push(new Trashcan(world.worldType));
         world.worldObjects.push(new Tourist(world.worldType));
@@ -85,7 +85,7 @@ export class World {
     public static createNightLevel(world: World): void {
         // It has gloves, cheese steak, ghost, hurdle,  anvil, tomb, bell, tourist, pigeon, pigeon poop
         world.worldObjects.push(new Gloves(world.worldType));
-        world.worldObjects.push(new ChesseSteak(world.worldType));
+        world.worldObjects.push(new CheeseSteak(world.worldType));
 
         world.worldObjects.push(new Tourist(world.worldType));
         world.worldObjects.push(new Anvil(world.worldType));
@@ -98,7 +98,7 @@ export class World {
     public static createChinaLevel(world: World): void {
         // It has ken, gloves, bell, crater, chinese food, cheese steak, cone, tourist, pigeon, pigeon poop
         world.worldObjects.push(new Gloves(world.worldType));
-        world.worldObjects.push(new ChesseSteak(world.worldType));
+        world.worldObjects.push(new CheeseSteak(world.worldType));
 
         world.worldObjects.push(new Crater(world.worldType));
         world.worldObjects.push(new Apple(world.worldType));
@@ -111,7 +111,7 @@ export class World {
     public static createRittenLevel(world: World): void {
         // It has apple, gloves, bell, bottle, trashcan, cheese steak, stand, tourist, pigeon, pigeon poop
         world.worldObjects.push(new Gloves(world.worldType));
-        world.worldObjects.push(new ChesseSteak(world.worldType));
+        world.worldObjects.push(new CheeseSteak(world.worldType));
 
         world.worldObjects.push(new Apple(world.worldType));
         world.worldObjects.push(new Tourist(world.worldType));
@@ -124,7 +124,7 @@ export class World {
     public static createKellyLevel(world: World): void {
         // It has apple, gloves, bell, wind, flowers, cheese steak, cone, tourist, pigeon, pigeon poop
         world.worldObjects.push(new Gloves(world.worldType));
-        world.worldObjects.push(new ChesseSteak(world.worldType));
+        world.worldObjects.push(new CheeseSteak(world.worldType));
 
         world.worldObjects.push(new Apple(world.worldType));
         world.worldObjects.push(new Wind(world.worldType));
