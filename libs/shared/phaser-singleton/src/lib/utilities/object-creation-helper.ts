@@ -1,13 +1,4 @@
-import {
-    HALF_DIVIDER,
-    OBJECTS_SPRITE_KEY,
-    REPEAT_FRAME,
-    TORUIST_END_FRAME,
-    TORUIST_FRAME_KEY,
-    TORUIST_FRAME_RATE,
-    TOURIST_STANDING_FRAME,
-    ZERO_PAD_TOURIST,
-} from '@openforge/shared/data-access-model';
+import { OBJECTS_SPRITE_KEY, REPEAT_FRAME, TOURIST_END_FRAME, TOURIST_FRAME_KEY, TOURIST_FRAME_RATE, TOURIST_STANDING_FRAME, ZERO_PAD_TOURIST } from '@openforge/shared/data-access-model';
 import { WorldObject } from 'libs/shared/data-access-model/src/lib/classes/obstacles/world-object.class';
 import { Objects } from 'libs/shared/data-access-model/src/lib/enums/objects.enum';
 import { Scene } from 'phaser';
@@ -18,8 +9,8 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
 
     // If it's a BELL, Modify how it displays
     if (worldObject.name === Objects.BELL) {
-        initialX = scene.sys.canvas.width + scene.sys.canvas.width / HALF_DIVIDER;
-        initialY = -scene.textures.get(Objects.BELL).getSourceImage().height;
+        // TODO - Have bell fall from mid screen instead
+        // initialX = scene.sys.canvas.width + scene.sys.canvas.width / HALF_DIVIDER;
     }
 
     // Here we set the Sprite Object, with or without modification for Bell
@@ -30,11 +21,11 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
         worldObjectSprite.anims.create({
             key: TOURIST_STANDING_FRAME,
             frames: scene.anims.generateFrameNames(OBJECTS_SPRITE_KEY, {
-                prefix: TORUIST_FRAME_KEY,
-                end: TORUIST_END_FRAME,
+                prefix: TOURIST_FRAME_KEY,
+                end: TOURIST_END_FRAME,
                 zeroPad: ZERO_PAD_TOURIST,
             }),
-            frameRate: TORUIST_FRAME_RATE,
+            frameRate: TOURIST_FRAME_RATE,
             repeat: REPEAT_FRAME,
         });
         worldObjectSprite.anims.play(TOURIST_STANDING_FRAME, true);

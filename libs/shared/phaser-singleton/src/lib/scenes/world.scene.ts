@@ -71,23 +71,26 @@ export class WorldScene extends Phaser.Scene {
     private worldObjectGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private playerGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
-    private isMovingLeft: boolean = false; // * Flag to detect if character is pressing left button
-    private isMovingRight: boolean = false; // * Flag to detect is character is pressing right button
-    private isJumping: boolean = false; // * Flag to detect is character is pressing jump button
-    private isDamaged: boolean = false; // * Flag to detect is character is being damaged
+
     private nextWorldObjectPixelFlag = STARTER_PIXEL_FLAG; // * Pixels flag to know if next worldObject needs to be drawn
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
     private damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
     private healthbar: Phaser.GameObjects.Sprite; // * Healthbar used to show the remaining life of the player
+    private spaceBarKey: Phaser.Input.Keyboard.Key; // Spacebar key to move the player in pc
+    private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // Cursos keys to move the player in pc
+
     private damageValue = 0; // * Amount of damaged received by obstacles
+    private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
+    private isEndReached: boolean = false; // Boolean to distinguish if the end has been reached
+    private isInvulnerable: boolean = false; // Flag to detect gloves invulnerability
+    private isMovingLeft: boolean = false; // * Flag to detect if character is pressing left button
+    private isMovingRight: boolean = false; // * Flag to detect is character is pressing right button
+    private isJumping: boolean = false; // * Flag to detect is character is pressing jump button
+    private isDamaged: boolean = false; // * Flag to detect is character is being damaged
+
     public cityBackgroundTileSprite: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
     public bushesTileSprite: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
     public floorTileSprite: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
-    private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // Cursos keys to move the player in pc
-    private endDisplayedFlag: boolean = false; // Boolean to distinguish if the end has been shown
-    private endReachedFlag: boolean = false; // Boolean to distinguish if the end has been reached
-    private invulnerableFlag: boolean = false; // Flag to detect gloves invulnerability
-    private spaceBarKey: Phaser.Input.Keyboard.Key; // Spacebar key to move the player in pc
 
     constructor() {
         super(WORLD_SCENE);
@@ -218,7 +221,7 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private calculatePoints(): void {
-        if (!this.endReachedFlag) {
+        if (!this.isEndReached) {
             GameEngineSingleton.points++;
             this.pointsText.setText(`${GameEngineSingleton.points}`);
         }
@@ -243,12 +246,12 @@ export class WorldScene extends Phaser.Scene {
             this.nextWorldObjectPixelFlag += GameEngineSingleton.world.pixelForNextObstacle;
         }
         // Draw the museum if the goal points has been reached
-        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.endReachedFlag) {
+        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
             const worldObjectObj: Phaser.Types.Physics.Arcade.ImageWithDynamicBody = this.physics.add.image(initialX, initialY, END_KEY);
             worldObjectObj.setName(END_KEY);
             worldObjectObj.setScale(END_OBJECT_SCALE);
             this.worldObjectGroup.add(worldObjectObj);
-            this.endReachedFlag = true;
+            this.isEndReached = true;
         }
         this.worldObjectGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
         this.physics.add.collider(this.floorTileSprite, this.worldObjectGroup);
@@ -272,7 +275,7 @@ export class WorldScene extends Phaser.Scene {
                     if (worldObject.name === END_KEY && worldObjectXEnd <= window.innerWidth) {
                         // If the end is displayed stop the movement
                         this.worldObjectGroup.setVelocityX(0);
-                        this.endDisplayedFlag = true;
+                        this.isEnd = true;
                     }
                     // console.log(`COLLISION ${worldObject.name}`, playerXEnd >= worldObjectXStart, playerXStart <= worldObjectXEnd, playerYBelow >= worldObjectYAbove);
                     // console.log('DAMAGE BOUNDS', playerXEnd, worldObjectXStart, playerXStart, worldObjectXEnd, playerYBelow, worldObjectYAbove);
@@ -285,7 +288,7 @@ export class WorldScene extends Phaser.Scene {
                             void this.endGame(GameEnum.WIN);
                         } else if (worldObject.name === Objects.GLOVES) {
                             this.makeInvulnerable(worldObject);
-                        } else if (!this.isDamaged && !this.invulnerableFlag) {
+                        } else if (!this.isDamaged && !this.isInvulnerable) {
                             this.receiveDamage();
                         }
                     }
@@ -350,7 +353,7 @@ export class WorldScene extends Phaser.Scene {
         //* If gloves is picked up destroy the asset
         worldObject.destroy();
         this.worldObjectGroup.remove(worldObject);
-        this.invulnerableFlag = true;
+        this.isInvulnerable = true;
         this.tweens.add({
             targets: this.player,
             alpha: 0,
@@ -359,7 +362,7 @@ export class WorldScene extends Phaser.Scene {
             yoyo: true, // Type of animation
             onComplete: () => {
                 this.player.setAlpha(1); // Restore normal opacity
-                this.invulnerableFlag = false;
+                this.isInvulnerable = false;
             },
         });
     }
@@ -374,7 +377,7 @@ export class WorldScene extends Phaser.Scene {
         this.damageValue++;
         this.player.setVelocityY(-VELOCITY_PLAYER_WHEN_MOVING);
         // Make invulnerable for some seconds to avoid multi coalition
-        this.invulnerableFlag = true;
+        this.isInvulnerable = true;
         //if no more damage is allowed send out the player!
         if (this.damageValue === DAMAGE_MAX_VALUE) {
             void this.endGame(GameEnum.LOOSE);
@@ -393,7 +396,7 @@ export class WorldScene extends Phaser.Scene {
             callback: () => {
                 this.player.setVelocityY(0);
                 this.isDamaged = false;
-                this.invulnerableFlag = false;
+                this.isInvulnerable = false;
             },
             callbackScope: this,
             loop: false,
@@ -421,7 +424,7 @@ export class WorldScene extends Phaser.Scene {
      */
     private showInfiniteBackgrounds(): void {
         // While the end has not reached do the scrolling of level
-        if (!this.endDisplayedFlag) {
+        if (!this.isEnd) {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
             this.cityBackgroundTileSprite.tilePositionX += MOVING_X_BACKGROUNDS;
             this.bushesTileSprite.tilePositionX += MOVING_X_BACKGROUNDS;
