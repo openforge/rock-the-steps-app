@@ -11,8 +11,6 @@ import {
     CONTROLS_KEY,
     DAMAGE_MAX_VALUE,
     DAMAGE_TIMER,
-    DAMAGED_ANIMATION,
-    DURATION_INVULNERABLE_REP,
     END_KEY,
     END_OBJECT_SCALE,
     FIRST_ACHIEVEMENT_ID,
@@ -22,14 +20,11 @@ import {
     HALF_DIVIDER,
     HEALTHBAR_KEY,
     HEALTHBAR_TEXTURE_PREFIX,
-    HEIGHT_OF_JUMP,
     INITIAL_HEALTHBAR_X,
     INITIAL_HEALTHBAR_Y,
     INITIAL_POINTS_X,
     INITIAL_POINTS_Y,
-    INVULNERABLE_REPS,
     JUMP_KEY,
-    JUMPING_ANIMATION,
     LevelsEnum,
     MOVING_X_BACKGROUNDS,
     OBJECTS_SPRITE_KEY,
@@ -39,7 +34,6 @@ import {
     RESIZE_EVENT,
     SKY_KEY,
     STARTER_PIXEL_FLAG,
-    VELOCITY_PLAYER,
     VELOCITY_PLAYER_WHEN_MOVING,
     WALKING_ANIMATION,
     WORLD_OBJECTS_VELOCITY,
@@ -58,7 +52,6 @@ export class WorldScene extends Phaser.Scene {
     private flatBackgroundAsset = 'assets/city-scene/flat-level-day.png'; // * Asset url relative to the app itself
     private worldObjectGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private playerGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
-    private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
     private character: Character = new Character(); // this is the class associated with the player
     private nextWorldObjectPixelFlag = STARTER_PIXEL_FLAG; // * Pixels flag to know if next worldObject needs to be drawn
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
@@ -119,7 +112,7 @@ export class WorldScene extends Phaser.Scene {
         this.setBackgrounds();
         this.initializeBasicWorld();
         createButtons(this, this.character, this.spaceBarKey);
-        createAnimationsCharacter(this.player);
+        createAnimationsCharacter(this.character.sprite);
         this.scale.on(RESIZE_EVENT, this.resize, this); // * Set cameras to the correct position
     }
 
@@ -134,11 +127,11 @@ export class WorldScene extends Phaser.Scene {
         this.playerGroup = this.physics.add.group();
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.damageValue = 0;
-        this.player = this.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
+        this.character.sprite = this.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
         this.healthbar = this.add.sprite(INITIAL_HEALTHBAR_X, INITIAL_HEALTHBAR_Y, HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}0`);
-        this.playerGroup.add(this.player);
-        this.physics.add.collider(this.player, this.floorTileSprite);
-        this.player.anims.play(WALKING_ANIMATION, true);
+        this.playerGroup.add(this.character.sprite);
+        this.physics.add.collider(this.character.sprite, this.floorTileSprite);
+        this.character.sprite.anims.play(WALKING_ANIMATION, true);
         // Display the points
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3rem', color: 'black' });
     }
@@ -151,7 +144,7 @@ export class WorldScene extends Phaser.Scene {
     update() {
         this.calculatePoints();
         this.showInfiniteBackgrounds();
-        this.evaluateMovement();
+        this.character.evaluateMovement(this.cursors);
         this.avoidOutOfBounds();
         this.objectsCreation();
         this.objectsDetection();
@@ -209,9 +202,9 @@ export class WorldScene extends Phaser.Scene {
         if (this.worldObjectGroup.getChildren().length > 0) {
             this.worldObjectGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
                 if (worldObject) {
-                    const playerYBelow = this.player.y + this.player.height / HALF_DIVIDER;
-                    const playerXStart = this.player.x - this.player.width / HALF_DIVIDER;
-                    const playerXEnd = this.player.x + this.player.width / HALF_DIVIDER;
+                    const playerYBelow = this.character.sprite.y + this.character.sprite.height / HALF_DIVIDER;
+                    const playerXStart = this.character.sprite.x - this.character.sprite.width / HALF_DIVIDER;
+                    const playerXEnd = this.character.sprite.x + this.character.sprite.width / HALF_DIVIDER;
                     const worldObjectYAbove = worldObject.y - worldObject.height / HALF_DIVIDER;
                     const worldObjectXStart = worldObject.x - worldObject.width / HALF_DIVIDER;
                     const worldObjectXEnd = worldObject.x + worldObject.width / HALF_DIVIDER;
@@ -230,7 +223,10 @@ export class WorldScene extends Phaser.Scene {
                             // If the end is tuched send to winning screen
                             void this.endGame(GameEnum.WIN);
                         } else if (worldObject.name === Objects.GLOVES) {
-                            this.makeInvulnerable(worldObject);
+                            //* If gloves is picked up destroy the asset
+                            worldObject.destroy();
+                            this.worldObjectGroup.remove(worldObject);
+                            this.character.makeInvulnerable(this);
                         } else if (!this.character.isDamaged && !this.character.isInvulnerable) {
                             this.receiveDamage();
                         }
@@ -282,32 +278,8 @@ export class WorldScene extends Phaser.Scene {
     private healUp(worldObject: Phaser.GameObjects.Image): void {
         this.damageValue--;
         this.healthbar.setTexture(HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}${this.damageValue}`);
-        //* If cheesesteak is picked up destroy the asset
-        worldObject.destroy();
+        worldObject.destroy(); //* If cheesesteak is picked up destroy the asset
         this.worldObjectGroup.remove(worldObject);
-    }
-
-    /**
-     * Method used to enable gloves
-     *
-     * @param worldObject gloves to be destroyed after used
-     */
-    private makeInvulnerable(worldObject: Phaser.GameObjects.Image): void {
-        //* If gloves is picked up destroy the asset
-        worldObject.destroy();
-        this.worldObjectGroup.remove(worldObject);
-        this.character.isInvulnerable = true;
-        this.tweens.add({
-            targets: this.player,
-            alpha: 0,
-            duration: DURATION_INVULNERABLE_REP, // Duration of each blinking
-            repeat: INVULNERABLE_REPS, // Number of repetitions 200 x 10 = 2000millisec
-            yoyo: true, // Type of animation
-            onComplete: () => {
-                this.player.setAlpha(1); // Restore normal opacity
-                this.character.isInvulnerable = false;
-            },
-        });
     }
 
     /**
@@ -318,7 +290,7 @@ export class WorldScene extends Phaser.Scene {
     private receiveDamage(): void {
         // If is not invulnerable then affect with damage
         this.damageValue++;
-        this.player.setVelocityY(-VELOCITY_PLAYER_WHEN_MOVING);
+        this.character.sprite.setVelocityY(-VELOCITY_PLAYER_WHEN_MOVING);
         // Make invulnerable for some seconds to avoid multi coalition
         this.character.isInvulnerable = true;
         //if no more damage is allowed send out the player!
@@ -337,7 +309,7 @@ export class WorldScene extends Phaser.Scene {
         this.damageTimer = this.time.addEvent({
             delay: DAMAGE_TIMER,
             callback: () => {
-                this.player.setVelocityY(0);
+                this.character.sprite.setVelocityY(0);
                 this.character.isDamaged = false;
                 this.character.isInvulnerable = false;
             },
@@ -352,12 +324,12 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private avoidOutOfBounds(): void {
-        const personajeWidth = this.player.width;
+        const personajeWidth = this.character.sprite.width;
 
         const xMin = personajeWidth / HALF_DIVIDER; // Left limit
         const xMax = window.innerWidth - personajeWidth / HALF_DIVIDER; // right limit
 
-        this.player.x = Phaser.Math.Clamp(this.player.x, xMin, xMax);
+        this.character.sprite.x = Phaser.Math.Clamp(this.character.sprite.x, xMin, xMax);
     }
 
     /**
@@ -372,33 +344,6 @@ export class WorldScene extends Phaser.Scene {
             this.cityBackgroundTileSprite.tilePositionX += MOVING_X_BACKGROUNDS;
             this.bushesTileSprite.tilePositionX += MOVING_X_BACKGROUNDS;
             this.floorTileSprite.tilePositionX += MOVING_X_BACKGROUNDS;
-        }
-    }
-
-    /**
-     * * Method that performs behaviors of player depending on flags
-     *
-     * @return void
-     */
-    private evaluateMovement(): void {
-        if (this.character.isMovingLeft || this.cursors.left.isDown) {
-            this.player.flipX = true;
-            this.player.setVelocityX(-VELOCITY_PLAYER_WHEN_MOVING);
-        } else if (this.character.isMovingRight || this.cursors.right.isDown) {
-            this.player.flipX = false;
-            this.player.setVelocityX(VELOCITY_PLAYER_WHEN_MOVING);
-        } else if (this.character.isDamaged) {
-            this.player.play(DAMAGED_ANIMATION);
-        } else {
-            if (this.player.body.touching.down) {
-                this.player.setVelocityX(-VELOCITY_PLAYER);
-                this.player.play(WALKING_ANIMATION, true);
-            }
-        }
-        if (this.character.isJumping && this.player.body.touching.down) {
-            this.player.setVelocityY(-HEIGHT_OF_JUMP);
-            this.player.setVelocityX(0);
-            this.player.play(JUMPING_ANIMATION);
         }
     }
 
