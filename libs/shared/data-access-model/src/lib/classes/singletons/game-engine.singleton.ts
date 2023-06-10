@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { DifficultEnum, GameEnum, LevelsEnum } from '@openforge/shared/data-access-model';
+import * as Phaser from 'phaser';
 import { Subject } from 'rxjs';
 
-import { World } from '../World.class';
+import { World } from '../world.class';
 
 /**
  * * GameEngine Singleton Service

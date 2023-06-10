@@ -4,10 +4,7 @@ import {
     BG_SCALE_Y,
     BUSHES_KEY,
     BUSHES_ORIGIN_Y,
-    BUTTON_JUMP_X,
-    BUTTON_LEFT_X,
-    BUTTON_RIGHT_X,
-    BUTTONS_MOVE_Y,
+    Character,
     CHARACTER_SPRITE_KEY,
     CITY_KEY,
     CITY_ORIGIN_Y,
@@ -15,7 +12,6 @@ import {
     DAMAGE_MAX_VALUE,
     DAMAGE_TIMER,
     DAMAGED_ANIMATION,
-    DOWN_EVENT,
     DURATION_INVULNERABLE_REP,
     END_KEY,
     END_OBJECT_SCALE,
@@ -34,24 +30,15 @@ import {
     INVULNERABLE_REPS,
     JUMP_KEY,
     JUMPING_ANIMATION,
-    LEFT_KEY,
     LevelsEnum,
     MOVING_X_BACKGROUNDS,
     OBJECTS_SPRITE_KEY,
     PAUSE_BUTTON,
-    PAUSE_BUTTON_X,
-    PAUSE_BUTTON_Y,
-    PAUSE_SCENE,
     PLAYER_POS_X,
     PLAYER_POS_Y,
-    POINTER_DOWN_EVENT,
-    POINTER_UP_EVENT,
     RESIZE_EVENT,
-    RIGHT_KEY,
-    SCALE_PAUSE_BUTTON,
     SKY_KEY,
     STARTER_PIXEL_FLAG,
-    UP_EVENT,
     VELOCITY_PLAYER,
     VELOCITY_PLAYER_WHEN_MOVING,
     WALKING_ANIMATION,
@@ -61,9 +48,10 @@ import {
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import * as Phaser from 'phaser';
 
-import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/GameEngine.singletons';
+import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/game-engine.singleton';
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 import { createAnimationsCharacter } from '../utilities/character-animation';
+import { createButtons } from '../utilities/hud-helper';
 import { createObjects } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
@@ -71,7 +59,7 @@ export class WorldScene extends Phaser.Scene {
     private worldObjectGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private playerGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
-
+    private character: Character = new Character(); // this is the class associated with the player
     private nextWorldObjectPixelFlag = STARTER_PIXEL_FLAG; // * Pixels flag to know if next worldObject needs to be drawn
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
     private damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
@@ -82,11 +70,6 @@ export class WorldScene extends Phaser.Scene {
     private damageValue = 0; // * Amount of damaged received by obstacles
     private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
     private isEndReached: boolean = false; // Boolean to distinguish if the end has been reached
-    private isInvulnerable: boolean = false; // Flag to detect gloves invulnerability
-    private isMovingLeft: boolean = false; // * Flag to detect if character is pressing left button
-    private isMovingRight: boolean = false; // * Flag to detect is character is pressing right button
-    private isJumping: boolean = false; // * Flag to detect is character is pressing jump button
-    private isDamaged: boolean = false; // * Flag to detect is character is being damaged
 
     public cityBackgroundTileSprite: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
     public bushesTileSprite: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
@@ -135,7 +118,7 @@ export class WorldScene extends Phaser.Scene {
         console.log('world.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height, PhaserSingletonService.activeGame);
         this.setBackgrounds();
         this.initializeBasicWorld();
-        this.createButtons();
+        createButtons(this, this.character, this.spaceBarKey);
         createAnimationsCharacter(this.player);
         this.scale.on(RESIZE_EVENT, this.resize, this); // * Set cameras to the correct position
     }
@@ -158,46 +141,6 @@ export class WorldScene extends Phaser.Scene {
         this.player.anims.play(WALKING_ANIMATION, true);
         // Display the points
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3rem', color: 'black' });
-    }
-
-    /**
-     * * Method used to create the buttons of movement and jump
-     *
-     * @private
-     */
-    private createButtons(): void {
-        const buttonLeft = this.add.sprite(BUTTON_LEFT_X, window.innerHeight - BUTTONS_MOVE_Y, CONTROLS_KEY, LEFT_KEY);
-        buttonLeft.setInteractive();
-        buttonLeft.on(POINTER_DOWN_EVENT, () => (this.isMovingLeft = true), this);
-        buttonLeft.on(POINTER_UP_EVENT, () => (this.isMovingLeft = false), this);
-        const buttonRight = this.add.sprite(BUTTON_RIGHT_X, window.innerHeight - BUTTONS_MOVE_Y, CONTROLS_KEY, RIGHT_KEY);
-        buttonRight.setInteractive();
-        buttonRight.on(POINTER_DOWN_EVENT, () => (this.isMovingRight = true), this);
-        buttonRight.on(POINTER_UP_EVENT, () => (this.isMovingRight = false), this);
-        const buttonJump = this.add.sprite(window.innerWidth - BUTTON_JUMP_X, window.innerHeight - BUTTONS_MOVE_Y, JUMP_KEY);
-        buttonJump.setInteractive();
-        buttonJump.on(POINTER_DOWN_EVENT, () => (this.isJumping = true), this);
-        buttonJump.on(POINTER_UP_EVENT, () => (this.isJumping = false), this);
-        this.spaceBarKey.on(DOWN_EVENT, () => (this.isJumping = true), this);
-        this.spaceBarKey.on(UP_EVENT, () => (this.isJumping = false), this);
-        const pauseButton = this.add
-            .image(this.sys.canvas.width - PAUSE_BUTTON_X, PAUSE_BUTTON_Y, PAUSE_BUTTON)
-            .setScale(SCALE_PAUSE_BUTTON, SCALE_PAUSE_BUTTON)
-            .setOrigin(1, 0)
-            .setInteractive();
-        pauseButton.on(POINTER_DOWN_EVENT, this.showPauseModal, this);
-    }
-
-    /**
-     * Method used to display pause modal
-     *
-     * @private
-     */
-    private showPauseModal(): void {
-        // Pause the game
-        GameEngineSingleton.scene = this.scene;
-        this.scene.pause();
-        this.scene.run(PAUSE_SCENE);
     }
 
     /**
@@ -288,7 +231,7 @@ export class WorldScene extends Phaser.Scene {
                             void this.endGame(GameEnum.WIN);
                         } else if (worldObject.name === Objects.GLOVES) {
                             this.makeInvulnerable(worldObject);
-                        } else if (!this.isDamaged && !this.isInvulnerable) {
+                        } else if (!this.character.isDamaged && !this.character.isInvulnerable) {
                             this.receiveDamage();
                         }
                     }
@@ -353,7 +296,7 @@ export class WorldScene extends Phaser.Scene {
         //* If gloves is picked up destroy the asset
         worldObject.destroy();
         this.worldObjectGroup.remove(worldObject);
-        this.isInvulnerable = true;
+        this.character.isInvulnerable = true;
         this.tweens.add({
             targets: this.player,
             alpha: 0,
@@ -362,7 +305,7 @@ export class WorldScene extends Phaser.Scene {
             yoyo: true, // Type of animation
             onComplete: () => {
                 this.player.setAlpha(1); // Restore normal opacity
-                this.isInvulnerable = false;
+                this.character.isInvulnerable = false;
             },
         });
     }
@@ -377,7 +320,7 @@ export class WorldScene extends Phaser.Scene {
         this.damageValue++;
         this.player.setVelocityY(-VELOCITY_PLAYER_WHEN_MOVING);
         // Make invulnerable for some seconds to avoid multi coalition
-        this.isInvulnerable = true;
+        this.character.isInvulnerable = true;
         //if no more damage is allowed send out the player!
         if (this.damageValue === DAMAGE_MAX_VALUE) {
             void this.endGame(GameEnum.LOOSE);
@@ -385,7 +328,7 @@ export class WorldScene extends Phaser.Scene {
         this.healthbar.setTexture(HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}${this.damageValue}`);
         // Set damaged flag so no other animations break damaged animation
         // Play damage animation
-        this.isDamaged = true;
+        this.character.isDamaged = true;
         // Stop and Delete previous same timer (IF EXISTS)
         if (this.damageTimer) {
             this.damageTimer.destroy();
@@ -395,8 +338,8 @@ export class WorldScene extends Phaser.Scene {
             delay: DAMAGE_TIMER,
             callback: () => {
                 this.player.setVelocityY(0);
-                this.isDamaged = false;
-                this.isInvulnerable = false;
+                this.character.isDamaged = false;
+                this.character.isInvulnerable = false;
             },
             callbackScope: this,
             loop: false,
@@ -438,13 +381,13 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private evaluateMovement(): void {
-        if (this.isMovingLeft || this.cursors.left.isDown) {
+        if (this.character.isMovingLeft || this.cursors.left.isDown) {
             this.player.flipX = true;
             this.player.setVelocityX(-VELOCITY_PLAYER_WHEN_MOVING);
-        } else if (this.isMovingRight || this.cursors.right.isDown) {
+        } else if (this.character.isMovingRight || this.cursors.right.isDown) {
             this.player.flipX = false;
             this.player.setVelocityX(VELOCITY_PLAYER_WHEN_MOVING);
-        } else if (this.isDamaged) {
+        } else if (this.character.isDamaged) {
             this.player.play(DAMAGED_ANIMATION);
         } else {
             if (this.player.body.touching.down) {
@@ -452,7 +395,7 @@ export class WorldScene extends Phaser.Scene {
                 this.player.play(WALKING_ANIMATION, true);
             }
         }
-        if (this.isJumping && this.player.body.touching.down) {
+        if (this.character.isJumping && this.player.body.touching.down) {
             this.player.setVelocityY(-HEIGHT_OF_JUMP);
             this.player.setVelocityX(0);
             this.player.play(JUMPING_ANIMATION);

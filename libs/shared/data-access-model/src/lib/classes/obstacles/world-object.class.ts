@@ -2,7 +2,7 @@ import { LevelsEnum } from '@openforge/shared/data-access-model';
 
 import { INITIAL_X_REGULAR_ASSET_START } from '../../constants/game-units.constants';
 import { Objects } from '../../enums/objects.enum';
-import { PrimordialObject } from '../PrimordialObject.class';
+import { PrimordialObject } from '../primordial-object.class';
 
 /**
  * Base class to be extended by implementations

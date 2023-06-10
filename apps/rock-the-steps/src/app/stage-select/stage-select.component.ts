@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { GameServicesActions, LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 
-import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/GameEngine.singletons';
+import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/game-engine.singleton';
 import { DifficultSelectModalComponent } from './difficult-select-modal/difficult-select-modal.component';
 
 @Component({
