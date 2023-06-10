@@ -14,11 +14,11 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
     }
 
     // Here we set the Sprite Object, with or without modification for Bell
-    const worldObjectSprite = scene.physics.add.sprite(initialX, initialY, OBJECTS_SPRITE_KEY, worldObject.name);
+    const tmpSprite = scene.physics.add.sprite(initialX, initialY, OBJECTS_SPRITE_KEY, worldObject.name);
 
     // * This is an obstacle!  Don't hit the tourists :)
     if (worldObject.name === Objects.TOURIST) {
-        worldObjectSprite.anims.create({
+        tmpSprite.anims.create({
             key: TOURIST_STANDING_FRAME,
             frames: scene.anims.generateFrameNames(OBJECTS_SPRITE_KEY, {
                 prefix: TOURIST_FRAME_KEY,
@@ -28,8 +28,8 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
             frameRate: TOURIST_FRAME_RATE,
             repeat: REPEAT_FRAME,
         });
-        worldObjectSprite.anims.play(TOURIST_STANDING_FRAME, true);
+        tmpSprite.anims.play(TOURIST_STANDING_FRAME, true);
     }
-    worldObjectSprite.setName(worldObject.name);
-    worldObjectGroup.add(worldObjectSprite);
+    tmpSprite.setName(worldObject.name);
+    worldObjectGroup.add(tmpSprite);
 }

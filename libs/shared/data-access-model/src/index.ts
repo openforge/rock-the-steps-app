@@ -1,3 +1,5 @@
+export * from './lib/classes/objects';
+
 // * Singletons
 export * from './lib/classes/singletons/game-engine.singleton';
 
