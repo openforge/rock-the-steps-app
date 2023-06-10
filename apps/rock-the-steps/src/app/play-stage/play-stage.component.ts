@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GameEnum } from '@openforge/shared/data-access-model';
@@ -21,6 +20,7 @@ export class PlayStageComponent implements OnInit {
             await this.initStageScene();
         }
         // * Listen for gameEventBus to know if the user looses or won
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         GameEngineSingleton.gameEventBus.subscribe(async (value: GameEnum) => {
             if (GameEnum.WIN === value) {
                 await this.router.navigate(['/finish'], { queryParams: { r: GameEnum.WIN }, replaceUrl: true });
