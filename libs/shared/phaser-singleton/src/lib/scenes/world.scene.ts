@@ -1,8 +1,8 @@
+/* eslint-disable no-magic-numbers */
 import { GameServices } from '@openforge/capacitor-game-services';
 import {
-    BG_SCALE_X,
-    BG_SCALE_Y,
     Bushes,
+    BUSHES_KEY,
     Character,
     CHARACTER_SPRITE_KEY,
     CITY_KEY,
@@ -49,7 +49,6 @@ import { createObjects, createSteps } from '../utilities/object-creation-helper'
 export class WorldScene extends Phaser.Scene {
     private worldObjectGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private playerGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
-    private backgroundGroup: Phaser.Physics.Arcade.Group;
     private character: Character; // this is the class associated with the player
     private nextObstaclePoint = STARTER_PIXEL_FLAG; // * Pixels flag to know if next worldObject needs to be drawn
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
@@ -66,7 +65,6 @@ export class WorldScene extends Phaser.Scene {
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
     public floor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
     public secondFloor: Floor;
-    private floor_asset = 'assets/city-scene/flat-sidewalk.png'; // * Asset url relative to the app itself
 
     private stepsExist = false;
 
@@ -84,8 +82,9 @@ export class WorldScene extends Phaser.Scene {
         try {
             console.log('world.scene.ts', 'Preloading Assets...');
             this.load.image(SKY_KEY, `assets/city-scene/bg-${GameEngineSingleton.world.worldType}.png`); // * load the sky image
-            this.load.image(CITY_KEY, `assets/city-scene/city-${GameEngineSingleton.world.worldType}.png`); // * load the city image
-            this.load.image(FLOOR_KEY, this.floor_asset); // * load the floor image
+            this.load.image(CITY_KEY, `assets/city-scene/city-SUNSET.png`); // * load the city image
+            this.load.image(FLOOR_KEY, 'assets/city-scene/flat-sidewalk.png'); // * load the floor image
+            this.load.image(BUSHES_KEY, `assets/city-scene/bushes-DAYTIME.png`); // *  load the bushes image
             this.load.image(STEPS_KEY, 'assets/steps/steps_day.png');
             // * Load the objects and the player
             this.load.atlas(OBJECTS_SPRITE_KEY, `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
@@ -106,7 +105,6 @@ export class WorldScene extends Phaser.Scene {
      */
     async create(): Promise<void> {
         console.log('world.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height, PhaserSingletonService.activeGame);
-        this.setBackgrounds();
         this.initializeBasicWorld();
         createButtons(this, this.character, this.spaceBarKey);
         createAnimationsCharacter(this.character.sprite);
@@ -119,6 +117,20 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private initializeBasicWorld(): void {
+        // * Setup the City Background Image
+        const screenWidth = this.sys.canvas.width * 2; // * To get the width of the current screen
+        const screenHeight = this.sys.canvas.height; // * To get the height of the current screen
+
+        // * Setup the Sky Background Image
+        const skyBackground = this.add.image(0, 0, SKY_KEY);
+        skyBackground.setDisplaySize(screenWidth, screenHeight);
+
+        this.cityBackground = new CityBackground(this, screenWidth, screenHeight);
+        this.bushes = new Bushes(this, screenWidth, screenHeight);
+
+        // const bushesHeight = this.textures.get(FLOOR_KEY).getSourceImage().height;
+        this.floor = new Floor(this, 0, 0, screenWidth, screenHeight, 50);
+
         this.cursors = this.input.keyboard.createCursorKeys();
         this.worldObjectGroup = this.physics.add.group();
         this.playerGroup = this.physics.add.group();
@@ -336,40 +348,12 @@ export class WorldScene extends Phaser.Scene {
         // While the end has not reached do the scrolling of level
         if (!this.isEnd) {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
-            this.cityBackground.sprite.tilePositionX += MOVING_X_BACKGROUNDS;
-            // this.backgroundGroup.add(this.cityBackground.sprite);
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            // this.backgroundGroup.(element => {
-            //     const tmp = element as Phaser.GameObjects.TileSprite;
-            //     tmp.tilePositionX += MOVING_X_BACKGROUNDS;
-            // });
-            this.bushes.sprite.tilePositionX += MOVING_X_BACKGROUNDS;
-            this.floor.sprite.tilePositionX += MOVING_X_BACKGROUNDS;
+            this.cityBackground.sprite.tilePositionX += 0.5;
+            this.bushes.sprite.tilePositionX += 1;
+            this.floor.sprite.tilePositionX += 2;
             if (this.secondFloor) this.secondFloor.sprite.tilePositionX += MOVING_X_BACKGROUNDS;
         }
     }
-
-    /**
-     * Method used to setup the backgrounds to be displayed in each level
-     *
-     * @returns Phaser.GameObjects.Image[] returns the city and the bushes
-     */
-    private setBackgrounds(): void {
-        // * Setup the Sky Background Image
-        const skyBackground = this.add.image(0, 0, SKY_KEY);
-        skyBackground.setScale(BG_SCALE_X, BG_SCALE_Y);
-
-        // * Setup the City Background Image
-        const screenWidth = this.sys.canvas.width; // * To get the width of the current screen
-        const screenHeight = this.sys.canvas.height; // * To get the height of the current screen
-        const totalWidth = screenWidth * HALF_DIVIDER; // * We need to adjust this based on the desired scrolling speed
-        const bushesHeight = this.textures.get(FLOOR_KEY).getSourceImage().height;
-
-        this.cityBackground = new CityBackground(this, totalWidth, screenHeight, screenWidth);
-        this.bushes = new Bushes(this, totalWidth, screenHeight, screenWidth);
-        this.floor = new Floor(this, 0, 0, totalWidth, bushesHeight, screenWidth, screenHeight);
-    }
-
     /**
      * * When the screen is resized, we
      *

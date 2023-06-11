@@ -61,7 +61,7 @@ export function createSteps(scene: Scene, initialX: number, initialY: number, wo
     worldObjectGroup.add(tmpObject);
     scene.physics.add.collider(character.sprite, tmpObject);
 
-    // Have the floor start at X minus the width of the steps
+    // // Have the floor start at X minus the width of the steps
     const tmpFloor = scene.physics.add.image(initialX + tmpObject.width, initialY, FLOOR_KEY);
     tmpFloor.setName(FLOOR_KEY);
     tmpFloor.body.setImmovable(true);
@@ -70,7 +70,7 @@ export function createSteps(scene: Scene, initialX: number, initialY: number, wo
     scene.physics.add.collider(tmpFloor, worldObjectGroup); // * need to add to collision
     scene.physics.add.collider(tmpFloor, character.sprite); // * need to add to collision
 
-    secondFloor = new Floor(scene, initialX + tmpObject.width, initialY, 500, 200, scene.sys.canvas.width, scene.sys.canvas.height);
+    secondFloor = new Floor(scene, initialX + tmpObject.width, initialY, 500, 200, scene.sys.canvas.height);
     scene.physics.add.collider(secondFloor.sprite, worldObjectGroup);
     scene.physics.add.collider(floor.sprite, secondFloor.sprite); // make sure it doesn't fall through the other floor
 }
