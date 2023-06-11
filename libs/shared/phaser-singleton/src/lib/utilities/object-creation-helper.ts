@@ -16,7 +16,6 @@ import { WorldObject } from 'libs/shared/data-access-model/src/lib/classes/obsta
 import { Objects } from 'libs/shared/data-access-model/src/lib/enums/objects.enum';
 import { Scene } from 'phaser';
 
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 export function createObjects(worldObject: WorldObject, scene: Scene, initialX: number, initialY: number, worldObjectGroup: Phaser.Physics.Arcade.Group) {
     console.log('createObjects:', worldObject.name);
 

@@ -26,7 +26,6 @@ import {
     INITIAL_POINTS_Y,
     JUMP_KEY,
     LevelsEnum,
-    MOVING_X_BACKGROUNDS,
     OBJECTS_SPRITE_KEY,
     PAUSE_BUTTON,
     RESIZE_EVENT,
@@ -119,14 +118,15 @@ export class WorldScene extends Phaser.Scene {
     private initializeBasicWorld(): void {
         // * Setup the City Background Image
         const screenWidth = this.sys.canvas.width * 2; // * To get the width of the current screen
+        console.warn('screenWidth = ', screenWidth);
         const screenHeight = this.sys.canvas.height; // * To get the height of the current screen
-
+        console.warn('screenHeight  = ', screenHeight);
         // * Setup the Sky Background Image
         const skyBackground = this.add.image(0, 0, SKY_KEY);
-        skyBackground.setDisplaySize(screenWidth, screenHeight);
+        skyBackground.setDisplaySize(screenWidth * 2, screenHeight * 4);
 
-        this.cityBackground = new CityBackground(this, screenWidth, screenHeight);
-        this.bushes = new Bushes(this, screenWidth, screenHeight);
+        this.cityBackground = new CityBackground(this);
+        this.bushes = new Bushes(this);
 
         // const bushesHeight = this.textures.get(FLOOR_KEY).getSourceImage().height;
         this.floor = new Floor(this, 0, 0, screenWidth, screenHeight, 50);
@@ -351,7 +351,7 @@ export class WorldScene extends Phaser.Scene {
             this.cityBackground.sprite.tilePositionX += 0.5;
             this.bushes.sprite.tilePositionX += 1;
             this.floor.sprite.tilePositionX += 2;
-            if (this.secondFloor) this.secondFloor.sprite.tilePositionX += MOVING_X_BACKGROUNDS;
+            if (this.secondFloor) this.secondFloor.sprite.tilePositionX += 2;
         }
     }
     /**
