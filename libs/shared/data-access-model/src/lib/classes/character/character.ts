@@ -16,8 +16,7 @@ export class Character {
         this.sprite = scene.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
         this.sprite.anims.play(WALKING_ANIMATION, true);
         playerGroup.add(this.sprite);
-        // add collider to the floor tile so we sit on top
-        scene.physics.add.collider(this.sprite, floorTileSprite);
+        scene.physics.add.collider(this.sprite, floorTileSprite); // add collider to the floor tile so we sit on top
         try {
             //
         } catch (error) {

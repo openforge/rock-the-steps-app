@@ -1,4 +1,17 @@
-import { OBJECTS_SPRITE_KEY, REPEAT_FRAME, TOURIST_END_FRAME, TOURIST_FRAME_KEY, TOURIST_FRAME_RATE, TOURIST_STANDING_FRAME, ZERO_PAD_TOURIST } from '@openforge/shared/data-access-model';
+/* eslint-disable prefer-arrow/prefer-arrow-functions */
+import {
+    Character,
+    Floor,
+    FLOOR_KEY,
+    OBJECTS_SPRITE_KEY,
+    REPEAT_FRAME,
+    STEPS_KEY,
+    TOURIST_END_FRAME,
+    TOURIST_FRAME_KEY,
+    TOURIST_FRAME_RATE,
+    TOURIST_STANDING_FRAME,
+    ZERO_PAD_TOURIST,
+} from '@openforge/shared/data-access-model';
 import { WorldObject } from 'libs/shared/data-access-model/src/lib/classes/obstacles/world-object.class';
 import { Objects } from 'libs/shared/data-access-model/src/lib/enums/objects.enum';
 import { Scene } from 'phaser';
@@ -32,4 +45,32 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
     }
     tmpSprite.setName(worldObject.name);
     worldObjectGroup.add(tmpSprite);
+}
+
+/**
+ * TODO - IMPLEMENT THE STEPS AND PLAYER RUNNING ABOVE IT
+ */
+export function createSteps(scene: Scene, initialX: number, initialY: number, worldObjectGroup: Phaser.Physics.Arcade.Group, character: Character, secondFloor: Floor, floor: Floor) {
+    console.log('create steps', initialX, initialY);
+
+    // First, add the steps
+    const tmpObject = scene.physics.add.image(initialX - 100, initialY, STEPS_KEY);
+    tmpObject.setName(STEPS_KEY);
+    tmpObject.body.setImmovable(true);
+    tmpObject.setImmovable(true);
+    worldObjectGroup.add(tmpObject);
+    scene.physics.add.collider(character.sprite, tmpObject);
+
+    // Have the floor start at X minus the width of the steps
+    const tmpFloor = scene.physics.add.image(initialX + tmpObject.width, initialY, FLOOR_KEY);
+    tmpFloor.setName(FLOOR_KEY);
+    tmpFloor.body.setImmovable(true);
+    tmpFloor.setImmovable(true);
+    worldObjectGroup.add(tmpFloor);
+    scene.physics.add.collider(tmpFloor, worldObjectGroup); // * need to add to collision
+    scene.physics.add.collider(tmpFloor, character.sprite); // * need to add to collision
+
+    secondFloor = new Floor(scene, initialX + tmpObject.width, initialY, 500, 200, scene.sys.canvas.width, scene.sys.canvas.height);
+    scene.physics.add.collider(secondFloor.sprite, worldObjectGroup);
+    scene.physics.add.collider(floor.sprite, secondFloor.sprite); // make sure it doesn't fall through the other floor
 }

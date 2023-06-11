@@ -8,8 +8,8 @@ export class Bushes {
     public sprite: Phaser.GameObjects.TileSprite;
 
     constructor(scene: Scene, totalWidth: number, screenWidth: number, screenHeight: number) {
-        // * Now load the bushes image
-        scene.load.image(BUSHES_KEY, `assets/city-scene/bushes-${GameEngineSingleton.world.worldType}.png`);
+        console.log('bushes constructed');
+        scene.load.image(BUSHES_KEY, `assets/city-scene/bushes-${GameEngineSingleton.world.worldType}.png`); // * Now load the bushes image
         // * Creating the tileSprite
         this.sprite = scene.add.tileSprite(0, 0, totalWidth, screenHeight, BUSHES_KEY);
         this.sprite.setOrigin(0, BUSHES_ORIGIN_Y);

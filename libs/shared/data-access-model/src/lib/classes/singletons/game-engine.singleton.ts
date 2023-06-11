@@ -4,7 +4,7 @@ import { DifficultyEnum, GameEnum, LevelsEnum } from '@openforge/shared/data-acc
 import * as Phaser from 'phaser';
 import { Subject } from 'rxjs';
 
-import { World } from '../world.class';
+import { World } from '../World.class';
 
 /**
  * * GameEngine Singleton Service

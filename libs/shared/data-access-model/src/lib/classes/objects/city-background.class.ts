@@ -7,6 +7,7 @@ export class CityBackground {
     public sprite: Phaser.GameObjects.TileSprite;
 
     constructor(scene: Scene, totalWidth: number, screenWidth: number, screenHeight: number) {
+        console.log('city constructed');
         // * Creating the tileSprite
         this.sprite = scene.add.tileSprite(0, 0, totalWidth, screenHeight, STEPS_KEY);
         this.sprite.setOrigin(0, CITY_ORIGIN_Y);

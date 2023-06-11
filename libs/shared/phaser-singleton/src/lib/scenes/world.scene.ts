@@ -44,13 +44,14 @@ import { GameEngineSingleton } from '../../../../data-access-model/src/lib/class
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 import { createAnimationsCharacter } from '../utilities/character-animation';
 import { createButtons } from '../utilities/hud-helper';
-import { createObjects } from '../utilities/object-creation-helper';
+import { createObjects, createSteps } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
     private worldObjectGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private playerGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
+    private backgroundGroup: Phaser.Physics.Arcade.Group;
     private character: Character; // this is the class associated with the player
-    private nextWorldObjectPixelFlag = STARTER_PIXEL_FLAG; // * Pixels flag to know if next worldObject needs to be drawn
+    private nextObstaclePoint = STARTER_PIXEL_FLAG; // * Pixels flag to know if next worldObject needs to be drawn
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
     private damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
     private healthbar: Phaser.GameObjects.Sprite; // * Healthbar used to show the remaining life of the player
@@ -64,6 +65,7 @@ export class WorldScene extends Phaser.Scene {
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
     public floor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
+    public secondFloor: Floor;
     private floor_asset = 'assets/city-scene/flat-sidewalk.png'; // * Asset url relative to the app itself
 
     private stepsExist = false;
@@ -81,22 +83,18 @@ export class WorldScene extends Phaser.Scene {
     async preload(): Promise<void> {
         try {
             console.log('world.scene.ts', 'Preloading Assets...');
-
-            // * Now load the sky image
-            this.load.image(SKY_KEY, `assets/city-scene/bg-${GameEngineSingleton.world.worldType}.png`);
-            // * Now load the city image
-            this.load.image(CITY_KEY, `assets/city-scene/city-${GameEngineSingleton.world.worldType}.png`);
-            // * Now load the floor image
-            this.load.image(FLOOR_KEY, this.floor_asset);
+            this.load.image(SKY_KEY, `assets/city-scene/bg-${GameEngineSingleton.world.worldType}.png`); // * load the sky image
+            this.load.image(CITY_KEY, `assets/city-scene/city-${GameEngineSingleton.world.worldType}.png`); // * load the city image
+            this.load.image(FLOOR_KEY, this.floor_asset); // * load the floor image
+            this.load.image(STEPS_KEY, 'assets/steps/steps_day.png');
             // * Load the objects and the player
             this.load.atlas(OBJECTS_SPRITE_KEY, `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
+            this.load.image(END_KEY, 'assets/objects/end.png');
             this.load.atlas(CHARACTER_SPRITE_KEY, `assets/character/character-sprite.png`, `assets/character/character-sprite.json`);
-            //load buttons
+            // * load the HUD buttons
             this.load.image(JUMP_KEY, `assets/buttons/jump.png`);
             this.load.atlas(CONTROLS_KEY, `assets/buttons/controls.png`, `assets/buttons/controls.json`);
             this.load.atlas(HEALTHBAR_KEY, `assets/objects/healthbar.png`, `assets/objects/healthbar.json`);
-            this.load.image(END_KEY, 'assets/objects/end.png');
-            this.load.image(STEPS_KEY, 'assets/steps/steps_day.png');
             this.load.image(PAUSE_BUTTON, 'assets/buttons/pause-button.png');
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
@@ -159,30 +157,30 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * * Method used to initialize the objects of the current World level
+     * * Creates objects every X pixels, based on game difficulty.
      *
      * @return void
      */
     private createObjects(): void {
-        // Generates objects while the level does not end
-        let initialX: number = this.sys.canvas.width;
-        const initialY = 0;
-        if (GameEngineSingleton.points > this.nextWorldObjectPixelFlag && GameEngineSingleton.points < GameEngineSingleton.world.pointsToEndLevel) {
+        const x = this.sys.canvas.width;
+        const y = 0;
+
+        // createObstacles
+        if (GameEngineSingleton.points > this.nextObstaclePoint && GameEngineSingleton.points < GameEngineSingleton.world.pointsToEndLevel) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
             const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
-            initialX = this.sys.canvas.width + worldObject.spritePositionX;
-
-            createObjects(worldObject, this, initialX, initialY, this.worldObjectGroup);
-            this.nextWorldObjectPixelFlag += GameEngineSingleton.world.pixelForNextObstacle;
+            createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.worldObjectGroup);
+            this.nextObstaclePoint += GameEngineSingleton.world.pixelForNextObstacle;
         }
 
-        // CREATE STEPS
+        // createSteps
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps && !this.stepsExist) {
-            this.createSteps(initialX, initialY);
+            createSteps(this, x, y, this.worldObjectGroup, this.character, this.secondFloor, this.floor);
+            this.stepsExist = true;
         }
         // Draw the museum if the goal points has been reached
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
-            const tmpObject: Phaser.Types.Physics.Arcade.ImageWithDynamicBody = this.physics.add.image(initialX, initialY, END_KEY);
+            const tmpObject = this.physics.add.image(x, y, END_KEY);
             tmpObject.setName(END_KEY);
             tmpObject.setScale(END_OBJECT_SCALE);
             this.worldObjectGroup.add(tmpObject);
@@ -190,25 +188,6 @@ export class WorldScene extends Phaser.Scene {
         }
         this.worldObjectGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
         this.physics.add.collider(this.floor.sprite, this.worldObjectGroup);
-    }
-
-    /**
-     * TODO - IMPLEMENT THE STEPS AND PLAYER RUNNING ABOVE IT
-     */
-    private createSteps(initialX: number, initialY: number): void {
-        console.log('create steps', initialX, initialY);
-
-        // First, add the steps
-        // const tmpObject: Phaser.Types.Physics.Arcade.ImageWithDynamicBody = this.physics.add.image(initialX, initialY, STEPS_KEY);
-        // tmpObject.setName(STEPS_KEY);
-        // tmpObject.body.setImmovable(true);
-        // tmpObject.setImmovable(true);
-        // this.worldObjectGroup.add(tmpObject);
-        // this.physics.add.collider(this.character.sprite, tmpObject);
-        // this.stepsExist = true;
-
-        // Then, move the rest of the scene up
-        // this.floor.sprite.setPosition(0, this.floor.sprite.y + tmpObject.height);
     }
 
     /**
@@ -358,8 +337,15 @@ export class WorldScene extends Phaser.Scene {
         if (!this.isEnd) {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
             this.cityBackground.sprite.tilePositionX += MOVING_X_BACKGROUNDS;
+            // this.backgroundGroup.add(this.cityBackground.sprite);
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            // this.backgroundGroup.(element => {
+            //     const tmp = element as Phaser.GameObjects.TileSprite;
+            //     tmp.tilePositionX += MOVING_X_BACKGROUNDS;
+            // });
             this.bushes.sprite.tilePositionX += MOVING_X_BACKGROUNDS;
             this.floor.sprite.tilePositionX += MOVING_X_BACKGROUNDS;
+            if (this.secondFloor) this.secondFloor.sprite.tilePositionX += MOVING_X_BACKGROUNDS;
         }
     }
 
@@ -380,10 +366,8 @@ export class WorldScene extends Phaser.Scene {
         const bushesHeight = this.textures.get(FLOOR_KEY).getSourceImage().height;
 
         this.cityBackground = new CityBackground(this, totalWidth, screenHeight, screenWidth);
-
         this.bushes = new Bushes(this, totalWidth, screenHeight, screenWidth);
-
-        this.floor = new Floor(this, totalWidth, bushesHeight, screenWidth, screenHeight);
+        this.floor = new Floor(this, 0, 0, totalWidth, bushesHeight, screenWidth, screenHeight);
     }
 
     /**
