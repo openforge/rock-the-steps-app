@@ -187,7 +187,7 @@ export class WorldScene extends Phaser.Scene {
 
         // createSteps
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps && !this.stepsExist) {
-            createSteps(this, x, y, this.worldObjectGroup, this.character, this.secondFloor, this.floor);
+            createSteps(this, x, y, this.worldObjectGroup, this.character);
             this.stepsExist = true;
         }
         // Draw the museum if the goal points has been reached

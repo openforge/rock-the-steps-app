@@ -7,7 +7,6 @@ export class Floor {
 
     constructor(scene: Scene, x: number, y: number, screenWidth: number, screenHeight: number, bushesHeight: number) {
         console.log('floor constructed');
-        // * Creating the tileSprite of the floor
         this.sprite = scene.add.tileSprite(x, y, screenWidth, screenHeight, FLOOR_KEY);
         this.sprite.setOrigin(x, y);
         this.sprite.setSize(screenWidth, screenHeight); // * We need to set the size to avoid duplications
