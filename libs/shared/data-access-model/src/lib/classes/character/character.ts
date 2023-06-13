@@ -12,17 +12,23 @@ export class Character {
     public isDamaged: boolean = false; // * Flag to detect is character is being damaged
     public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
 
-    constructor(scene: Scene, playerGroup: Phaser.Physics.Arcade.Group, floorTileSprite: Phaser.GameObjects.TileSprite) {
+    constructor(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite) {
         this.sprite = scene.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
         this.sprite.anims.play(WALKING_ANIMATION, true);
-        playerGroup.add(this.sprite);
-        // add collider to the floor tile so we sit on top
-        scene.physics.add.collider(this.sprite, floorTileSprite);
-        try {
-            //
-        } catch (error) {
-            console.error(`Error building obstacle ${this.name}`, error);
-        }
+        this.addFloorCollision(scene, floorTileSprite);
+    }
+
+    /**
+     * * Adds collider with floor tile on the first setup, as well as dynamic floors after that.
+     *
+     * @param scene Scene
+     * @param floorTileSprite Phaser.GameObjects.TileSprite
+     */
+    public addFloorCollision(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        scene.physics.add.collider(this.sprite, floorTileSprite, (character, floor) => {
+            // NOISY console.log('character.ts --> FLOOR collision detected', character.name, floor.name);
+        });
     }
 
     /**

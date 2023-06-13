@@ -38,6 +38,4 @@ export const PLAYER_POS_X = 50;
 export const PLAYER_POS_Y = 220;
 export const BG_SCALE_X = 2.5;
 export const BG_SCALE_Y = 12;
-export const CITY_ORIGIN_Y = 0.1;
-export const BUSHES_ORIGIN_Y = 0.05;
 export const STARTER_PIXEL_FLAG = 50;

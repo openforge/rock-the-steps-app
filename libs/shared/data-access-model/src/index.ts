@@ -33,7 +33,7 @@ export * from './lib/classes/obstacles/bigpoo.class';
 export * from './lib/enums/index';
 
 // * Models
-export * from './lib/models/leaderboards.model';
+export * from './lib/models/leaderboards.interface';
 
 // * Constants
 export * from './lib/constants/game-keys.constants';
