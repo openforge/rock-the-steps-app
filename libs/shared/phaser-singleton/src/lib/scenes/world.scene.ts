@@ -35,7 +35,7 @@ import {
     WORLD_OBJECTS_VELOCITY,
     WORLD_SCENE,
 } from '@openforge/shared/data-access-model';
-import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
+import { CONFIG, PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import * as Phaser from 'phaser';
 
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/game-engine.singleton';
@@ -113,17 +113,10 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private initializeBasicWorld(): void {
-        const canvasWidth = this.sys.canvas.width; // * To get the width of the current screen
-        const canvasHeight = this.sys.canvas.height; // * To get the height of the current screen
-        console.warn('canvasWidth = ', canvasWidth);
-        console.warn('canvasHeight = ', canvasHeight);
-
         const skyBackground = this.add.image(0, 0, SKY_KEY); // * Setup the Sky Background Image
-        console.log('skybackground {height,width} BEFORE =', skyBackground.height, skyBackground.width);
         skyBackground.setOrigin(0, 0);
-        skyBackground.setDisplaySize(canvasWidth, canvasHeight);
-        skyBackground.setSize(canvasWidth, canvasHeight);
-        console.log('skybackground {height,width} AFTER =', skyBackground.height, skyBackground.width);
+        skyBackground.setDisplaySize(CONFIG.DEFAULT_WIDTH, CONFIG.DEFAULT_HEIGHT);
+        skyBackground.setSize(CONFIG.DEFAULT_WIDTH, CONFIG.DEFAULT_HEIGHT);
 
         this.cityBackground = new CityBackground(this);
         this.bushes = new Bushes(this);

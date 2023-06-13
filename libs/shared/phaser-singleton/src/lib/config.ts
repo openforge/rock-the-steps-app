@@ -1,5 +1,6 @@
 export const CONFIG = {
-    DEFAULT_WIDTH: 800,
-    DEFAULT_HEIGHT: 600,
+    DEFAULT_WIDTH: window.innerWidth,
+    DEFAULT_HEIGHT: window.innerHeight,
+    SCALE_RATIO: window.innerWidth / window.innerHeight,
     DEFAULT_CONTROL_SCALE: 0.7,
 };
