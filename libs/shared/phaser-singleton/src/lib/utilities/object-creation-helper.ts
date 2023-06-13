@@ -52,18 +52,25 @@ export function createSteps(scene: Scene, initialX: number, initialY: number, ob
     console.log('create steps', initialX, initialY);
 
     // First, add the steps
-    const tmpObject = scene.physics.add.image(initialX - 100, initialY, STEPS_KEY);
-    tmpObject.setName(STEPS_KEY);
-    tmpObject.body.setImmovable(true);
-    tmpObject.setImmovable(true);
-    obstacleGroup.add(tmpObject);
-    scene.physics.add.collider(character.sprite, tmpObject);
+    const tmpSteps = scene.physics.add.image(initialX - 100, initialY, STEPS_KEY);
+    tmpSteps.setName(STEPS_KEY);
+    tmpSteps.body.setImmovable(true);
+    tmpSteps.setImmovable(true);
+    obstacleGroup.add(tmpSteps);
 
-    const tmpFloor = scene.physics.add.image(initialX + tmpObject.width, initialY, FLOOR_KEY);
+    scene.physics.add.collider(character.sprite, tmpSteps, (tmpChar, tmpStepsCB) => {
+        console.log('Collision #1' + tmpChar.name + ' XXX ' + tmpStepsCB.name);
+    });
+
+    // * Always shift it by X + width of the steps so they dont overlap
+    const tmpFloor = scene.physics.add.image(initialX + tmpSteps.width, initialY, FLOOR_KEY);
     tmpFloor.setName(FLOOR_KEY);
     tmpFloor.body.setImmovable(true);
     tmpFloor.setImmovable(true);
     obstacleGroup.add(tmpFloor);
     scene.physics.add.collider(tmpFloor, obstacleGroup); // * Collide with obstacleGroup
-    scene.physics.add.collider(tmpFloor, character.sprite); // * need to add to collision
+
+    scene.physics.add.collider(character.sprite, tmpFloor, (tmpCharSprite, floorSprite) => {
+        console.log('Collision #2' + tmpCharSprite.name + ' XXX ' + floorSprite.name);
+    });
 }

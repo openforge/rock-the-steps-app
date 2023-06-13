@@ -43,7 +43,7 @@ import { GameEngineSingleton } from '../../../../data-access-model/src/lib/class
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 import { createAnimationsCharacter } from '../utilities/character-animation';
 import { createButtons } from '../utilities/hud-helper';
-import { createObjects, createSteps } from '../utilities/object-creation-helper';
+import { createObjects } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
     private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
@@ -115,11 +115,10 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private initializeBasicWorld(): void {
-        // * Setup the City Background Image
         const screenWidth = this.sys.canvas.width * 2; // * To get the width of the current screen
-        console.warn('screenWidth = ', screenWidth);
         const screenHeight = this.sys.canvas.height; // * To get the height of the current screen
-        console.warn('screenHeight  = ', screenHeight);
+        console.log('screenWidth = ', screenWidth);
+        console.log('screenHeight  = ', screenHeight);
         const skyBackground = this.add.image(0, 0, SKY_KEY); // * Setup the Sky Background Image
         skyBackground.setDisplaySize(screenWidth * 2, screenHeight * 4);
 
@@ -182,7 +181,9 @@ export class WorldScene extends Phaser.Scene {
 
         // createSteps
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps && !this.stepsExist) {
-            createSteps(this, x, y, this.obstacleGroup, this.character);
+            // TODO - Implement the create steps function to create steps and 2nd level of ground.  Not yet hooked up.
+            // createSteps(this, x, y, this.obstacleGroup, this.character);
+            //this.floor.sprite.setPosition(this.floor.sprite.x, this.floor.sprite.y - 50);
             this.stepsExist = true;
         }
         // Draw the museum if the goal points has been reached
@@ -265,7 +266,6 @@ export class WorldScene extends Phaser.Scene {
      */
     private cleanUpObjects(): void {
         this.obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
-            //cleanup
             if (worldObject && worldObject.x + worldObject.width < 0 - worldObject.width) {
                 worldObject.destroy();
                 this.obstacleGroup.remove(worldObject);

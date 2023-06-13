@@ -25,8 +25,9 @@ export class Character {
      * @param floorTileSprite Phaser.GameObjects.TileSprite
      */
     public addFloorCollision(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         scene.physics.add.collider(this.sprite, floorTileSprite, (character, floor) => {
-            console.log('character.ts --> FLOOR collision detected', character.name, floor.name);
+            // NOISY console.log('character.ts --> FLOOR collision detected', character.name, floor.name);
         });
     }
 
