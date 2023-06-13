@@ -1,7 +1,6 @@
 /* eslint-disable prefer-arrow/prefer-arrow-functions */
 import {
     Character,
-    Floor,
     FLOOR_KEY,
     OBJECTS_SPRITE_KEY,
     REPEAT_FRAME,
@@ -49,7 +48,7 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
 /**
  * TODO - IMPLEMENT THE STEPS AND PLAYER RUNNING ABOVE IT
  */
-export function createSteps(scene: Scene, initialX: number, initialY: number, worldObjectGroup: Phaser.Physics.Arcade.Group, character: Character, secondFloor: Floor, floor: Floor) {
+export function createSteps(scene: Scene, initialX: number, initialY: number, worldObjectGroup: Phaser.Physics.Arcade.Group, character: Character) {
     console.log('create steps', initialX, initialY);
 
     // First, add the steps
@@ -60,16 +59,11 @@ export function createSteps(scene: Scene, initialX: number, initialY: number, wo
     worldObjectGroup.add(tmpObject);
     scene.physics.add.collider(character.sprite, tmpObject);
 
-    // // Have the floor start at X minus the width of the steps
     const tmpFloor = scene.physics.add.image(initialX + tmpObject.width, initialY, FLOOR_KEY);
     tmpFloor.setName(FLOOR_KEY);
     tmpFloor.body.setImmovable(true);
     tmpFloor.setImmovable(true);
     worldObjectGroup.add(tmpFloor);
-    scene.physics.add.collider(tmpFloor, worldObjectGroup); // * need to add to collision
+    scene.physics.add.collider(tmpFloor, worldObjectGroup); // * Collide with worldObjectGroup
     scene.physics.add.collider(tmpFloor, character.sprite); // * need to add to collision
-
-    secondFloor = new Floor(scene, initialX + tmpObject.width, initialY, 500, 200, scene.sys.canvas.height);
-    scene.physics.add.collider(secondFloor.sprite, worldObjectGroup);
-    scene.physics.add.collider(floor.sprite, secondFloor.sprite); // make sure it doesn't fall through the other floor
 }

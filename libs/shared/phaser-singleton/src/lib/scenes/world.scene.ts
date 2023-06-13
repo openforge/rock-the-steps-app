@@ -225,7 +225,6 @@ export class WorldScene extends Phaser.Scene {
                     // console.log(`COLLISION ${worldObject.name}`, playerXEnd >= worldObjectXStart, playerXStart <= worldObjectXEnd, playerYBelow >= worldObjectYAbove);
                     // console.log('DAMAGE BOUNDS', playerXEnd, worldObjectXStart, playerXStart, worldObjectXEnd, playerYBelow, worldObjectYAbove);
                     if (playerXEnd >= worldObjectXStart && playerXStart <= worldObjectXEnd && playerYBelow >= worldObjectYAbove) {
-                        //logic damage
                         if (worldObject.name === Objects.CHEESESTEAK) {
                             this.healUp(worldObject);
                         } else if (worldObject.name === END_KEY) {

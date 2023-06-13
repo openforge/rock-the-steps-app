@@ -3,6 +3,10 @@
 ```npm install```
 ```npx nx run rock-the-steps:serve``` 
 
+# Debug Mode
+
+To turn on/off debug mode (the boxes) go to phaser-singleton.module.ts and toggle the arcade 'debug:false/debug:true'
+
 # Architecture
 
 This project uses Ionic Framework for the majority of screens and overlays; and uses Phaser for the gameplay itself.  Please see corresponding documentation on their respective websites.

@@ -16,12 +16,19 @@ export class Character {
         this.sprite = scene.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
         this.sprite.anims.play(WALKING_ANIMATION, true);
         playerGroup.add(this.sprite);
-        scene.physics.add.collider(this.sprite, floorTileSprite); // add collider to the floor tile so we sit on top
-        try {
-            //
-        } catch (error) {
-            console.error(`Error building obstacle ${this.name}`, error);
-        }
+        this.addFloorCollision(scene, floorTileSprite);
+    }
+
+    /**
+     * * Adds collider with floor tile on the first setup, as well as dynamic floors after that.
+     *
+     * @param scene Scene
+     * @param floorTileSprite Phaser.GameObjects.TileSprite
+     */
+    public addFloorCollision(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite) {
+        scene.physics.add.collider(this.sprite, floorTileSprite, (character, floor) => {
+            console.log('character.ts --> FLOOR collision detected', character.name, floor.name);
+        });
     }
 
     /**
