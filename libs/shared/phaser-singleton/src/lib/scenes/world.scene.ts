@@ -46,8 +46,7 @@ import { createButtons } from '../utilities/hud-helper';
 import { createObjects, createSteps } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
-    private worldObjectGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
-    private playerGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
+    private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private character: Character; // this is the class associated with the player
     private nextObstaclePoint = STARTER_PIXEL_FLAG; // * Pixels flag to know if next worldObject needs to be drawn
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
@@ -129,11 +128,10 @@ export class WorldScene extends Phaser.Scene {
         this.floor = new Floor(this, 0, 0, screenWidth, screenHeight, 50);
 
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.worldObjectGroup = this.physics.add.group();
-        this.playerGroup = this.physics.add.group();
+        this.obstacleGroup = this.physics.add.group();
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.damageValue = 0;
-        this.character = new Character(this, this.playerGroup, this.floor.sprite);
+        this.character = new Character(this, this.floor.sprite);
         this.healthbar = this.add.sprite(INITIAL_HEALTHBAR_X, INITIAL_HEALTHBAR_Y, HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}0`);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3rem', color: 'black' });
     }
@@ -178,13 +176,13 @@ export class WorldScene extends Phaser.Scene {
         if (GameEngineSingleton.points > this.nextObstaclePoint && GameEngineSingleton.points < GameEngineSingleton.world.pointsToEndLevel) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
             const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
-            createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.worldObjectGroup);
+            createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.obstacleGroup);
             this.nextObstaclePoint += GameEngineSingleton.world.pixelForNextObstacle;
         }
 
         // createSteps
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps && !this.stepsExist) {
-            createSteps(this, x, y, this.worldObjectGroup, this.character);
+            createSteps(this, x, y, this.obstacleGroup, this.character);
             this.stepsExist = true;
         }
         // Draw the museum if the goal points has been reached
@@ -192,11 +190,11 @@ export class WorldScene extends Phaser.Scene {
             const tmpObject = this.physics.add.image(x, y, END_KEY);
             tmpObject.setName(END_KEY);
             tmpObject.setScale(END_OBJECT_SCALE);
-            this.worldObjectGroup.add(tmpObject);
+            this.obstacleGroup.add(tmpObject);
             this.isEndReached = true;
         }
-        this.worldObjectGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
-        this.physics.add.collider(this.floor.sprite, this.worldObjectGroup);
+        this.obstacleGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
+        this.physics.add.collider(this.floor.sprite, this.obstacleGroup);
     }
 
     /**
@@ -205,8 +203,8 @@ export class WorldScene extends Phaser.Scene {
      * @private
      */
     private objectsDetection(): void {
-        if (this.worldObjectGroup.getChildren().length > 0) {
-            this.worldObjectGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
+        if (this.obstacleGroup.getChildren().length > 0) {
+            this.obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
                 if (worldObject) {
                     const playerYBelow = this.character.sprite.y + this.character.sprite.height / HALF_DIVIDER;
                     const playerXStart = this.character.sprite.x - this.character.sprite.width / HALF_DIVIDER;
@@ -216,7 +214,7 @@ export class WorldScene extends Phaser.Scene {
                     const worldObjectXEnd = worldObject.x + worldObject.width / HALF_DIVIDER;
                     if (worldObject.name === END_KEY && worldObjectXEnd <= window.innerWidth) {
                         // If the end is displayed stop the movement
-                        this.worldObjectGroup.setVelocityX(0);
+                        this.obstacleGroup.setVelocityX(0);
                         this.isEnd = true;
                     }
                     // console.log(`COLLISION ${worldObject.name}`, playerXEnd >= worldObjectXStart, playerXStart <= worldObjectXEnd, playerYBelow >= worldObjectYAbove);
@@ -230,7 +228,7 @@ export class WorldScene extends Phaser.Scene {
                         } else if (worldObject.name === Objects.GLOVES) {
                             //* If gloves is picked up destroy the asset
                             worldObject.destroy();
-                            this.worldObjectGroup.remove(worldObject);
+                            this.obstacleGroup.remove(worldObject);
                             this.character.makeInvulnerable(this);
                         } else if (!this.character.isDamaged && !this.character.isInvulnerable) {
                             this.receiveDamage();
@@ -266,11 +264,11 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private cleanUpObjects(): void {
-        this.worldObjectGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
+        this.obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
             //cleanup
             if (worldObject && worldObject.x + worldObject.width < 0 - worldObject.width) {
                 worldObject.destroy();
-                this.worldObjectGroup.remove(worldObject);
+                this.obstacleGroup.remove(worldObject);
             }
         });
     }
@@ -284,7 +282,7 @@ export class WorldScene extends Phaser.Scene {
         this.damageValue--;
         this.healthbar.setTexture(HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}${this.damageValue}`);
         worldObject.destroy(); //* If cheesesteak is picked up destroy the asset
-        this.worldObjectGroup.remove(worldObject);
+        this.obstacleGroup.remove(worldObject);
     }
 
     /**

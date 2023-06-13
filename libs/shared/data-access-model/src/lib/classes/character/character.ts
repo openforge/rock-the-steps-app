@@ -12,10 +12,9 @@ export class Character {
     public isDamaged: boolean = false; // * Flag to detect is character is being damaged
     public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
 
-    constructor(scene: Scene, playerGroup: Phaser.Physics.Arcade.Group, floorTileSprite: Phaser.GameObjects.TileSprite) {
+    constructor(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite) {
         this.sprite = scene.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
         this.sprite.anims.play(WALKING_ANIMATION, true);
-        playerGroup.add(this.sprite);
         this.addFloorCollision(scene, floorTileSprite);
     }
 

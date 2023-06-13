@@ -15,7 +15,7 @@ import { WorldObject } from 'libs/shared/data-access-model/src/lib/classes/obsta
 import { Objects } from 'libs/shared/data-access-model/src/lib/enums/objects.enum';
 import { Scene } from 'phaser';
 
-export function createObjects(worldObject: WorldObject, scene: Scene, initialX: number, initialY: number, worldObjectGroup: Phaser.Physics.Arcade.Group) {
+export function createObjects(worldObject: WorldObject, scene: Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group) {
     console.log('createObjects:', worldObject.name);
 
     // If it's a BELL, Modify how it displays
@@ -42,13 +42,13 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
         tmpSprite.anims.play(TOURIST_STANDING_FRAME, true);
     }
     tmpSprite.setName(worldObject.name);
-    worldObjectGroup.add(tmpSprite);
+    obstacleGroup.add(tmpSprite);
 }
 
 /**
  * TODO - IMPLEMENT THE STEPS AND PLAYER RUNNING ABOVE IT
  */
-export function createSteps(scene: Scene, initialX: number, initialY: number, worldObjectGroup: Phaser.Physics.Arcade.Group, character: Character) {
+export function createSteps(scene: Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group, character: Character) {
     console.log('create steps', initialX, initialY);
 
     // First, add the steps
@@ -56,14 +56,14 @@ export function createSteps(scene: Scene, initialX: number, initialY: number, wo
     tmpObject.setName(STEPS_KEY);
     tmpObject.body.setImmovable(true);
     tmpObject.setImmovable(true);
-    worldObjectGroup.add(tmpObject);
+    obstacleGroup.add(tmpObject);
     scene.physics.add.collider(character.sprite, tmpObject);
 
     const tmpFloor = scene.physics.add.image(initialX + tmpObject.width, initialY, FLOOR_KEY);
     tmpFloor.setName(FLOOR_KEY);
     tmpFloor.body.setImmovable(true);
     tmpFloor.setImmovable(true);
-    worldObjectGroup.add(tmpFloor);
-    scene.physics.add.collider(tmpFloor, worldObjectGroup); // * Collide with worldObjectGroup
+    obstacleGroup.add(tmpFloor);
+    scene.physics.add.collider(tmpFloor, obstacleGroup); // * Collide with obstacleGroup
     scene.physics.add.collider(tmpFloor, character.sprite); // * need to add to collision
 }
