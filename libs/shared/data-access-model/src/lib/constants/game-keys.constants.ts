@@ -19,7 +19,6 @@ export const JUMP_KEY = 'jump';
 export const RIGHT_KEY = 'right';
 export const CONTROLS_KEY = 'controls';
 export const PAUSE_BUTTON = 'pauseButton';
-export const RESIZE_EVENT = 'resize';
 export const TOURIST_STANDING_FRAME = 'standing';
 export const TOURIST_FRAME_KEY = 'tourist';
 export const CITY_KEY = 'city-background';

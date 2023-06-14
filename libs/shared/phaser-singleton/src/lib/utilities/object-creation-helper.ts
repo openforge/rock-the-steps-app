@@ -16,7 +16,7 @@ import { Objects } from 'libs/shared/data-access-model/src/lib/enums/objects.enu
 import { Scene } from 'phaser';
 
 export function createObjects(worldObject: WorldObject, scene: Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group) {
-    console.log('createObjects:', worldObject.name);
+    // console.log('createObjects:', worldObject.name);
 
     // If it's a BELL, Modify how it displays
     if (worldObject.name === Objects.BELL) {

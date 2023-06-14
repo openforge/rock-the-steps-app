@@ -15,7 +15,7 @@ export const createAligned = (scene: Scene, totalWidth: number, texture: string,
     let x = 0;
 
     for (let i = 0; i < count; ++i) {
-        const tmpImage = scene.add.tileSprite(x, scene.scale.height, totalWidth, scene.scale.height, texture).setOrigin(0, 1).setScrollFactor(scrollFactor);
+        const tmpImage = scene.add.tileSprite(x, scene.scale.height, 0, 0, texture).setOrigin(0, 1).setScrollFactor(scrollFactor);
         x += tmpImage.width;
         tmpImage.tilePositionX += MOVING_X_BACKGROUNDS;
     }

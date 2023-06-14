@@ -28,7 +28,6 @@ import {
     LevelsEnum,
     OBJECTS_SPRITE_KEY,
     PAUSE_BUTTON,
-    RESIZE_EVENT,
     SKY_KEY,
     STARTER_PIXEL_FLAG,
     STEPS_KEY,
@@ -36,7 +35,7 @@ import {
     WORLD_OBJECTS_VELOCITY,
     WORLD_SCENE,
 } from '@openforge/shared/data-access-model';
-import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
+import { CONFIG, PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import * as Phaser from 'phaser';
 
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/game-engine.singleton';
@@ -80,7 +79,7 @@ export class WorldScene extends Phaser.Scene {
         try {
             console.log('world.scene.ts', 'Preloading Assets...');
             this.load.image(SKY_KEY, `assets/city-scene/bg-${GameEngineSingleton.world.worldType}.png`); // * load the sky image
-            this.load.image(CITY_KEY, `assets/city-scene/city-SUNSET.png`); // * load the city image
+            this.load.image(CITY_KEY, `assets/city-scene/city-${GameEngineSingleton.world.worldType}.png`); // * load the city image
             this.load.image(FLOOR_KEY, 'assets/city-scene/flat-sidewalk.png'); // * load the floor image
             this.load.image(BUSHES_KEY, `assets/city-scene/bushes-DAYTIME.png`); // *  load the bushes image
             this.load.image(STEPS_KEY, 'assets/steps/steps_day.png');
@@ -106,7 +105,6 @@ export class WorldScene extends Phaser.Scene {
         this.initializeBasicWorld();
         createButtons(this, this.character, this.spaceBarKey);
         createAnimationsCharacter(this.character.sprite);
-        this.scale.on(RESIZE_EVENT, this.resize, this); // * Set cameras to the correct position
     }
 
     /**
@@ -115,16 +113,14 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private initializeBasicWorld(): void {
-        const screenWidth = this.sys.canvas.width * 2; // * To get the width of the current screen
-        const screenHeight = this.sys.canvas.height; // * To get the height of the current screen
-        console.log('screenWidth = ', screenWidth);
-        console.log('screenHeight  = ', screenHeight);
         const skyBackground = this.add.image(0, 0, SKY_KEY); // * Setup the Sky Background Image
-        skyBackground.setDisplaySize(screenWidth * 2, screenHeight * 4);
+        skyBackground.setOrigin(0, 0);
+        skyBackground.setDisplaySize(CONFIG.DEFAULT_WIDTH, CONFIG.DEFAULT_HEIGHT);
+        skyBackground.setSize(CONFIG.DEFAULT_WIDTH, CONFIG.DEFAULT_HEIGHT);
 
         this.cityBackground = new CityBackground(this);
         this.bushes = new Bushes(this);
-        this.floor = new Floor(this, 0, 0, screenWidth, screenHeight, 50);
+        this.floor = new Floor(this, 0, 0);
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.obstacleGroup = this.physics.add.group();
@@ -132,7 +128,7 @@ export class WorldScene extends Phaser.Scene {
         this.damageValue = 0;
         this.character = new Character(this, this.floor.sprite);
         this.healthbar = this.add.sprite(INITIAL_HEALTHBAR_X, INITIAL_HEALTHBAR_Y, HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}0`);
-        this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3rem', color: 'black' });
+        this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
     }
 
     /**
@@ -347,14 +343,5 @@ export class WorldScene extends Phaser.Scene {
             this.floor.sprite.tilePositionX += 2;
             if (this.secondFloor) this.secondFloor.sprite.tilePositionX += 2;
         }
-    }
-    /**
-     * * When the screen is resized, we
-     *
-     * @param gameSize
-     */
-    resize(gameSize: Phaser.Structs.Size): void {
-        console.log('Resizing', gameSize.width, gameSize.height);
-        this.cameras.resize(gameSize.width, gameSize.height);
     }
 }
