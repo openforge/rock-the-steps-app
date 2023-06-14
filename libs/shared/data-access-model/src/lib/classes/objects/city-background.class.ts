@@ -11,10 +11,6 @@ export class CityBackground {
         // * Creating the tileSprite
         this.sprite = scene.add.tileSprite(0, 0, 0, 0, CITY_KEY);
         this.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.sprite.width);
-        console.warn('city.sprite.displayWidth = ', this.sprite.displayWidth);
-        console.warn('city.sprite.displayHeight = ', this.sprite.displayHeight);
-        console.warn('city.sprite.width = ', this.sprite.width);
-        console.warn('city.sprite.height = ', this.sprite.height);
         this.sprite.setOrigin(0, 0);
         this.sprite.setPosition(0, CONFIG.DEFAULT_HEIGHT * 0.58); // * Set the position of the image to the bottom to simulate that is on the floor
         scene.physics.add.existing(this.sprite, true);

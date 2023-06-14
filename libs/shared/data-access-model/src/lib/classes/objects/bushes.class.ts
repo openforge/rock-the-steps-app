@@ -15,11 +15,6 @@ export class Bushes {
         this.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.sprite.width);
         this.sprite.setOrigin(0, 0);
         this.sprite.setPosition(0, gameHeight * 0.8); // * Set the position of the image to the bottom to simulate that is on the floor
-        console.warn('bushes.sprite.displayWidth = ', this.sprite.displayWidth);
-        console.warn('bushes.sprite.displayHeight = ', this.sprite.displayHeight);
-        console.warn('bushes.sprite.width = ', this.sprite.width);
-        console.warn('bushes.sprite.height = ', this.sprite.height);
-        console.warn('bushes.sprite.getBounds = ', this.sprite.getBounds());
         scene.physics.add.existing(this.sprite, true);
     }
 }
