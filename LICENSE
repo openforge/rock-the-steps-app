@@ -1,27 +1,29 @@
-Repository Name - Rock The Steps
-Code Version - 1.1
-Licenses - MIT License, CC BY-NC-SA 4.0, CC BY 4.0, OpenForge Proprietary License
-License Document Version - 1.0
-Proprietary Rights Notice - Rock the Steps TM & © 2022–Present, OpenForge LLC. All rights reserved.
-Owner/Licensor - OpenForge LLC
+- Proprietary Rights Notice 
+    - Rock the Steps TM & © 2022–Present, OpenForge LLC. All rights reserved.
+- Licenses
+    - MIT License, CC BY-NC-SA 4.0, CC BY 4.0, OpenForge Proprietary License
+- License Document 
+    - Version - 1.0
+- Owner/Licensor 
+    - OpenForge LLC
 
 # INTRODUCTION
 
-Rock The Steps (“RTS”) was created and is distributed by OpenForge LLC (openforge.io). OpenForge owns all rights to RTS. The files for version 1 (“RTS1”) are online at  the URL stated above (“Repository”).
+Rock The Steps (“RTS”) was created and is distributed by OpenForge LLC (openforge.io). OpenForge owns all rights to RTS. The files for version 1 (“RTS1”) are online at the URL stated above (“Repository”).
 
 The purpose of this Repository is educational in nature to allow other game developers to see how the source code is built, so they can use that knowledge to enhance their own projects. It’s easier to learn while seeing code in the context of the designs, so in that spirit our team has provided initial non-code assets in order to showcase how they are used in the source code. We use different licensing terms for source code (“Code” as further defined herein) and non-code assets (“Assets” as further defined herein):
 
-- All source code (“Code”) for RTS is licensed pursuant to the MIT License. 
+- All source code (“Code”) for RTS is licensed pursuant to the <b>MIT License.</b>
 - All contributions to future versions of the Code must be submitted pursuant to the MIT License.
 - All non-code files and assets, including the graphics and music (collectively, “Assets”) prepared by OpenForge (“OpenForge Assets”) remain the property of OpenForge. Pursuant to the OpenForge Proprietary License (below), the OpenForge Assets may be reviewed and used solely by individuals for their individual educational purposes. They may not be distributed to third parties under any circumstances. Anyone who wishes to review the OpenForge Assets may download a copy from the Repository.
 - OpenForge reserves the right to distribute proprietary, commercial versions of RTS.
-Anyone who wants to distribute current or modified copies of RTS1 may only do so with Assets they create or that are developed or licensed by third parties. Any combinations of the RTS Code with third-party Assets may be distributed only pursuant to the Creative Commons BY-NC-SA 4.0 license. 
+Anyone who wants to distribute current or modified copies of RTS1 may only do so with Assets they create or that are developed or licensed by third parties.  
 
 Rock The Steps was built as a light-hearted platformer. Everyone is welcome to come and contribute Code, and art, music and other Assets to improve the game for everyone who wants to play it. We welcome contributions to future versions of Rock The Steps. The license for contributions to the source code is different from contributions to the non-code assets.
 
-Art and music submissions are accepted usually to fill in missing or outdated Assets, or to add a new city from people who live in that city and have first-hand experience. If you are interested in contributing, we recommend that you contact us first to determine the best resources for you to work on based on need and interest. We also commission larger projects such as character portraits, story art, and music tracks.  Please see our license provisions (below) for more information on Asset contributions.
+Art and music submissions are accepted usually to fill in missing or outdated Assets, or to add a new city from people who live in that city and have first-hand experience. If you are interested in contributing, we recommend that you contact us first to determine the best resources for you to work on based on need and interest. We also commission larger projects such as character portraits, story art, and music tracks. Please see our license provisions (below) for more information on Asset contributions.
 
-With that said, we intend to continue building Rock The Steps and publish it on the app stores for others to enjoy as a light-hearted platformer that the community can enjoy. Yes, we have bills to pay too :)  If you would like to contribute to this initiative by contributing Assets, we would welcome your support; however, we want to be upfront on how such Asset contributions would be used.
+With that said, we intend to continue building Rock The Steps and publish it on the app stores for others to enjoy as a light-hearted platformer that the community can enjoy. Yes, we have bills to pay too :) If you would like to contribute to this initiative by contributing Assets, we would welcome your support; however, we want to be upfront on how such Asset contributions would be used.
 
 # LICENSING TERMS
 
@@ -109,4 +111,4 @@ It is also highly recommended to use an editor that at least supports syntax hig
 
 # Contacting Us
 
-The best way to get in touch with the development team is by email to [hello@openforge.io or via Github].
+The best way to get in touch with the development team is by contacting us via our contact form at www.openforge.io or via Github.
