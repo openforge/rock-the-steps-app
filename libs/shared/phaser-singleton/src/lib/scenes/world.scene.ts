@@ -80,9 +80,9 @@ export class WorldScene extends Phaser.Scene {
             console.log('world.scene.ts', 'Preloading Assets...');
             this.load.image(SKY_KEY, `assets/city-scene/bg-${GameEngineSingleton.world.worldType}.png`); // * load the sky image
             this.load.image(CITY_KEY, `assets/city-scene/city-${GameEngineSingleton.world.worldType}.png`); // * load the city image
-            this.load.image(FLOOR_KEY, 'assets/city-scene/flat-sidewalk.png'); // * load the floor image
+            this.load.image(FLOOR_KEY, `assets/city-scene/flat-sidewalk-${GameEngineSingleton.world.worldType}.png`); // * load the floor image
             this.load.image(BUSHES_KEY, `assets/city-scene/bushes-DAYTIME.png`); // *  load the bushes image
-            this.load.image(STEPS_KEY, 'assets/steps/steps_day.png');
+            this.load.image(STEPS_KEY, `assets/steps/steps-${GameEngineSingleton.world.worldType}.png`);
             // * Load the objects and the player
             this.load.atlas(OBJECTS_SPRITE_KEY, `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
             this.load.image(END_KEY, 'assets/objects/end.png');
