@@ -13,6 +13,6 @@
     },
     "devDependencies": {
         "@capacitor/assets": "^2.0.4",
-        "@capacitor/cli": "^4.7.0"
+        "@capacitor/cli": "^4.8.0"
     }
 }
