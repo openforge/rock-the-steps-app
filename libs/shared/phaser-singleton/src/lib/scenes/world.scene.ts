@@ -9,6 +9,7 @@ import {
     CityBackground,
     CONTROLS_KEY,
     DAMAGE_MAX_VALUE,
+    DAMAGE_MIN_VALUE,
     DAMAGE_TIMER,
     END_KEY,
     END_OBJECT_SCALE,
@@ -217,7 +218,7 @@ export class WorldScene extends Phaser.Scene {
                     // console.log(`COLLISION ${worldObject.name}`, playerXEnd >= worldObjectXStart, playerXStart <= worldObjectXEnd, playerYBelow >= worldObjectYAbove);
                     // console.log('DAMAGE BOUNDS', playerXEnd, worldObjectXStart, playerXStart, worldObjectXEnd, playerYBelow, worldObjectYAbove);
                     if (playerXEnd >= worldObjectXStart && playerXStart <= worldObjectXEnd && playerYBelow >= worldObjectYAbove) {
-                        if (worldObject.name === Objects.CHEESESTEAK) {
+                        if (worldObject.name === Objects.CHEESESTEAK && this.damageValue > DAMAGE_MIN_VALUE) {
                             this.healUp(worldObject);
                         } else if (worldObject.name === END_KEY) {
                             // If the end is tuched send to winning screen
