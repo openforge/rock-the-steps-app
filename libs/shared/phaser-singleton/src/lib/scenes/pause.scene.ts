@@ -5,7 +5,7 @@
 import { GameEnum } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 
-import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/GameEngine.singletons';
+import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/game-engine.singleton';
 export class PauseScene extends Phaser.Scene {
     constructor() {
         super('PauseScene');
@@ -46,6 +46,10 @@ export class PauseScene extends Phaser.Scene {
         this.scene.resume('WorldScene');
     }
 
+    /**
+     * * Here is where we switch between scenes based on User Selection.
+     * * If User opens Pause Menu, it will switch.
+     */
     private goToMainMenu(): void {
         this.scene.stop(); // Delete modal scene
         PhaserSingletonService.activeGame.destroy(true);

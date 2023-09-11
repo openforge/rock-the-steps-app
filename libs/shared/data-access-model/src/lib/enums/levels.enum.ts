@@ -8,7 +8,7 @@ export enum LevelsEnum {
     RITTEN_HOUSE = 'RITTEN_HOUSE',
     CHINA_TOWN = 'CHINA_TOWN',
 }
-export enum DifficultEnum {
+export enum DifficultyEnum {
     EASY = DIFFICULT_EASY,
     MEDIUM = DIFFICULT_MEDIUM,
     HARD = DIFFICULT_HARD,

@@ -1,21 +1,114 @@
-MIT LICENSE
+- Proprietary Rights Notice 
+    - Rock the Steps TM & © 2022–Present, OpenForge LLC. All rights reserved.
+- Licenses
+    - MIT License, CC BY-NC-SA 4.0, CC BY 4.0, OpenForge Proprietary License
+- License Document 
+    - Version - 1.0
+- Owner/Licensor 
+    - OpenForge LLC
 
-Copyright (C) 2022 - Present OPENFORGE, LLC. <https://openforge.io/>
+# INTRODUCTION
+
+Rock The Steps (“RTS”) was created and is distributed by OpenForge LLC (openforge.io). OpenForge owns all rights to RTS. The files for version 1 (“RTS1”) are online at the URL stated above (“Repository”).
+
+The purpose of this Repository is educational in nature to allow other game developers to see how the source code is built, so they can use that knowledge to enhance their own projects. It’s easier to learn while seeing code in the context of the designs, so in that spirit our team has provided initial non-code assets in order to showcase how they are used in the source code. We use different licensing terms for source code (“Code” as further defined herein) and non-code assets (“Assets” as further defined herein):
+
+- All source code (“Code”) for RTS is licensed pursuant to the <b>MIT License.</b>
+- All contributions to future versions of the Code must be submitted pursuant to the MIT License.
+- All non-code files and assets, including the graphics and music (collectively, “Assets”) prepared by OpenForge (“OpenForge Assets”) remain the property of OpenForge. Pursuant to the OpenForge Proprietary License (below), the OpenForge Assets may be reviewed and used solely by individuals for their individual educational purposes. They may not be distributed to third parties under any circumstances. Anyone who wishes to review the OpenForge Assets may download a copy from the Repository.
+- OpenForge reserves the right to distribute proprietary, commercial versions of RTS.
+Anyone who wants to distribute current or modified copies of RTS1 may only do so with Assets they create or that are developed or licensed by third parties.  
+
+Rock The Steps was built as a light-hearted platformer. Everyone is welcome to come and contribute Code, and art, music and other Assets to improve the game for everyone who wants to play it. We welcome contributions to future versions of Rock The Steps. The license for contributions to the source code is different from contributions to the non-code assets.
+
+Art and music submissions are accepted usually to fill in missing or outdated Assets, or to add a new city from people who live in that city and have first-hand experience. If you are interested in contributing, we recommend that you contact us first to determine the best resources for you to work on based on need and interest. We also commission larger projects such as character portraits, story art, and music tracks. Please see our license provisions (below) for more information on Asset contributions.
+
+With that said, we intend to continue building Rock The Steps and publish it on the app stores for others to enjoy as a light-hearted platformer that the community can enjoy. Yes, we have bills to pay too :) If you would like to contribute to this initiative by contributing Assets, we would welcome your support; however, we want to be upfront on how such Asset contributions would be used.
+
+# LICENSING TERMS
+
+The Code of Rock The Steps (independent of the Assets) is licensed under the MIT License (included below). 
+
+All graphics, music, sound effects, and other Assets created by OpenForge that are not Code are the property of OpenForge LLC and are not included under the MIT License. Assets include without limitation all story and text elements, music, and other non-Code elements. OpenForge Assets are licensed pursuant to the OpenForge Proprietary License.
+
+# OpenForge Proprietary License
+
+All graphics, music, sound effects, and other non-Code assets ("Assets") used in Rock The Steps created by OpenForge (“OpenForge Assets”) are the property of OpenForge LLC and are protected by copyright law. The OpenForge Assets are licensed for personal educational use only, and may not be distributed outside of this folder or Repository. No other rights are granted to these OpenForge Assets.
+
+You may not use, copy, reproduce, distribute, transmit, broadcast, display, sell, license, or otherwise exploit any OpenForge Assets for any other purposes without the prior written consent of OpenForge LLC.
+
+As noted above, any versions of the Code under the MIT License may only be distributed WITHOUT the OpenForge Assets. The intent is that this repository is used (1) for educational purposes, anyone and everyone can see how Rock the Steps has been made and (2) any new versions of the source code can be freely distributed without the Assets. Anyone who wishes to review the OpenForge Assets may download a copy from the Repository.
+
+# Source Code Contribution Terms
+
+We would encourage the community to make Code contributions (“Contributed Code”) that can be used by other community members in their mobile games.  By working together, we can create new mechanics and features that can be enjoyed by people all across the world.
+
+With this spirit in mind, all contributors acknowledge and agree that all Contributed Code shall be added to this Repository under the MIT License.
+
+# Asset Contribution Terms
+
+Since Assets are often licensed under different terms than source code and since we need to be able to safely continue work on this Repository without legal hurdles, we are setting the following requirements on all Asset contributions (“Contributed Assets”) to this Repository:
+
+Any person submitting any Contributed Asset to this Repository must have all rights to do so under the terms in this document.
+Any person submitting any Contributed Asset to this repository is granting OpenForge LLC all rights under a Creative Commons Attribution 4.0 International license (listed below); and the credit requirement will be considered Github’s listing of your profile as a contributor.  The original author still retains their rights for their Contributed Assets separately from this agreement.
+For anyone who would like to license a Contributed Asset separately from the Repository, please contact the original author of the Contributed Asset. 
+
+# MIT License for Source Code
+
+Copyright © 2022-Present, OpenForge, LLC. <https://openforge.io/>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+of the source code of this software (excluding Assets) and associated documentation files (the "Source Code"), to deal in the Source Code without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Source Code, and to permit persons to whom the Source Code is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+THE SOURCE CODE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOURCE CODE OR THE USE OR OTHER DEALINGS IN THE SOURCE CODE.
+
+# Creative Commons License for OpenForge Assets
+
+The Assets created by OpenForge (“OpenForge Assets” as further defined herein) and made available to others are licensed pursuant to a Creative Commons BY-NC-SA 4.0 license. A full statement of this license is online at https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode and is incorporated by reference and is binding on you. A summary of the Creative Commons license follows:
+
+CC BY-NC-SA 4.0
+Attribution-NonCommercial-ShareAlike 4.0 International
+
+
+This license requires that reusers give credit to the creator. It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, for noncommercial purposes only. If others modify or adapt the material, they must license the modified material under identical terms.
+
+
+BY: Credit must be given to you, the creator.
+NC: Only noncommercial use of your work is permitted.
+Noncommercial means not primarily intended for or directed towards commercial advantage or monetary compensation.
+SA: Adaptations must be shared under the same terms.
+
+# Creative Commons License for Contributed Assets
+
+The Assets created by people and by companies (other than OpenForge) that are contributed to the Repository (“Contributed Assets” as further defined herein) and made available to others are licensed pursuant to a Creative Commons BY 4.0 license. A full statement of this license is online at https://creativecommons.org/licenses/by/4.0/legalcode and is incorporated by reference and is binding on you. A summary of the Creative Commons license follows:
+
+CC BY 4.0
+Attribution 4.0 International
+
+
+This license requires that reusers give credit to the creator. It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, even for commercial purposes.
+
+
+BY: Credit must be given to you, the creator.
+
+
+
+Bug Reports and Feature Requests
+
+If you encounter an engine or other Code bug such as a crash, scripting error, etc., report it to OpenForge here on GitHub.
+
+Otherwise, issues with user-made content or other Contributed Assets should be reported to their respective creators on the forums. You can usually find a thread for the add-on in question in the Scenario & Campaign Development, Faction & Era Development or Multiplayer Development sections.
+
+We accept suggestions for improvements, features, or other game enhancements here on GitHub. We encourage you to attempt to implement your idea yourself and submit a pull request containing relevant information to your feature.
+
+# Pull Requests
+
+Pull requests (PRs) can be created by forking the Repository on the GitHub website, making your own changes to your forked repository, and then clicking the "Pull Request" button. All pull requests must follow the above guidelines in order to be merged and whenever possible should include additional unit tests in order to both prove the proposed fix or feature works as intended as well as to allow quickly detecting other bugs in that code.
+
+It is also highly recommended to use an editor that at least supports syntax highlighting (such as VSCode) regardless of what you're changing. The fact that you can edit files through the GitHub website or with plain Notepad does not mean you should.
+
+# Contacting Us
+
+The best way to get in touch with the development team is by contacting us via our contact form at www.openforge.io or via Github.

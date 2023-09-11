@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
 import * as Phaser from 'phaser';
 
+import { CONFIG } from './config';
 import { PauseScene } from './scenes/pause.scene';
 import { WorldScene } from './scenes/world.scene';
 
@@ -73,14 +74,16 @@ export class PhaserSingletonService {
                 // To scale game to always fit in parent container
                 // https://photonstorm.github.io/phaser3-docs/Phaser.Scale.ScaleManager.html
                 PhaserSingletonService.activeGame = new Phaser.Game({
-                    type: Phaser.AUTO,
+                    type: Phaser.CANVAS, // better for mobile rendering
                     scale: {
-                        mode: Phaser.Scale.RESIZE,
-                        width: window.innerWidth,
-                        autoCenter: Phaser.Scale.CENTER_BOTH,
-                        height: window.innerHeight,
+                        parent: 'stage-main',
+                        mode: Phaser.Scale.FIT,
+                        // mode: Phaser.Scale.ENVELOP <-- works well; but would have to manage aspect ratio manually.
+                        // mode: Phaser.Scale.RESIZE,on resize its not scaling (it's resizing) so performance consequences
+                        autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
+                        width: CONFIG.DEFAULT_WIDTH,
+                        height: CONFIG.DEFAULT_HEIGHT,
                     },
-                    parent: 'stage-main',
                     scene: [WorldScene, PauseScene],
                     plugins: {
                         global: [],
@@ -96,7 +99,7 @@ export class PhaserSingletonService {
                         default: 'arcade',
                         arcade: {
                             gravity: { y: 1000 },
-                            debug: false,
+                            debug: true,
                         },
                     },
                 });
