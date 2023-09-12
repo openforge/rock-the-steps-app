@@ -14,6 +14,7 @@ export const INITIAL_HEALTHBAR_Y = 50;
 export const HALF_DIVIDER = 2;
 export const MOVING_X_BACKGROUNDS = 2;
 export const DAMAGE_MAX_VALUE = 5;
+export const DAMAGE_MIN_VALUE = 0;
 export const DURATION_INVULNERABLE_REP = 200;
 export const INVULNERABLE_REPS = 15;
 export const WORLD_OBJECTS_VELOCITY = 130;
