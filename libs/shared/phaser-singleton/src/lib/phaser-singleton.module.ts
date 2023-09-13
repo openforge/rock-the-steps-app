@@ -75,8 +75,8 @@ export class PhaserSingletonService {
                 // https://photonstorm.github.io/phaser3-docs/Phaser.Scale.ScaleManager.html
                 PhaserSingletonService.activeGame = new Phaser.Game({
                     type: Phaser.CANVAS, // better for mobile rendering
+                    parent: 'stage-main',
                     scale: {
-                        parent: 'stage-main',
                         mode: Phaser.Scale.FIT,
                         // mode: Phaser.Scale.ENVELOP <-- works well; but would have to manage aspect ratio manually.
                         // mode: Phaser.Scale.RESIZE,on resize its not scaling (it's resizing) so performance consequences
@@ -99,7 +99,7 @@ export class PhaserSingletonService {
                         default: 'arcade',
                         arcade: {
                             gravity: { y: 1000 },
-                            debug: true,
+                            debug: false,
                         },
                     },
                 });

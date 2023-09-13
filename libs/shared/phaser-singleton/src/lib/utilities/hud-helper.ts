@@ -10,6 +10,7 @@ import {
     JUMP_KEY,
     LEFT_KEY,
     PAUSE_BUTTON,
+    PAUSE_SCENE,
     POINTER_DOWN_EVENT,
     POINTER_UP_EVENT,
     RIGHT_KEY,
@@ -18,7 +19,6 @@ import {
 import { Scene } from 'phaser';
 
 import { CONFIG } from '../config';
-import { PauseScene } from '../scenes/pause.scene';
 
 /**
  * * Method used to create the buttons of movement and jump
@@ -50,7 +50,7 @@ export function createButtons(scene: Scene, character: Character, spaceBarKey: P
         .setScale(0.1)
         .setOrigin(1, 0)
         .setInteractive();
-    pauseButton.on(POINTER_DOWN_EVENT, showPauseModal, scene);
+    pauseButton.on(POINTER_DOWN_EVENT, () => showPauseModal(scene), scene);
 }
 
 /**
@@ -59,10 +59,9 @@ export function createButtons(scene: Scene, character: Character, spaceBarKey: P
  * @private
  */
 // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-export function showPauseModal(_scene: PauseScene): void {
+export function showPauseModal(_scene: Scene): void {
     if (_scene) {
-        // TODO - re-add pause button
-        // _scene.pause();
-        // _scene.run(PAUSE_SCENE);
+        _scene.scene.pause();
+        _scene.scene.run(PAUSE_SCENE);
     }
 }
