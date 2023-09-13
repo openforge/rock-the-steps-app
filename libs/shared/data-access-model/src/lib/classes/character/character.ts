@@ -1,7 +1,16 @@
 import { Scene } from 'phaser';
 
 import { CHARACTER_SPRITE_KEY, DAMAGED_ANIMATION, JUMPING_ANIMATION, WALKING_ANIMATION } from '../../constants/game-keys.constants';
-import { DURATION_INVULNERABLE_REP, HEIGHT_OF_JUMP, INVULNERABLE_REPS, PLAYER_POS_X, PLAYER_POS_Y, VELOCITY_PLAYER, VELOCITY_PLAYER_WHEN_MOVING } from '../../constants/game-units.constants';
+import {
+    DURATION_INVULNERABLE_REP,
+    HEIGHT_OF_JUMP,
+    INVULNERABLE_REPS,
+    PLAYER_POS_X,
+    PLAYER_POS_Y,
+    VELOCITY_PLAYER,
+    VELOCITY_PLAYER_WHEN_AUTOMATICALLY,
+    VELOCITY_PLAYER_WHEN_MOVING,
+} from '../../constants/game-units.constants';
 
 export class Character {
     public name = 'character';
@@ -25,10 +34,7 @@ export class Character {
      * @param floorTileSprite Phaser.GameObjects.TileSprite
      */
     public addFloorCollision(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        scene.physics.add.collider(this.sprite, floorTileSprite, (character, floor) => {
-            // NOISY console.log('character.ts --> FLOOR collision detected', character.name, floor.name);
-        });
+        scene.physics.add.collider(this.sprite, floorTileSprite);
     }
 
     /**
@@ -77,5 +83,16 @@ export class Character {
                 this.isInvulnerable = false;
             },
         });
+    }
+
+    /**
+     * * Function to automatically move the character
+     * * This is to avoid to get the player going back when the forward arrow is not pressed
+     *
+     */
+    public moveCharacterAutomatically(): void {
+        if (!this.isMovingRight) {
+            this.sprite.setVelocityX(VELOCITY_PLAYER_WHEN_AUTOMATICALLY);
+        }
     }
 }

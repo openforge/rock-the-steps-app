@@ -148,6 +148,7 @@ export class WorldScene extends Phaser.Scene {
         this.flyGroundedPigeons();
         this.moveInfiniteBackgrounds();
         this.character.evaluateMovement(this.cursors);
+        this.character.moveCharacterAutomatically();
         this.avoidOutOfBounds();
         this.createObjects();
         this.endDetection();
