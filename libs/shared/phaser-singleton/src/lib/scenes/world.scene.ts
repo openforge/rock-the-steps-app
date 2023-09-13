@@ -108,6 +108,8 @@ export class WorldScene extends Phaser.Scene {
      */
     async create(): Promise<void> {
         console.log('world.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height, PhaserSingletonService.activeGame);
+        this.scale.orientation = Phaser.Scale.Orientation.LANDSCAPE; // * We need to set the orientation to landscape for the scene
+        this.scale.lockOrientation('landscape');
         this.initializeBasicWorld();
         createButtons(this, this.character, this.spaceBarKey);
         createAnimationsCharacter(this.character.sprite);
