@@ -1,5 +1,15 @@
 package angular.ionicphaser.openforge.io;
 
-import com.getcapacitor.BridgeActivity;
+import android.os.Bundle;
 
-public class MainActivity extends BridgeActivity {}
+import com.getcapacitor.BridgeActivity;
+import com.openforge.capacitorgameconnect.CapacitorGameConnectPlugin;
+
+public class MainActivity extends BridgeActivity {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        registerPlugin(CapacitorGameConnectPlugin.class);
+        super.onCreate(savedInstanceState);
+    }
+}

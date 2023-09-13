@@ -1,5 +1,4 @@
 /* eslint-disable no-magic-numbers */
-import { GameServices } from '@openforge/capacitor-game-services';
 import {
     Bushes,
     BUSHES_KEY,
@@ -18,7 +17,7 @@ import {
     FLOOR_KEY,
     FLY_GROUNDED_PIGEONS_OFFSET,
     GameEnum,
-    GameServicesEnum,
+    GameServicesActions,
     HALF_DIVIDER,
     HEALTHBAR_KEY,
     HEALTHBAR_TEXTURE_PREFIX,
@@ -49,6 +48,7 @@ import { createButtons } from '../utilities/hud-helper';
 import { createObjects, createPigeonObjectSprite } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
+    private gameServicesActions: GameServicesActions = new GameServicesActions();
     private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private obstaclePigeonGroup: Pigeon[] = []; // * Array of sprites for the pigeon obstacles
     private obstaclePoopGroup: Poop[] = []; // * Array of sprites for the pigeon obstacles
@@ -292,9 +292,9 @@ export class WorldScene extends Phaser.Scene {
         PhaserSingletonService.activeGame = undefined;
         GameEngineSingleton.gameEventBus.next(result);
         if (result === GameEnum.WIN) {
-            await GameServices.submitScore({ leaderboardId: GameServicesEnum.LEADERBOARDS_ID, score: GameEngineSingleton.points });
+            await this.gameServicesActions.submitScore(GameEngineSingleton.points);
             if (GameEngineSingleton.world.worldType === LevelsEnum.DAYTIME) {
-                await GameServices.unlockAchievement({ achievementID: FIRST_ACHIEVEMENT_ID });
+                await this.gameServicesActions.unlockAchievement(FIRST_ACHIEVEMENT_ID);
             }
         }
     }

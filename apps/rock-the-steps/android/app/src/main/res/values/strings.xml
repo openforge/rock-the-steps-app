@@ -4,4 +4,5 @@
     <string name="title_activity_main">rock-the-steps</string>
     <string name="package_name">angular.ionicphaser.openforge.io</string>
     <string name="custom_url_scheme">angular.ionicphaser.openforge.io</string>
+    <string translatable="false"  name="game_services_project_id">800282877821</string>
 </resources>
