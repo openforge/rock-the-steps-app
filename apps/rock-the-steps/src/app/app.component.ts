@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { GameServicesActions } from '@openforge/shared/data-access-model';
+import { Platform } from '@ionic/angular';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 
 @Component({
@@ -8,21 +8,12 @@ import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
     styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnDestroy, OnInit {
-    private gameServicesActions: GameServicesActions = new GameServicesActions();
-    constructor(public phaserInstance: PhaserSingletonService) {}
+    constructor(public phaserInstance: PhaserSingletonService, public platform: Platform) {}
 
     async ngOnInit(): Promise<void> {
-        this.setScreenOrientation();
-        await this.signInGameServices(); // here is where the plugin is called
-    }
-
-    /**
-     * * Function to sign in a user to game center
-     * * It needs to be everytime the user open the app because Game Center didn't storage the user login
-     *
-     */
-    public async signInGameServices(): Promise<void> {
-        await this.gameServicesActions.signIn();
+        if (this.platform.is('capacitor')) {
+            this.setScreenOrientation();
+        }
     }
 
     /**

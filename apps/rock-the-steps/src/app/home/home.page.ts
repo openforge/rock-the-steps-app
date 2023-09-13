@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GameServicesActions, ScreensEnum } from '@openforge/shared/data-access-model';
+import { GameServicesActions, ScreensEnum, User } from '@openforge/shared/data-access-model';
 
 @Component({
     selector: 'openforge-home',
@@ -8,8 +8,10 @@ import { GameServicesActions, ScreensEnum } from '@openforge/shared/data-access-
     styleUrls: ['home.page.scss'],
 })
 export class HomePageComponent implements OnInit {
+    public user: User;
     public screensEnum = ScreensEnum; // * Enum used for the navigation screen type safe
     private gameServicesActions: GameServicesActions = new GameServicesActions();
+
     /**
      * * On Init, initilize the Phaser Singleton instance
      * The initialisation is delayed by 500ms to give the HomePage the chance to render
@@ -22,6 +24,7 @@ export class HomePageComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         console.log('HomePageComponent', 'ngOnInit');
+        await this.gameCenterLogin();
     }
 
     /**
@@ -53,6 +56,6 @@ export class HomePageComponent implements OnInit {
      *
      */
     public async gameCenterLogin(): Promise<void> {
-        await this.gameServicesActions.signIn();
+        this.user = await this.gameServicesActions.signIn();
     }
 }
