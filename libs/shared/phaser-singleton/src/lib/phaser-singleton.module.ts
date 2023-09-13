@@ -102,6 +102,9 @@ export class PhaserSingletonService {
                             debug: true,
                         },
                     },
+                    input: {
+                        activePointers: 4, // * This enables the multitouch option. It increments depending of the buttons quantity
+                    },
                 });
             }
         });
