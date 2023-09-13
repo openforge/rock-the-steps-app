@@ -94,7 +94,7 @@
     "@capacitor/status-bar": "^4.0.0",
     "@ionic/angular": "^6.5.6",
     "@nrwl/eslint-plugin-nx": "^13.2.1",
-    "@openforge/capacitor-game-services": "^1.1.2",
+    "@openforge/capacitor-game-connect": "^1.0.2",
     "@schematics/angular": "^15.1.6",
     "@vitejs/plugin-vue": "^4.0.0",
     "babel-eslint": "^10.1.0",
