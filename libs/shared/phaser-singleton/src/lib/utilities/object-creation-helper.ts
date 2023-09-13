@@ -2,19 +2,78 @@
 import {
     Character,
     FLOOR_KEY,
+    FLYER_PIGEONS_Y_OFFSET,
     OBJECTS_SPRITE_KEY,
+    Pigeon,
+    PIGEON_END_FRAME,
+    PIGEON_FRAME_KEY,
+    PIGEON_FRAME_RATE,
+    PIGEON_START_FRAME,
+    POOP_OBJECTS_VELOCITY_Y,
     REPEAT_FRAME,
+    STANDING_FRAME,
     STEPS_KEY,
     TOURIST_END_FRAME,
     TOURIST_FRAME_KEY,
     TOURIST_FRAME_RATE,
-    TOURIST_STANDING_FRAME,
+    WORLD_OBJECTS_VELOCITY,
+    ZERO_PAD_PIGEON,
     ZERO_PAD_TOURIST,
 } from '@openforge/shared/data-access-model';
 import { WorldObject } from 'libs/shared/data-access-model/src/lib/classes/obstacles/world-object.class';
 import { Objects } from 'libs/shared/data-access-model/src/lib/enums/objects.enum';
 import { Scene } from 'phaser';
 
+/**
+ * Method used to generate dropable objects
+ *
+ * @param scene
+ * @param initialX
+ * @param initialY
+ * @param objectName
+ */
+export function createDropObject(scene: Scene, initialX: number, initialY: number, objectName: string): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
+    const tmpSprite = scene.physics.add.sprite(initialX, initialY, OBJECTS_SPRITE_KEY, objectName);
+    tmpSprite.setName(objectName);
+    tmpSprite.setVelocityX(-WORLD_OBJECTS_VELOCITY);
+    tmpSprite.setVelocityY(POOP_OBJECTS_VELOCITY_Y);
+    tmpSprite.body.setGravityY(POOP_OBJECTS_VELOCITY_Y);
+    return tmpSprite;
+}
+
+/**
+ * Method used to generate pigeons
+ *
+ * @param scene
+ * @param pigeon
+ * @param initialX
+ * @param initialY
+ */
+export function createPigeonObjectSprite(scene: Scene, pigeon: Pigeon, initialX: number, initialY: number): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
+    let positionY = initialY;
+    const isFlying = Math.floor(2 * Math.random()) === 0;
+    pigeon.isFlying = isFlying;
+    // If is a pigeon it can be already flying or start flying from floor
+    // Pigeon variant 0 will fly from floor
+    // Pigeon variant 1 will be already flying
+    if (isFlying) {
+        positionY = window.innerHeight * FLYER_PIGEONS_Y_OFFSET; // This will be the Y axis of pigeon flying
+    }
+    const tmpSprite = scene.physics.add.sprite(initialX, positionY, OBJECTS_SPRITE_KEY, pigeon.name);
+    tmpSprite.setVelocityX(-WORLD_OBJECTS_VELOCITY);
+    tmpSprite.anims.create({
+        key: STANDING_FRAME,
+        frames: scene.anims.generateFrameNames(OBJECTS_SPRITE_KEY, {
+            prefix: PIGEON_FRAME_KEY,
+            start: PIGEON_START_FRAME,
+            end: PIGEON_END_FRAME,
+            zeroPad: ZERO_PAD_PIGEON,
+        }),
+        frameRate: PIGEON_FRAME_RATE,
+        repeat: REPEAT_FRAME,
+    });
+    return tmpSprite;
+}
 export function createObjects(worldObject: WorldObject, scene: Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group) {
     // console.log('createObjects:', worldObject.name);
 
@@ -30,7 +89,7 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
     // * This is an obstacle!  Don't hit the tourists :)
     if (worldObject.name === Objects.TOURIST) {
         tmpSprite.anims.create({
-            key: TOURIST_STANDING_FRAME,
+            key: STANDING_FRAME,
             frames: scene.anims.generateFrameNames(OBJECTS_SPRITE_KEY, {
                 prefix: TOURIST_FRAME_KEY,
                 end: TOURIST_END_FRAME,
@@ -39,7 +98,7 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
             frameRate: TOURIST_FRAME_RATE,
             repeat: REPEAT_FRAME,
         });
-        tmpSprite.anims.play(TOURIST_STANDING_FRAME, true);
+        tmpSprite.anims.play(STANDING_FRAME, true);
     }
     tmpSprite.setName(worldObject.name);
     obstacleGroup.add(tmpSprite);

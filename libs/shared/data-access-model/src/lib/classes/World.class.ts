@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import { Anvil, Apple, BigPoo, Bottle, CheeseSteak, ChineseFood, Cone, Flowers, Ghost, Gloves, Hurdle, LibertyBell, Tourist, Trashcan, Wind } from '../..';
+import { Anvil, Apple, BigPoo, Bottle, CheeseSteak, ChineseFood, Cone, Flowers, Ghost, Gloves, Hurdle, LibertyBell, Pigeon, Tourist, Trashcan, Wind } from '../..';
 import { DifficultyEnum, LevelsEnum } from '../enums/levels.enum';
 import { Crater } from './obstacles/crater.class';
 import { Stand } from './obstacles/stand.class';
@@ -68,6 +68,7 @@ export class World {
         world.objects.push(new Trashcan(world.worldType));
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new Tourist(world.worldType));
+        world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 999;
     }
     public static createSunsetLevel(world: World): void {
@@ -81,6 +82,7 @@ export class World {
         world.objects.push(new Anvil(world.worldType));
         world.objects.push(new BigPoo(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
+        world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 1999;
     }
     public static createNightLevel(world: World): void {
@@ -94,6 +96,7 @@ export class World {
         world.objects.push(new Tomb(world.worldType));
         world.objects.push(new Ghost(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
+        world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 2999;
     }
     public static createChinaLevel(world: World): void {
@@ -107,6 +110,7 @@ export class World {
         world.objects.push(new ChineseFood(world.worldType));
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new Tourist(world.worldType));
+        world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 3499;
     }
     public static createRittenLevel(world: World): void {
@@ -120,6 +124,7 @@ export class World {
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Bottle(world.worldType));
         world.objects.push(new Stand(world.worldType));
+        world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 3899;
     }
     public static createKellyLevel(world: World): void {
@@ -132,6 +137,7 @@ export class World {
         world.objects.push(new Tourist(world.worldType));
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
+        world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 4499;
     }
 

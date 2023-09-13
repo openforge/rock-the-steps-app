@@ -20,7 +20,6 @@ export * from './lib/classes/obstacles/ghost.class';
 export * from './lib/classes/obstacles/liberty-bell.class';
 export * from './lib/classes/obstacles/pigeon.class';
 export * from './lib/classes/obstacles/poop.class';
-export * from './lib/classes/obstacles/pooping-pigeon.class';
 export * from './lib/classes/obstacles/tourist.class';
 export * from './lib/classes/obstacles/trashcan.class';
 export * from './lib/classes/obstacles/wind.class';
