@@ -4,6 +4,8 @@ import { WorldObject } from './world-object.class';
 
 export class Poop extends WorldObject {
     name = Objects.POOP;
+    public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Poop Sprite to be used
+
     constructor(level: LevelsEnum) {
         super();
         try {

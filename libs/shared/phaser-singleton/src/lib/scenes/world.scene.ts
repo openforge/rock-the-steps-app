@@ -16,6 +16,7 @@ import {
     FIRST_ACHIEVEMENT_ID,
     Floor,
     FLOOR_KEY,
+    FLY_GROUNDED_PIGEONS_OFFSET,
     GameEnum,
     GameServicesEnum,
     HALF_DIVIDER,
@@ -29,6 +30,8 @@ import {
     LevelsEnum,
     OBJECTS_SPRITE_KEY,
     PAUSE_BUTTON,
+    Pigeon,
+    Poop,
     SKY_KEY,
     STARTER_PIXEL_FLAG,
     STEPS_KEY,
@@ -43,10 +46,12 @@ import { GameEngineSingleton } from '../../../../data-access-model/src/lib/class
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 import { createAnimationsCharacter } from '../utilities/character-animation';
 import { createButtons } from '../utilities/hud-helper';
-import { createObjects } from '../utilities/object-creation-helper';
+import { createObjects, createPigeonObjectSprite } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
     private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
+    private obstaclePigeonGroup: Pigeon[] = []; // * Array of sprites for the pigeon obstacles
+    private obstaclePoopGroup: Poop[] = []; // * Array of sprites for the pigeon obstacles
     private character: Character; // this is the class associated with the player
     private nextObstaclePoint = STARTER_PIXEL_FLAG; // * Pixels flag to know if next worldObject needs to be drawn
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
@@ -138,13 +143,28 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     update() {
+        // console.log('Char position', this.character.sprite.y)
         this.calculatePoints();
+        this.flyGroundedPigeons();
         this.moveInfiniteBackgrounds();
         this.character.evaluateMovement(this.cursors);
         this.avoidOutOfBounds();
         this.createObjects();
-        this.objectsDetection();
+        this.endDetection();
         this.cleanUpObjects();
+    }
+
+    /**
+     * Method used to fly pigeons grounded
+     *
+     * @private
+     */
+    private flyGroundedPigeons(): void {
+        this.obstaclePigeonGroup.forEach(pigeon => {
+            if (pigeon.sprite.x < window.innerWidth * FLY_GROUNDED_PIGEONS_OFFSET) {
+                pigeon.flyFromTheGround(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+            }
+        });
     }
 
     /**
@@ -172,7 +192,17 @@ export class WorldScene extends Phaser.Scene {
         if (GameEngineSingleton.points > this.nextObstaclePoint && GameEngineSingleton.points < GameEngineSingleton.world.pointsToEndLevel) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
             const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
-            createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.obstacleGroup);
+            if (worldObject.name === Objects.PIGEON && worldObject instanceof Pigeon) {
+                const pigeonSprite = createPigeonObjectSprite(this, worldObject, x + worldObject.spritePositionX, y);
+                worldObject.sprite = pigeonSprite;
+                worldObject.fly();
+                worldObject.dropPoop(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+                this.obstaclePigeonGroup.push(worldObject);
+                this.physics.add.collider(this.floor.sprite, pigeonSprite);
+                this.physics.add.collider(this.character.sprite, pigeonSprite, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+            } else {
+                createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.obstacleGroup);
+            }
             this.nextObstaclePoint += GameEngineSingleton.world.pixelForNextObstacle;
         }
 
@@ -193,44 +223,54 @@ export class WorldScene extends Phaser.Scene {
         }
         this.obstacleGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
         this.physics.add.collider(this.floor.sprite, this.obstacleGroup);
+        this.physics.add.collider(this.character.sprite, this.obstacleGroup, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
     }
 
     /**
-     * * Method in progress to create the objects and create the collisions
+     * Method used to listen for collisions with obstacles
+     *
+     * @param player
+     * @param obstacle
+     * @private
+     */
+    private obstacleHandler(player: Phaser.Types.Physics.Arcade.GameObjectWithBody, obstacle: Phaser.Types.Physics.Arcade.GameObjectWithBody): void {
+        console.log(`Colliding ${player.name} with ${obstacle.name}`);
+        if (obstacle.name === Objects.CHEESESTEAK && this.damageValue > DAMAGE_MIN_VALUE && this.damageValue) {
+            this.healUp(obstacle);
+        } else if (obstacle.name === END_KEY) {
+            // If the end is touched send to winning screen
+            void this.endGame(GameEnum.WIN);
+        } else if (obstacle.name === Objects.GLOVES) {
+            //* If gloves is picked up destroy the asset
+            obstacle.destroy();
+            this.obstacleGroup.remove(obstacle);
+            this.character.makeInvulnerable(this);
+        } else if (!this.character.isDamaged && !this.character.isInvulnerable) {
+            obstacle.destroy();
+            this.receiveDamage();
+        }
+    }
+
+    /**
+     * * Method used to detect end of level
      *
      * @private
      */
-    private objectsDetection(): void {
+    private endDetection(): void {
         if (this.obstacleGroup.getChildren().length > 0) {
             this.obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
                 if (worldObject) {
-                    const playerYBelow = this.character.sprite.y + this.character.sprite.height / HALF_DIVIDER;
-                    const playerXStart = this.character.sprite.x - this.character.sprite.width / HALF_DIVIDER;
-                    const playerXEnd = this.character.sprite.x + this.character.sprite.width / HALF_DIVIDER;
-                    const worldObjectYAbove = worldObject.y - worldObject.height / HALF_DIVIDER;
-                    const worldObjectXStart = worldObject.x - worldObject.width / HALF_DIVIDER;
+                    // Calculated values that will be possible used for the steps
+                    // const playerYBelow = this.character.sprite.y + this.character.sprite.height / HALF_DIVIDER;
+                    // const playerXStart = this.character.sprite.x - this.character.sprite.width / HALF_DIVIDER;
+                    // const playerXEnd = this.character.sprite.x + this.character.sprite.width / HALF_DIVIDER;
+                    // const worldObjectYAbove = worldObject.y - worldObject.height / HALF_DIVIDER;
+                    // const worldObjectXStart = worldObject.x - worldObject.width / HALF_DIVIDER;
                     const worldObjectXEnd = worldObject.x + worldObject.width / HALF_DIVIDER;
                     if (worldObject.name === END_KEY && worldObjectXEnd <= window.innerWidth) {
                         // If the end is displayed stop the movement
                         this.obstacleGroup.setVelocityX(0);
                         this.isEnd = true;
-                    }
-                    // console.log(`COLLISION ${worldObject.name}`, playerXEnd >= worldObjectXStart, playerXStart <= worldObjectXEnd, playerYBelow >= worldObjectYAbove);
-                    // console.log('DAMAGE BOUNDS', playerXEnd, worldObjectXStart, playerXStart, worldObjectXEnd, playerYBelow, worldObjectYAbove);
-                    if (playerXEnd >= worldObjectXStart && playerXStart <= worldObjectXEnd && playerYBelow >= worldObjectYAbove) {
-                        if (worldObject.name === Objects.CHEESESTEAK && this.damageValue > DAMAGE_MIN_VALUE) {
-                            this.healUp(worldObject);
-                        } else if (worldObject.name === END_KEY) {
-                            // If the end is tuched send to winning screen
-                            void this.endGame(GameEnum.WIN);
-                        } else if (worldObject.name === Objects.GLOVES) {
-                            //* If gloves is picked up destroy the asset
-                            worldObject.destroy();
-                            this.obstacleGroup.remove(worldObject);
-                            this.character.makeInvulnerable(this);
-                        } else if (!this.character.isDamaged && !this.character.isInvulnerable) {
-                            this.receiveDamage();
-                        }
                     }
                 }
             });
@@ -268,6 +308,16 @@ export class WorldScene extends Phaser.Scene {
                 this.obstacleGroup.remove(worldObject);
             }
         });
+        // console.log('Poops ', this.obstaclePigeonGroup);
+
+        this.obstaclePigeonGroup.map((worldObject: Pigeon, index) => {
+            if (worldObject && worldObject.sprite.x + worldObject.sprite.width < 0 - worldObject.sprite.width) {
+                worldObject.sprite.destroy();
+            } else if (worldObject && worldObject.sprite.y + worldObject.sprite.height > window.innerHeight + worldObject.sprite.height) {
+                worldObject.sprite.destroy();
+                this.obstaclePigeonGroup.splice(index, 1);
+            }
+        });
     }
 
     /**
@@ -275,7 +325,7 @@ export class WorldScene extends Phaser.Scene {
      *
      * @param worldObject cheesesteak to be destroyed after used
      */
-    private healUp(worldObject: Phaser.GameObjects.Image): void {
+    private healUp(worldObject: Phaser.Types.Physics.Arcade.GameObjectWithBody): void {
         this.damageValue--;
         this.healthbar.setTexture(HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}${this.damageValue}`);
         worldObject.destroy(); //* If cheesesteak is picked up destroy the asset
