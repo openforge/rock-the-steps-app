@@ -15,10 +15,10 @@ export class World {
     public pointsToEndLevel = 0; // * Points to end level
     public pointsTillSteps = 200; // * number of points need to reach until steps are created
     public pixelForNextObstacle = 0; // * Pixel to create next obstacle;
-    public difficultyLevel: DifficultyEnum;
-    public moveSpeedBackground = 0;
-    public moveSpeedBushes = 0;
-    public moveSpeedFloor = 0;
+    public difficultyLevel: DifficultyEnum; // * Property to get difficulty enum used in functions
+    public moveSpeedBackground = 0; // * To get the total speed of the background
+    public moveSpeedBushes = 0; // * To get the total speed of the bushes
+    public moveSpeedFloor = 0; // * To get the total speed of the floor
     constructor() {}
 
     /**
