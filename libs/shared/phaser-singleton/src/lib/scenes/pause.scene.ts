@@ -54,6 +54,6 @@ export class PauseScene extends Phaser.Scene {
         this.scene.stop(); // Delete modal scene
         PhaserSingletonService.activeGame.destroy(true);
         PhaserSingletonService.activeGame = undefined;
-        GameEngineSingleton.gameEventBus.next(GameEnum.EXIT);
+        GameEngineSingleton.gameEventType.next(GameEnum.EXIT);
     }
 }

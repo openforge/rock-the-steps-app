@@ -290,7 +290,7 @@ export class WorldScene extends Phaser.Scene {
         this.scene.stop(); // Delete modal scene
         PhaserSingletonService.activeGame.destroy(true);
         PhaserSingletonService.activeGame = undefined;
-        GameEngineSingleton.gameEventBus.next(result);
+        GameEngineSingleton.gameEventType.next(result);
         if (result === GameEnum.WIN) {
             await this.gameServicesActions.submitScore(GameEngineSingleton.points);
             if (GameEngineSingleton.world.worldType === LevelsEnum.DAYTIME) {

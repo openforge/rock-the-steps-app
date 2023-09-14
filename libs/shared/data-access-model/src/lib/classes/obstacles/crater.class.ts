@@ -3,8 +3,10 @@ import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
 
 export class Crater extends WorldObject {
-    public name = Objects.CRATER;
+    public name = Objects.CRATER; // * Object name
+
     constructor(level: LevelsEnum) {
+        console.log('crater.class.ts', 'constructor()');
         super();
         try {
             this.level = level;

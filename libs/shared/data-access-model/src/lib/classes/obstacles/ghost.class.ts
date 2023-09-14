@@ -3,8 +3,10 @@ import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
 
 export class Ghost extends WorldObject {
-    name = Objects.GHOST;
+    public name = Objects.GHOST; // * Object name
+
     constructor(level: LevelsEnum) {
+        console.log('ghost.class.ts', 'constructor()');
         super();
         try {
             this.level = level;

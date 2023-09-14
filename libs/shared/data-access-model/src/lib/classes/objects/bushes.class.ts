@@ -5,10 +5,11 @@ import { Scene } from 'phaser';
 import { BUSHES_KEY } from '../../constants/game-keys.constants';
 
 export class Bushes {
-    public sprite: Phaser.GameObjects.TileSprite;
+    public sprite: Phaser.GameObjects.TileSprite; // * Object sprite
 
     constructor(scene: Scene) {
-        const gameHeight = scene.game.config.height as unknown as number;
+        console.log('bushes.class.ts', 'constructor()');
+        const gameHeight = scene.game.config.height as number;
 
         // * Creating the tileSprite
         this.sprite = scene.add.tileSprite(0, 0, 0, 0, BUSHES_KEY);
