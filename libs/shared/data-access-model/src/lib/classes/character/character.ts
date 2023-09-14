@@ -24,6 +24,7 @@ export class Character {
     constructor(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite) {
         this.sprite = scene.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
         this.sprite.anims.play(WALKING_ANIMATION, true);
+        this.sprite.setDepth(1);
         this.addFloorCollision(scene, floorTileSprite);
     }
 

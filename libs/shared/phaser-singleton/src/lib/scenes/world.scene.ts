@@ -46,7 +46,7 @@ import { GameEngineSingleton } from '../../../../data-access-model/src/lib/class
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 import { createAnimationsCharacter } from '../utilities/character-animation';
 import { createButtons } from '../utilities/hud-helper';
-import { createFloor, createPigeonObjectSprite, createSteps } from '../utilities/object-creation-helper';
+import { createPigeonObjectSprite, createSteps } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
     private gameServicesActions: GameServicesActions = new GameServicesActions();
@@ -69,8 +69,9 @@ export class WorldScene extends Phaser.Scene {
 
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
-    public floor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
+    public firstFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
     public secondFloor: Floor;
+    public thirdFloor: Floor;
 
     private stepsExist = false;
 
@@ -131,7 +132,7 @@ export class WorldScene extends Phaser.Scene {
 
         this.cityBackground = new CityBackground(this);
         this.bushes = new Bushes(this);
-        this.floor = new Floor(this, 0, 0);
+        this.firstFloor = new Floor(this, 0, 0, 1);
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.obstacleGroup = this.physics.add.group();
@@ -139,7 +140,7 @@ export class WorldScene extends Phaser.Scene {
         this.floorsGroup = this.physics.add.group();
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.damageValue = 0;
-        this.character = new Character(this, this.floor.sprite);
+        this.character = new Character(this, this.firstFloor.sprite);
         this.healthbar = this.add.sprite(INITIAL_HEALTHBAR_X, INITIAL_HEALTHBAR_Y, HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}0`);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
     }
@@ -206,7 +207,7 @@ export class WorldScene extends Phaser.Scene {
                 worldObject.fly();
                 worldObject.dropPoop(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
                 this.obstaclePigeonGroup.push(worldObject);
-                this.physics.add.collider(this.floor.sprite, pigeonSprite);
+                this.physics.add.collider(this.firstFloor.sprite, pigeonSprite);
                 this.physics.add.collider(this.character.sprite, pigeonSprite, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
             } else {
                 // createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.obstacleGroup);
@@ -217,10 +218,13 @@ export class WorldScene extends Phaser.Scene {
         // createSteps
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps && !this.stepsExist) {
             // TODO - Implement the create steps function to create steps and 2nd level of ground.  Not yet hooked up.
-            const steps = createSteps(this, x, y, this.floor);
+            const steps = createSteps(this, x, y, this.firstFloor);
             this.stepsGroup.add(steps);
-            const floorTmp = createFloor(this, x + steps.width * 2, y, this.floor, this.character);
-            this.floorsGroup.add(floorTmp);
+            //const floorTmp = createFloor(this, x + steps.width * 2, y, this.floor, this.character);
+            this.secondFloor = new Floor(this, window.innerWidth * 0.1, 0, 2);
+            console.log('Floor created', this.secondFloor);
+
+            //this.floorsGroup.add(floorTmp);
             this.stepsExist = true;
         }
         // Draw the museum if the goal points has been reached
@@ -232,15 +236,15 @@ export class WorldScene extends Phaser.Scene {
             this.isEndReached = true;
         }
         this.obstacleGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
-        this.physics.add.collider(this.floor.sprite, this.obstacleGroup);
+        this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
         this.physics.add.collider(this.character.sprite, this.obstacleGroup);
         //* Group of sprites for the steps has collisions with floor but no with player and no damage
-        this.physics.add.collider(this.floor.sprite, this.stepsGroup);
+        this.physics.add.collider(this.firstFloor.sprite, this.stepsGroup);
         this.stepsGroup.setVelocityX(-UPPER_FLOORS_VELOCITY * GameEngineSingleton.difficult);
         // * Group of sprites for the obstacles has collisions with floor, steps and with player but no damage
         this.physics.add.collider(this.stepsGroup, this.floorsGroup);
         this.physics.add.collider(this.character.sprite, this.floorsGroup);
-        this.physics.add.collider(this.floor.sprite, this.floorsGroup);
+        if (this.secondFloor) this.physics.add.collider(this.firstFloor.sprite, this.secondFloor.sprite);
         this.floorsGroup.setVelocityX(-UPPER_FLOORS_VELOCITY * GameEngineSingleton.difficult);
     }
 
@@ -432,7 +436,7 @@ export class WorldScene extends Phaser.Scene {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
             this.cityBackground.sprite.tilePositionX += 0.5;
             this.bushes.sprite.tilePositionX += 1;
-            this.floor.sprite.tilePositionX += 2;
+            this.firstFloor.sprite.tilePositionX += 2;
             if (this.secondFloor) this.secondFloor.sprite.tilePositionX += 2;
         }
     }

@@ -117,7 +117,7 @@ export function createSteps(scene: Scene, initialX: number, initialY: number, fl
     tmpSteps.setName(STEPS_KEY);
     tmpSteps.body.setImmovable(true);
     tmpSteps.setImmovable(true);
-    tmpSteps.setScale(CONFIG.DEFAULT_WIDTH / tmpSteps.width);
+    //tmpSteps.setScale(CONFIG.DEFAULT_WIDTH / tmpSteps.width);
 
     scene.physics.add.collider(floor.sprite, tmpSteps);
     return tmpSteps;
