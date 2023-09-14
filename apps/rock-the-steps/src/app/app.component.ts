@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { GameServicesActions } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 
@@ -30,7 +31,7 @@ export class AppComponent implements OnDestroy, OnInit {
      *
      */
     private setScreenOrientation(): void {
-        void window.screen.orientation.lock('landscape');
+        void ScreenOrientation.lock({ orientation: 'landscape-primary' }).then(() => console.log('ram works now'));
     }
 
     /**
