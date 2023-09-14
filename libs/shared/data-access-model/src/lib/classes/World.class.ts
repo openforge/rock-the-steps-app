@@ -13,7 +13,7 @@ export class World {
     public objects: WorldObject[] = []; // * WorldObjects to be shown in the world
     public worldType: LevelsEnum = LevelsEnum.DAYTIME; // * Location where the world level will be located
     public pointsToEndLevel = 0; // * Points to end level
-    public pointsTillSteps = 200; // * number of points need to reach until steps are created
+    public pointsTillSteps = 100; // * number of points need to reach until steps are created
     public pixelForNextObstacle = 0; // * Pixel to create next obstacle;
     public difficultyLevel: DifficultyEnum;
     constructor() {}

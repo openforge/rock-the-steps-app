@@ -34,6 +34,7 @@ import {
     SKY_KEY,
     STARTER_PIXEL_FLAG,
     STEPS_KEY,
+    UPPER_FLOORS_VELOCITY,
     VELOCITY_PLAYER_WHEN_MOVING,
     WORLD_OBJECTS_VELOCITY,
     WORLD_SCENE,
@@ -45,11 +46,13 @@ import { GameEngineSingleton } from '../../../../data-access-model/src/lib/class
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 import { createAnimationsCharacter } from '../utilities/character-animation';
 import { createButtons } from '../utilities/hud-helper';
-import { createObjects, createPigeonObjectSprite } from '../utilities/object-creation-helper';
+import { createFloor, createPigeonObjectSprite, createSteps } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
     private gameServicesActions: GameServicesActions = new GameServicesActions();
     private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
+    private stepsGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the steps has collisions with floor but no with player and no damage
+    private floorsGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the floors has collisions with floor, steps and with player but no damage
     private obstaclePigeonGroup: Pigeon[] = []; // * Array of sprites for the pigeon obstacles
     private obstaclePoopGroup: Poop[] = []; // * Array of sprites for the pigeon obstacles
     private character: Character; // this is the class associated with the player
@@ -132,6 +135,8 @@ export class WorldScene extends Phaser.Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.obstacleGroup = this.physics.add.group();
+        this.stepsGroup = this.physics.add.group();
+        this.floorsGroup = this.physics.add.group();
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.damageValue = 0;
         this.character = new Character(this, this.floor.sprite);
@@ -204,7 +209,7 @@ export class WorldScene extends Phaser.Scene {
                 this.physics.add.collider(this.floor.sprite, pigeonSprite);
                 this.physics.add.collider(this.character.sprite, pigeonSprite, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
             } else {
-                createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.obstacleGroup);
+                // createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.obstacleGroup);
             }
             this.nextObstaclePoint += GameEngineSingleton.world.pixelForNextObstacle;
         }
@@ -212,8 +217,10 @@ export class WorldScene extends Phaser.Scene {
         // createSteps
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps && !this.stepsExist) {
             // TODO - Implement the create steps function to create steps and 2nd level of ground.  Not yet hooked up.
-            // createSteps(this, x, y, this.obstacleGroup, this.character);
-            //this.floor.sprite.setPosition(this.floor.sprite.x, this.floor.sprite.y - 50);
+            const steps = createSteps(this, x, y, this.floor);
+            this.stepsGroup.add(steps);
+            const floorTmp = createFloor(this, x + steps.width * 2, y, this.floor, this.character);
+            this.floorsGroup.add(floorTmp);
             this.stepsExist = true;
         }
         // Draw the museum if the goal points has been reached
@@ -226,7 +233,15 @@ export class WorldScene extends Phaser.Scene {
         }
         this.obstacleGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
         this.physics.add.collider(this.floor.sprite, this.obstacleGroup);
-        this.physics.add.collider(this.character.sprite, this.obstacleGroup, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+        this.physics.add.collider(this.character.sprite, this.obstacleGroup);
+        //* Group of sprites for the steps has collisions with floor but no with player and no damage
+        this.physics.add.collider(this.floor.sprite, this.stepsGroup);
+        this.stepsGroup.setVelocityX(-UPPER_FLOORS_VELOCITY * GameEngineSingleton.difficult);
+        // * Group of sprites for the obstacles has collisions with floor, steps and with player but no damage
+        this.physics.add.collider(this.stepsGroup, this.floorsGroup);
+        this.physics.add.collider(this.character.sprite, this.floorsGroup);
+        this.physics.add.collider(this.floor.sprite, this.floorsGroup);
+        this.floorsGroup.setVelocityX(-UPPER_FLOORS_VELOCITY * GameEngineSingleton.difficult);
     }
 
     /**
@@ -263,18 +278,41 @@ export class WorldScene extends Phaser.Scene {
         if (this.obstacleGroup.getChildren().length > 0) {
             this.obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
                 if (worldObject) {
-                    // Calculated values that will be possible used for the steps
-                    // const playerYBelow = this.character.sprite.y + this.character.sprite.height / HALF_DIVIDER;
-                    // const playerXStart = this.character.sprite.x - this.character.sprite.width / HALF_DIVIDER;
-                    // const playerXEnd = this.character.sprite.x + this.character.sprite.width / HALF_DIVIDER;
-                    // const worldObjectYAbove = worldObject.y - worldObject.height / HALF_DIVIDER;
-                    // const worldObjectXStart = worldObject.x - worldObject.width / HALF_DIVIDER;
                     const worldObjectXEnd = worldObject.x + worldObject.width / HALF_DIVIDER;
                     if (worldObject.name === END_KEY && worldObjectXEnd <= window.innerWidth) {
                         // If the end is displayed stop the movement
                         this.obstacleGroup.setVelocityX(0);
                         this.isEnd = true;
                     }
+                }
+            });
+        }
+        if (this.stepsGroup.getChildren().length > 0) {
+            this.stepsGroup.children.iterate((step: Phaser.GameObjects.Image) => {
+                const playerYBelow = this.character.sprite.y + this.character.sprite.height / HALF_DIVIDER;
+                const stepYBelow = step.y + step.height / HALF_DIVIDER;
+                const stepXEnd = step.x + step.width / HALF_DIVIDER;
+                const playerXStart = this.character.sprite.x - this.character.sprite.width / HALF_DIVIDER;
+                const stepYAbove = step.y - step.height / HALF_DIVIDER;
+                console.log('Y values player/step', playerYBelow, stepYBelow, stepXEnd, playerXStart);
+                // If player Y bottom is same or less that stairs and X is bigger than steps X then go UP!
+                if (step && playerYBelow >= stepYAbove && this.character.sprite.x > step.x) {
+                    // Calculated values that will be possible used for the steps
+                    // const stepXStart = step.x - step.width / HALF_DIVIDER;
+                    // const playerXEnd = this.character.sprite.x + this.character.sprite.width / HALF_DIVIDER;
+                    console.log('GOING UP');
+                    this.character.sprite.setVelocityY(-150);
+                }
+                // If player Y bottom is greater than stairs top and X start of player is greater than X end stairs THEN stop going up!
+                if (step && playerYBelow > stepYAbove && stepXEnd < playerXStart) {
+                    console.log('STOP');
+                    this.character.sprite.setVelocityY(0);
+                }
+                if (step.name === STEPS_KEY && stepXEnd <= 0) {
+                    // If the end is displayed stop the movement
+                    this.stepsGroup.setVelocityX(0);
+                    step.destroy();
+                    this.isEnd = true;
                 }
             });
         }

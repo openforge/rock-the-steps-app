@@ -1,6 +1,7 @@
 /* eslint-disable prefer-arrow/prefer-arrow-functions */
 import {
     Character,
+    Floor,
     FLOOR_KEY,
     FLYER_PIGEONS_Y_OFFSET,
     OBJECTS_SPRITE_KEY,
@@ -20,6 +21,7 @@ import {
     ZERO_PAD_PIGEON,
     ZERO_PAD_TOURIST,
 } from '@openforge/shared/data-access-model';
+import { CONFIG } from '@openforge/shared-phaser-singleton';
 import { WorldObject } from 'libs/shared/data-access-model/src/lib/classes/obstacles/world-object.class';
 import { Objects } from 'libs/shared/data-access-model/src/lib/enums/objects.enum';
 import { Scene } from 'phaser';
@@ -107,7 +109,7 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
 /**
  * TODO - IMPLEMENT THE STEPS AND PLAYER RUNNING ABOVE IT
  */
-export function createSteps(scene: Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group, character: Character) {
+export function createSteps(scene: Scene, initialX: number, initialY: number, floor: Floor) {
     console.log('create steps', initialX, initialY);
 
     // First, add the steps
@@ -115,21 +117,23 @@ export function createSteps(scene: Scene, initialX: number, initialY: number, ob
     tmpSteps.setName(STEPS_KEY);
     tmpSteps.body.setImmovable(true);
     tmpSteps.setImmovable(true);
-    obstacleGroup.add(tmpSteps);
+    tmpSteps.setScale(CONFIG.DEFAULT_WIDTH / tmpSteps.width);
 
-    scene.physics.add.collider(character.sprite, tmpSteps, (tmpChar, tmpStepsCB) => {
-        console.log('Collision #1' + tmpChar.name + ' XXX ' + tmpStepsCB.name);
-    });
+    scene.physics.add.collider(floor.sprite, tmpSteps);
+    return tmpSteps;
+}
 
+export function createFloor(scene: Scene, initialX: number, initialY: number, floor: Floor, character: Character) {
     // * Always shift it by X + width of the steps so they dont overlap
-    const tmpFloor = scene.physics.add.image(initialX + tmpSteps.width, initialY, FLOOR_KEY);
+    const tmpFloor = scene.add.tileSprite(initialX, initialY, 0, 0, FLOOR_KEY);
     tmpFloor.setName(FLOOR_KEY);
-    tmpFloor.body.setImmovable(true);
-    tmpFloor.setImmovable(true);
-    obstacleGroup.add(tmpFloor);
-    scene.physics.add.collider(tmpFloor, obstacleGroup); // * Collide with obstacleGroup
+    // eslint-disable-next-line no-magic-numbers
+    tmpFloor.setPosition(initialX, CONFIG.DEFAULT_HEIGHT - CONFIG.DEFAULT_HEIGHT * 0.1);
+    scene.physics.add.existing(tmpFloor, true);
+    // scene.physics.add.collider(tmpFloor, obstacleGroup); // * Collide with obstacleGroup
 
     scene.physics.add.collider(character.sprite, tmpFloor, (tmpCharSprite, floorSprite) => {
         console.log('Collision #2' + tmpCharSprite.name + ' XXX ' + floorSprite.name);
     });
+    return tmpFloor;
 }
