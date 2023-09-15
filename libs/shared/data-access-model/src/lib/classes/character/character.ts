@@ -70,19 +70,21 @@ export class Character {
      * @param worldObject gloves to be destroyed after used
      */
     public makeInvulnerable(scene: Scene): void {
-        console.log('makeInvulnerable');
-        this.isInvulnerable = true;
-        scene.tweens.add({
-            targets: this.sprite,
-            alpha: 0,
-            duration: DURATION_INVULNERABLE_REP, // Duration of each blinking
-            repeat: INVULNERABLE_REPS, // Number of repetitions 200 x 10 = 2000millisec
-            yoyo: true, // Type of animation
-            onComplete: () => {
-                this.sprite.setAlpha(1); // Restore normal opacity
-                this.isInvulnerable = false;
-            },
-        });
+        // * If the character it's alreadt with the vulnerable mode then don't assign it again
+        if (!this.isInvulnerable) {
+            this.isInvulnerable = true;
+            scene.tweens.add({
+                targets: this.sprite,
+                alpha: 0,
+                duration: DURATION_INVULNERABLE_REP, // Duration of each blinking
+                repeat: INVULNERABLE_REPS, // Number of repetitions 200 x 10 = 2000millisec
+                yoyo: true, // Type of animation
+                onComplete: () => {
+                    this.sprite.setAlpha(1); // Restore normal opacity
+                    this.isInvulnerable = false;
+                },
+            });
+        }
     }
 
     /**
