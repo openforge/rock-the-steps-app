@@ -3,8 +3,10 @@ import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
 
 export class LibertyBell extends WorldObject {
-    name = Objects.BELL;
+    public name = Objects.BELL; // * Object name
+
     constructor(level: LevelsEnum) {
+        console.log('liberty-bell.class.ts', 'constructor()');
         super();
         try {
             this.level = level;

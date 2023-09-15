@@ -5,9 +5,10 @@ import { Scene } from 'phaser';
 import { CITY_KEY } from '../../constants/game-keys.constants';
 
 export class CityBackground {
-    public sprite: Phaser.GameObjects.TileSprite;
+    public sprite: Phaser.GameObjects.TileSprite; // * Object sprite
 
     constructor(scene: Scene) {
+        console.log('city-background.class.ts', 'constructor()');
         // * Creating the tileSprite
         this.sprite = scene.add.tileSprite(0, 0, 0, 0, CITY_KEY);
         this.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.sprite.width);

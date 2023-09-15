@@ -8,9 +8,14 @@ import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/game-engine.singleton';
 export class PauseScene extends Phaser.Scene {
     constructor() {
+        console.log('pause.scene.ts', 'constructor()');
         super('PauseScene');
     }
 
+    /**
+     * * Creating Modal to display
+     *
+     */
     create() {
         // Adds transparent background
         const modalOverlay = this.add.graphics();
@@ -41,6 +46,10 @@ export class PauseScene extends Phaser.Scene {
         modal.add(mainMenuButton);
     }
 
+    /**
+     * * Function to pause current scene
+     *
+     */
     private resumeGame(): void {
         this.scene.stop(); // Delete modal scene
         this.scene.resume('WorldScene');
@@ -54,6 +63,6 @@ export class PauseScene extends Phaser.Scene {
         this.scene.stop(); // Delete modal scene
         PhaserSingletonService.activeGame.destroy(true);
         PhaserSingletonService.activeGame = undefined;
-        GameEngineSingleton.gameEventBus.next(GameEnum.EXIT);
+        GameEngineSingleton.gameEventType.next(GameEnum.EXIT);
     }
 }

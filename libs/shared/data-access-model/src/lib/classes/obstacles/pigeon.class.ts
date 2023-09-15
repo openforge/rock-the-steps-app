@@ -10,11 +10,13 @@ import { Poop } from './poop.class';
 import { WorldObject } from './world-object.class';
 
 export class Pigeon extends WorldObject {
-    name = Objects.PIGEON;
-    isFlying: boolean = false; // * Prop to detect if pigeon is in the air
+    public name = Objects.PIGEON; // * Object name
+    public isFlying: boolean = false; // * Prop to detect if pigeon is in the air
     public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Pigeon Sprite to be used
-    poop: Poop; //* Poop being thrown by this pigeon
+    public poop: Poop; //* Poop being thrown by this pigeon
+
     constructor(level: LevelsEnum) {
+        console.log('pigeon.class.ts', 'constructor()');
         super();
         this.poop = new Poop(level);
         try {
