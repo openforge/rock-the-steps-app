@@ -19,6 +19,8 @@ export class World {
     public moveSpeedBackground = 0; // * To get the total speed of the background
     public moveSpeedBushes = 0; // * To get the total speed of the bushes
     public moveSpeedFloor = 0; // * To get the total speed of the floor
+    public pointsToShowSecondFloor = 0; // * To show second floor at x points quantity
+    public pointsToShowThirdFloor = 0; // * To show third floor at x points quantity
     constructor() {}
 
     /**
@@ -73,6 +75,8 @@ export class World {
         world.objects.push(new Tourist(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 999;
+        world.pointsToShowSecondFloor = 300;
+        world.pointsToShowSecondFloor = 700;
     }
     public static createSunsetLevel(world: World): void {
         // It has gloves, cheese steak, trashcan, hurdle, anvil, bigpoo, tourist, bell, pigeon, pigeon poop
@@ -87,6 +91,8 @@ export class World {
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 1999;
+        world.pointsToShowSecondFloor = 700;
+        world.pointsToShowSecondFloor = 1100;
     }
     public static createNightLevel(world: World): void {
         // It has gloves, cheese steak, ghost, hurdle,  anvil, tomb, bell, tourist, pigeon, pigeon poop
@@ -101,6 +107,8 @@ export class World {
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 2999;
+        world.pointsToShowSecondFloor = 1100;
+        world.pointsToShowSecondFloor = 2000;
     }
     public static createChinaLevel(world: World): void {
         // It has ken, gloves, bell, crater, chinese food, cheese steak, cone, tourist, pigeon, pigeon poop
@@ -109,12 +117,15 @@ export class World {
 
         world.objects.push(new Crater(world.worldType));
         world.objects.push(new Apple(world.worldType));
+        world.objects.push(new Anvil(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new ChineseFood(world.worldType));
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new Tourist(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 3499;
+        world.pointsToShowSecondFloor = 1500;
+        world.pointsToShowSecondFloor = 2500;
     }
     public static createRittenLevel(world: World): void {
         // It has apple, gloves, bell, bottle, trashcan, cheese steak, stand, tourist, pigeon, pigeon poop
@@ -129,6 +140,8 @@ export class World {
         world.objects.push(new Stand(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 3899;
+        world.pointsToShowSecondFloor = 1700;
+        world.pointsToShowSecondFloor = 2700;
     }
     public static createKellyLevel(world: World): void {
         world.objects.push(new Gloves(world.worldType));
@@ -142,6 +155,8 @@ export class World {
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 4499;
+        world.pointsToShowSecondFloor = 1900;
+        world.pointsToShowSecondFloor = 3000;
     }
 
     /**
@@ -169,8 +184,8 @@ export class World {
             case DifficultyEnum.HARD: {
                 world.pixelForNextObstacle = 80;
                 world.moveSpeedBackground = 0.8;
-                world.moveSpeedBushes = 1.5;
-                world.moveSpeedFloor = 2.5;
+                world.moveSpeedBushes = 1.3;
+                world.moveSpeedFloor = 2.3;
                 break;
             }
             default: {

@@ -167,7 +167,8 @@ export class WorldScene extends Phaser.Scene {
      *
      */
     public floorCreationFlow(): void {
-        if (GameEngineSingleton.points === 250 || GameEngineSingleton.points === 500) this.createNewFloorIfApplies();
+        if (GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowSecondFloor || GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowThirdFloor)
+            this.createNewFloorIfApplies();
         if (this.secondFloor && this.secondFloor.sprite.x > -window.innerWidth) {
             this.secondFloor.sprite.x -= 1;
         }
