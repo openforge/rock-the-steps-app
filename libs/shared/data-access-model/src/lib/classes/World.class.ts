@@ -13,13 +13,14 @@ export class World {
     public objects: WorldObject[] = []; // * WorldObjects to be shown in the world
     public worldType: LevelsEnum = LevelsEnum.DAYTIME; // * Location where the world level will be located
     public pointsToEndLevel = 0; // * Points to end level
-    public pointsTillSteps = 200; // * number of points need to reach until steps are created
+    public pointsTillSteps = 100; // * number of points need to reach until steps are created
     public pixelForNextObstacle = 0; // * Pixel to create next obstacle;
     public difficultyLevel: DifficultyEnum; // * Property to get difficulty enum used in functions
     public moveSpeedBackground = 0; // * To get the total speed of the background
     public moveSpeedBushes = 0; // * To get the total speed of the bushes
     public moveSpeedFloor = 0; // * To get the total speed of the floor
-
+    public pointsToShowSecondFloor = 0; // * To show second floor at x points quantity
+    public pointsToShowThirdFloor = 0; // * To show third floor at x points quantity
     constructor() {}
 
     /**
@@ -80,6 +81,8 @@ export class World {
         world.objects.push(new Tourist(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 999;
+        world.pointsToShowSecondFloor = 300;
+        world.pointsToShowSecondFloor = 700;
     }
 
     /**
@@ -100,6 +103,8 @@ export class World {
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 1999;
+        world.pointsToShowSecondFloor = 700;
+        world.pointsToShowSecondFloor = 1100;
     }
 
     /**
@@ -120,6 +125,8 @@ export class World {
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 2999;
+        world.pointsToShowSecondFloor = 1100;
+        world.pointsToShowSecondFloor = 2000;
     }
 
     /**
@@ -134,12 +141,15 @@ export class World {
 
         world.objects.push(new Crater(world.worldType));
         world.objects.push(new Apple(world.worldType));
+        world.objects.push(new Anvil(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new ChineseFood(world.worldType));
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new Tourist(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 3499;
+        world.pointsToShowSecondFloor = 1500;
+        world.pointsToShowSecondFloor = 2500;
     }
 
     /**
@@ -160,6 +170,8 @@ export class World {
         world.objects.push(new Stand(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 3899;
+        world.pointsToShowSecondFloor = 1700;
+        world.pointsToShowSecondFloor = 2700;
     }
 
     /**
@@ -179,6 +191,8 @@ export class World {
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 4499;
+        world.pointsToShowSecondFloor = 1900;
+        world.pointsToShowSecondFloor = 3000;
     }
 
     /**
@@ -206,8 +220,8 @@ export class World {
             case DifficultyEnum.HARD: {
                 world.pixelForNextObstacle = 80;
                 world.moveSpeedBackground = 0.8;
-                world.moveSpeedBushes = 1.5;
-                world.moveSpeedFloor = 2.5;
+                world.moveSpeedBushes = 1.3;
+                world.moveSpeedFloor = 2.3;
                 break;
             }
             default: {
