@@ -10,6 +10,7 @@ import {
     DAMAGE_MAX_VALUE,
     DAMAGE_MIN_VALUE,
     DAMAGE_TIMER,
+    DifficultyEnum,
     END_KEY,
     END_OBJECT_SCALE,
     FIRST_ACHIEVEMENT_ID,
@@ -149,7 +150,6 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     update() {
-        // console.log('Char position', this.character.sprite.y)
         this.calculatePoints();
         this.flyGroundedPigeons();
         this.moveInfiniteBackgrounds();
@@ -251,10 +251,19 @@ export class WorldScene extends Phaser.Scene {
      * Method used to create dynamically the sprites for the steps
      */
     public createNewFloorIfApplies(): void {
-        // createSteps
+        if (GameEngineSingleton.difficult === DifficultyEnum.EASY) {
+            this.floorLevel = 0;
+            return;
+        } else if (GameEngineSingleton.difficult === DifficultyEnum.MEDIUM) {
+            this.setFloorObject(2);
+        } else if (GameEngineSingleton.difficult === DifficultyEnum.HARD) {
+            this.setFloorObject(3);
+        }
+    }
+
+    public setFloorObject(limitLevel: number): void {
         const x = this.sys.canvas.width;
-        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps * this.floorLevel && this.floorLevel < 3) {
-            console.log('CANVAS width', x);
+        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps * this.floorLevel && this.floorLevel < limitLevel) {
             this.floorLevel++;
             const steps = createSteps(this, x, CONFIG.DEFAULT_HEIGHT - CONFIG.DEFAULT_HEIGHT * (0.1 * this.floorLevel + 1));
             this.stepsGroup.add(steps);

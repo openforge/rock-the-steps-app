@@ -113,13 +113,12 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
 export function createSteps(scene: Scene, initialX: number, initialY: number) {
     console.log('create steps', initialX, initialY);
 
-    // First, add the steps
-    const tmpSteps = scene.physics.add.image(initialX + STEPS_OFFSET_X_FOR_CREATION, initialY, STEPS_KEY);
+    //  * First, add the steps
+    const tmpSteps = scene.physics.add.image(initialX + -STEPS_OFFSET_X_FOR_CREATION, initialY, STEPS_KEY);
     tmpSteps.originX = 0;
     tmpSteps.setName(STEPS_KEY);
     tmpSteps.body.setImmovable(true);
     tmpSteps.setImmovable(true);
-    //tmpSteps.setScale(CONFIG.DEFAULT_WIDTH / tmpSteps.width);
 
     return tmpSteps;
 }
@@ -131,10 +130,7 @@ export function createFloor(scene: Scene, initialX: number, initialY: number, fl
     // eslint-disable-next-line no-magic-numbers
     tmpFloor.setPosition(initialX, CONFIG.DEFAULT_HEIGHT - CONFIG.DEFAULT_HEIGHT * 0.1);
     scene.physics.add.existing(tmpFloor, true);
-    // scene.physics.add.collider(tmpFloor, obstacleGroup); // * Collide with obstacleGroup
 
-    scene.physics.add.collider(character.sprite, tmpFloor, (tmpCharSprite, floorSprite) => {
-        console.log('Collision #2' + tmpCharSprite.name + ' XXX ' + floorSprite.name);
-    });
+    scene.physics.add.collider(character.sprite, tmpFloor);
     return tmpFloor;
 }
