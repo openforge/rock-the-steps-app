@@ -49,4 +49,4 @@ export const PIGEONS_FLY_TIMEOUT = 2000;
 export const FLYER_PIGEONS_Y_OFFSET = 0.3;
 export const FLY_GROUNDED_PIGEONS_OFFSET = 0.8;
 export const ONE_SECOND_TIMEOUT = 1000;
-export const STEPS_OFFSET_X_FOR_CREATION = 72.7;
+export const STEPS_OFFSET_X_FOR_CREATION = 71.5;
