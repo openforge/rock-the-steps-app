@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { GameServicesActions, ScreensEnum } from '@openforge/shared/data-access-model';
 
@@ -7,9 +7,10 @@ import { GameServicesActions, ScreensEnum } from '@openforge/shared/data-access-
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent {
     public screensEnum = ScreensEnum; // * Enum used for the navigation screen type safe
     private gameServicesActions: GameServicesActions = new GameServicesActions();
+
     /**
      * * On Init, initilize the Phaser Singleton instance
      * The initialisation is delayed by 500ms to give the HomePage the chance to render
@@ -19,10 +20,6 @@ export class HomePageComponent implements OnInit {
      * With the delay the canvas size will be set correctly.
      */
     constructor(private router: Router) {}
-
-    async ngOnInit(): Promise<void> {
-        console.log('HomePageComponent', 'ngOnInit');
-    }
 
     /**
      * * Method used to navigate from the main screen

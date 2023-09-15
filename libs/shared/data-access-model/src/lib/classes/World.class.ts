@@ -68,7 +68,7 @@ export class World {
      * @param world as World
      */
     public static createDayLevel(world: World): void {
-        // It has apple, gloves, bell, bottle, trashcan, cheese steak, cone, tourist, pigeon, pigeon poop
+        // * It has apple, gloves, bell, bottle, trashcan, cheese steak, cone, tourist, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
         world.objects.push(new CheeseSteak(world.worldType));
 
@@ -88,7 +88,7 @@ export class World {
      * @param world as World
      */
     public static createSunsetLevel(world: World): void {
-        // It has gloves, cheese steak, trashcan, hurdle, anvil, bigpoo, tourist, bell, pigeon, pigeon poop
+        // * It has gloves, cheese steak, trashcan, hurdle, anvil, bigpoo, tourist, bell, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
         world.objects.push(new CheeseSteak(world.worldType));
 
@@ -108,7 +108,7 @@ export class World {
      * @param world as World
      */
     public static createNightLevel(world: World): void {
-        // It has gloves, cheese steak, ghost, hurdle,  anvil, tomb, bell, tourist, pigeon, pigeon poop
+        // * It has gloves, cheese steak, ghost, hurdle,  anvil, tomb, bell, tourist, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
         world.objects.push(new CheeseSteak(world.worldType));
 
@@ -128,7 +128,7 @@ export class World {
      * @param world as World
      */
     public static createChinaLevel(world: World): void {
-        // It has ken, gloves, bell, crater, chinese food, cheese steak, cone, tourist, pigeon, pigeon poop
+        // * It has ken, gloves, bell, crater, chinese food, cheese steak, cone, tourist, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
         world.objects.push(new CheeseSteak(world.worldType));
 
@@ -148,7 +148,7 @@ export class World {
      * @param world as World
      */
     public static createRittenLevel(world: World): void {
-        // It has apple, gloves, bell, bottle, trashcan, cheese steak, stand, tourist, pigeon, pigeon poop
+        // * It has apple, gloves, bell, bottle, trashcan, cheese steak, stand, tourist, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
         world.objects.push(new CheeseSteak(world.worldType));
 
