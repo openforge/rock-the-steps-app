@@ -1,6 +1,11 @@
 ion-toolbar {
   --background: var(--rts-red);
-  --border-width: 0 !important; // * todo paulina
+  --border-width: 0 !important;
+  padding: 1rem;
+}
+
+ion-header ion-toolbar:first-of-type {
+  --padding-top: 1rem;
 }
 
 ion-content {
@@ -38,10 +43,6 @@ ion-header > ion-button {
   text-align: center;
 }
 
-.is-selectable {
-  cursor: pointer;
-}
-
 .stage > img {
   height: 100%;
   width: 100%;
@@ -49,6 +50,25 @@ ion-header > ion-button {
 
 .stage > h6 {
   color: var(--rts-basic-white);
+}
+
+ion-badge {
+  position: absolute;
+  padding: 1.25rem 0.5rem;
+  font-size: 1rem;
+  border-radius: 50%;
+  right: -1.563rem;
+  top: -0.938rem;
+  color: var(--rts-red);
+  background: var(--rts-basic-white);
+}
+
+ion-icon {
+  color: var(--gray-base);
+}
+
+ion-icon.is-completed {
+  color: var(--rts-red);
 }
 
 ion-footer {
@@ -66,23 +86,4 @@ ion-footer {
   color: var(--rts-basic-white);
   font-size: 3rem;
   text-align: center;
-}
-
-ion-badge {
-  position: absolute;
-  padding: 1.25rem 0.5rem;
-  font-size: 1rem;
-  border-radius: 50%;
-  right: -1.563rem;
-  top: -0.938rem;
-  color: var(--rts-red);
-  background: white;
-}
-
-ion-icon {
-  color: grey;
-}
-
-ion-icon.is-completed {
-  color: var(--rts-red);
 }
