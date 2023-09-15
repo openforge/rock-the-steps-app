@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 import { ModalController } from '@ionic/angular';
 import { DifficultyEnum, GameServicesActions, LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 import { Stage } from 'libs/shared/data-access-model/src/lib/models/stage.interface';
@@ -154,11 +154,11 @@ export class StageSelectComponent implements OnInit {
     constructor(private router: Router, private modalCtrl: ModalController) {}
 
     async ngOnInit() {
-        this.allPointsEarned = Number((await Storage.get({ key: 'TOTAL_POINTS' })).value);
+        this.allPointsEarned = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
 
-        const userProgression = await Storage.get({ key: 'PROGRESSION' });
+        const userProgression = await Preferences.get({ key: 'PROGRESSION' });
         if (!userProgression.value) {
-            await Storage.set({ key: 'PROGRESSION', value: JSON.stringify(this.progression) });
+            await Preferences.set({ key: 'PROGRESSION', value: JSON.stringify(this.progression) });
         } else {
             this.progression = JSON.parse(userProgression.value) as Stage[];
         }

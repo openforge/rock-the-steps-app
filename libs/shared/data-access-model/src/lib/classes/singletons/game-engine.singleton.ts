@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 import { DifficultyEnum, GameEnum, LevelsEnum } from '@openforge/shared/data-access-model';
 import { Subject } from 'rxjs';
 
@@ -29,6 +29,6 @@ export class GameEngineSingleton {
      */
     public static async buildWorld(level: LevelsEnum, difficulty: DifficultyEnum): Promise<void> {
         this.world = World.build(level, difficulty);
-        this.totalPoints = Number((await Storage.get({ key: 'TOTAL_POINTS' })).value);
+        this.totalPoints = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
     }
 }

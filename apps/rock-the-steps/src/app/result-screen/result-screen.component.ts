@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Storage } from '@capacitor/storage';
+import { Preferences } from '@capacitor/preferences';
 import { GameEnum, Stage } from '@openforge/shared/data-access-model';
 
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/game-engine.singleton';
@@ -46,7 +46,7 @@ export class ResultScreenComponent implements OnInit {
     }
 
     public async updateUserProgression(): Promise<void> {
-        const userProgression = JSON.parse((await Storage.get({ key: 'PROGRESSION' })).value) as Stage[];
+        const userProgression = JSON.parse((await Preferences.get({ key: 'PROGRESSION' })).value) as Stage[];
         const progressionItem = userProgression.find(
             progression => progression.levelDifficulity === GameEngineSingleton.world.difficultyLevel && progression.levelName === GameEngineSingleton.world.worldType
         );
@@ -58,9 +58,9 @@ export class ResultScreenComponent implements OnInit {
             userProgression[progressionItemIndex].bestScore = GameEngineSingleton.points;
         }
 
-        await Storage.set({ key: 'PROGRESSION', value: JSON.stringify(userProgression) });
+        await Preferences.set({ key: 'PROGRESSION', value: JSON.stringify(userProgression) });
 
-        GameEngineSingleton.totalPoints = Number((await Storage.get({ key: 'TOTAL_POINTS' })).value) + GameEngineSingleton.points;
-        await Storage.set({ key: 'TOTAL_POINTS', value: GameEngineSingleton.totalPoints.toString() });
+        GameEngineSingleton.totalPoints = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value) + GameEngineSingleton.points;
+        await Preferences.set({ key: 'TOTAL_POINTS', value: GameEngineSingleton.totalPoints.toString() });
     }
 }
