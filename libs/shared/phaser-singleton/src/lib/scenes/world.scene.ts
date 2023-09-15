@@ -73,9 +73,10 @@ export class WorldScene extends Phaser.Scene {
     public thirdFloor: Floor;
     public floorLevel: number = 1;
 
-    private stepsExist = false;
+    private stepsExist = false; // * Used to validate steps in staircases
 
     constructor() {
+        console.log('world.scene.ts', 'constructor()');
         super(WORLD_SCENE);
     }
 
@@ -183,7 +184,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to fly pigeons grounded
+     * * Method used to fly pigeons grounded
      *
      * @private
      */
@@ -196,7 +197,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to calculate the points and update the text in the game
+     * * Method used to calculate the points and update the text in the game
      *
      * @return void
      */
@@ -216,7 +217,7 @@ export class WorldScene extends Phaser.Scene {
         const x = this.sys.canvas.width;
         const y = 0;
 
-        // createObstacles
+        // * createObstacles
         if (GameEngineSingleton.points > this.nextObstaclePoint && GameEngineSingleton.points < GameEngineSingleton.world.pointsToEndLevel) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
             const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
@@ -295,7 +296,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to listen for collisions with obstacles
+     * * Method used to listen for collisions with obstacles
      *
      * @param player
      * @param obstacle
@@ -371,7 +372,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to send the user back to the main screen
+     * * Method used to send the user back to the main screen
      *
      * @param result Result of the game reached WIN/LOSE
      * @return void
@@ -380,7 +381,7 @@ export class WorldScene extends Phaser.Scene {
         this.scene.stop(); // Delete modal scene
         PhaserSingletonService.activeGame.destroy(true);
         PhaserSingletonService.activeGame = undefined;
-        GameEngineSingleton.gameEventBus.next(result);
+        GameEngineSingleton.gameEventType.next(result);
         if (result === GameEnum.WIN) {
             await this.gameServicesActions.submitScore(GameEngineSingleton.points);
             if (GameEngineSingleton.world.worldType === LevelsEnum.DAYTIME) {
@@ -390,7 +391,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to remove obstacles after off screened
+     * * Method used to remove obstacles after off screened
      *
      * @return void
      */
@@ -414,7 +415,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to heal up player
+     * * Method used to heal up player
      *
      * @param worldObject cheesesteak to be destroyed after used
      */
@@ -426,7 +427,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to receive damage to the user
+     * * Method used to receive damage to the user
      *
      * @return void
      */
@@ -462,7 +463,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method to avoid player go outside scene
+     * * Method to avoid player go outside scene
      *
      * @return void
      */

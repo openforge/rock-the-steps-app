@@ -78,15 +78,13 @@ export function createPigeonObjectSprite(scene: Scene, pigeon: Pigeon, initialX:
     return tmpSprite;
 }
 export function createObjects(worldObject: WorldObject, scene: Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group) {
-    // console.log('createObjects:', worldObject.name);
-
-    // If it's a BELL, Modify how it displays
+    // * If it's a BELL, Modify how it displays
     if (worldObject.name === Objects.BELL) {
         // TODO - Have bell fall from mid screen instead
         // initialX = scene.sys.canvas.width + scene.sys.canvas.width / HALF_DIVIDER;
     }
 
-    // Here we set the Sprite Object, with or without modification for Bell
+    // * Here we set the Sprite Object, with or without modification for Bell
     const tmpSprite = scene.physics.add.sprite(initialX, initialY, OBJECTS_SPRITE_KEY, worldObject.name);
 
     // * This is an obstacle!  Don't hit the tourists :)

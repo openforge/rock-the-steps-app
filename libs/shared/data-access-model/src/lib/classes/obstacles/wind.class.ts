@@ -3,8 +3,10 @@ import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
 
 export class Wind extends WorldObject {
-    name = Objects.WIND;
+    public name = Objects.WIND; // * Object name
+
     constructor(level: LevelsEnum) {
+        console.log('wind.class.ts', 'constructor()');
         super();
         try {
             this.level = level;

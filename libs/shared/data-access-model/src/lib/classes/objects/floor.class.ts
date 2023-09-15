@@ -4,10 +4,10 @@ import { Scene } from 'phaser';
 import { FLOOR_KEY } from '../../constants/game-keys.constants';
 
 export class Floor {
-    public sprite: Phaser.GameObjects.TileSprite;
+    public sprite: Phaser.GameObjects.TileSprite; // * Object sprite
 
     constructor(scene: Scene, x: number, y: number, floorNumber: number) {
-        console.warn('floor constructed ');
+        console.log('floor.class.ts', 'constructor()');
         // * have to specify the width to make it full
         this.sprite = scene.add.tileSprite(x, y, 0, 0, FLOOR_KEY);
         this.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.sprite.width);

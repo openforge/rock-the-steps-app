@@ -13,8 +13,8 @@ import {
 } from '../../constants/game-units.constants';
 
 export class Character {
-    public name = 'character';
-    public isInvulnerable: boolean = false; // Flag to detect gloves invulnerability
+    public name = 'character'; // * Character name
+    public isInvulnerable: boolean = false; // * Flag to detect gloves invulnerability
     public isMovingLeft: boolean = false; // * Flag to detect if character is pressing left button
     public isMovingRight: boolean = false; // * Flag to detect is character is pressing right button
     public isJumping: boolean = false; // * Flag to detect is character is pressing jump button
