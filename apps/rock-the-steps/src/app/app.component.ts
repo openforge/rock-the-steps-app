@@ -31,7 +31,7 @@ export class AppComponent implements OnDestroy, OnInit {
      *
      */
     private setScreenOrientation(): void {
-        void ScreenOrientation.lock({ orientation: 'landscape-primary' }).then(() => console.log('ram works now'));
+        void ScreenOrientation.lock({ orientation: 'landscape-primary' });
     }
 
     /**
