@@ -392,10 +392,10 @@ export class WorldScene extends Phaser.Scene {
         // While the end has not reached do the scrolling of level
         if (!this.isEnd) {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
-            this.cityBackground.sprite.tilePositionX += 0.5;
-            this.bushes.sprite.tilePositionX += 1;
-            this.floor.sprite.tilePositionX += 2;
-            if (this.secondFloor) this.secondFloor.sprite.tilePositionX += 2;
+            this.cityBackground.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedBackground;
+            this.bushes.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedBushes;
+            this.floor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.secondFloor) this.secondFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
         }
     }
 }

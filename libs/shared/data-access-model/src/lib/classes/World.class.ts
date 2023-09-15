@@ -15,7 +15,10 @@ export class World {
     public pointsToEndLevel = 0; // * Points to end level
     public pointsTillSteps = 200; // * number of points need to reach until steps are created
     public pixelForNextObstacle = 0; // * Pixel to create next obstacle;
-    public difficultyLevel: DifficultyEnum;
+    public difficultyLevel: DifficultyEnum; // * Property to get difficulty enum used in functions
+    public moveSpeedBackground = 0; // * To get the total speed of the background
+    public moveSpeedBushes = 0; // * To get the total speed of the bushes
+    public moveSpeedFloor = 0; // * To get the total speed of the floor
     constructor() {}
 
     /**
@@ -151,18 +154,30 @@ export class World {
         switch (difficult) {
             case DifficultyEnum.EASY: {
                 world.pixelForNextObstacle = 130;
+                world.moveSpeedBackground = 0.3;
+                world.moveSpeedBushes = 0.8;
+                world.moveSpeedFloor = 1.8;
                 break;
             }
             case DifficultyEnum.MEDIUM: {
                 world.pixelForNextObstacle = 100;
+                world.moveSpeedBackground = 0.6;
+                world.moveSpeedBushes = 1.1;
+                world.moveSpeedFloor = 2.1;
                 break;
             }
             case DifficultyEnum.HARD: {
                 world.pixelForNextObstacle = 80;
+                world.moveSpeedBackground = 0.8;
+                world.moveSpeedBushes = 1.5;
+                world.moveSpeedFloor = 2.5;
                 break;
             }
             default: {
                 world.pixelForNextObstacle = 130;
+                world.moveSpeedBackground = 0.3;
+                world.moveSpeedBushes = 0.8;
+                world.moveSpeedFloor = 1.8;
                 break;
             }
         }
