@@ -34,7 +34,6 @@ import {
     SKY_KEY,
     STARTER_PIXEL_FLAG,
     STEPS_KEY,
-    UPPER_FLOORS_VELOCITY,
     VELOCITY_PLAYER_WHEN_MOVING,
     WORLD_OBJECTS_VELOCITY,
     WORLD_SCENE,
@@ -46,13 +45,12 @@ import { GameEngineSingleton } from '../../../../data-access-model/src/lib/class
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 import { createAnimationsCharacter } from '../utilities/character-animation';
 import { createButtons } from '../utilities/hud-helper';
-import { createPigeonObjectSprite, createSteps } from '../utilities/object-creation-helper';
+import { createObjects, createPigeonObjectSprite, createSteps } from '../utilities/object-creation-helper';
 
 export class WorldScene extends Phaser.Scene {
     private gameServicesActions: GameServicesActions = new GameServicesActions();
     private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private stepsGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the steps has collisions with floor but no with player and no damage
-    private floorsGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the floors has collisions with floor, steps and with player but no damage
     private obstaclePigeonGroup: Pigeon[] = []; // * Array of sprites for the pigeon obstacles
     private obstaclePoopGroup: Poop[] = []; // * Array of sprites for the pigeon obstacles
     private character: Character; // this is the class associated with the player
@@ -72,6 +70,7 @@ export class WorldScene extends Phaser.Scene {
     public firstFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
     public secondFloor: Floor;
     public thirdFloor: Floor;
+    public floorLevel: number = 1;
 
     private stepsExist = false;
 
@@ -133,14 +132,13 @@ export class WorldScene extends Phaser.Scene {
         this.cityBackground = new CityBackground(this);
         this.bushes = new Bushes(this);
         this.firstFloor = new Floor(this, 0, 0, 1);
-
         this.cursors = this.input.keyboard.createCursorKeys();
         this.obstacleGroup = this.physics.add.group();
         this.stepsGroup = this.physics.add.group();
-        this.floorsGroup = this.physics.add.group();
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.damageValue = 0;
         this.character = new Character(this, this.firstFloor.sprite);
+        this.physics.add.existing(this.firstFloor.sprite, true);
         this.healthbar = this.add.sprite(INITIAL_HEALTHBAR_X, INITIAL_HEALTHBAR_Y, HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}0`);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
     }
@@ -161,6 +159,26 @@ export class WorldScene extends Phaser.Scene {
         this.createObjects();
         this.endDetection();
         this.cleanUpObjects();
+        this.floorCreationFlow();
+    }
+
+    /**
+     * Method used for the creation of floors and steps
+     *
+     */
+    public floorCreationFlow(): void {
+        if (GameEngineSingleton.points === 250 || GameEngineSingleton.points === 500) this.createNewFloorIfApplies();
+        if (this.secondFloor && this.secondFloor.sprite.x > -window.innerWidth) {
+            this.secondFloor.sprite.x -= 1;
+        }
+        if (this.thirdFloor && this.thirdFloor.sprite.x > -window.innerWidth) {
+            this.thirdFloor.sprite.x -= 1;
+        }
+        this.stepsGroup.children.iterate((el: Phaser.GameObjects.Image) => {
+            if (el.x > -window.innerWidth) {
+                el.x -= 1;
+            }
+        });
     }
 
     /**
@@ -210,22 +228,9 @@ export class WorldScene extends Phaser.Scene {
                 this.physics.add.collider(this.firstFloor.sprite, pigeonSprite);
                 this.physics.add.collider(this.character.sprite, pigeonSprite, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
             } else {
-                // createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.obstacleGroup);
+                createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.obstacleGroup);
             }
             this.nextObstaclePoint += GameEngineSingleton.world.pixelForNextObstacle;
-        }
-
-        // createSteps
-        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps && !this.stepsExist) {
-            // TODO - Implement the create steps function to create steps and 2nd level of ground.  Not yet hooked up.
-            const steps = createSteps(this, x, y, this.firstFloor);
-            this.stepsGroup.add(steps);
-            //const floorTmp = createFloor(this, x + steps.width * 2, y, this.floor, this.character);
-            this.secondFloor = new Floor(this, window.innerWidth * 0.1, 0, 2);
-            console.log('Floor created', this.secondFloor);
-
-            //this.floorsGroup.add(floorTmp);
-            this.stepsExist = true;
         }
         // Draw the museum if the goal points has been reached
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
@@ -236,16 +241,47 @@ export class WorldScene extends Phaser.Scene {
             this.isEndReached = true;
         }
         this.obstacleGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
+
         this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
-        this.physics.add.collider(this.character.sprite, this.obstacleGroup);
-        //* Group of sprites for the steps has collisions with floor but no with player and no damage
-        this.physics.add.collider(this.firstFloor.sprite, this.stepsGroup);
-        this.stepsGroup.setVelocityX(-UPPER_FLOORS_VELOCITY * GameEngineSingleton.difficult);
-        // * Group of sprites for the obstacles has collisions with floor, steps and with player but no damage
-        this.physics.add.collider(this.stepsGroup, this.floorsGroup);
-        this.physics.add.collider(this.character.sprite, this.floorsGroup);
-        if (this.secondFloor) this.physics.add.collider(this.firstFloor.sprite, this.secondFloor.sprite);
-        this.floorsGroup.setVelocityX(-UPPER_FLOORS_VELOCITY * GameEngineSingleton.difficult);
+        this.physics.add.collider(this.character.sprite, this.obstacleGroup, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+        //* Group of sprites for the steps has collisions with floor but no with player and no damage\
+    }
+
+    /**
+     * Method used to create dynamically the sprites for the steps
+     */
+    public createNewFloorIfApplies(): void {
+        // createSteps
+        const x = this.sys.canvas.width;
+        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps * this.floorLevel && this.floorLevel < 3) {
+            console.log('CANVAS width', x);
+            this.floorLevel++;
+            const steps = createSteps(this, x, CONFIG.DEFAULT_HEIGHT - CONFIG.DEFAULT_HEIGHT * (0.1 * this.floorLevel + 1));
+            this.stepsGroup.add(steps);
+            const newFloor = new Floor(this, 0, 0, this.floorLevel + 1);
+            if (this.floorLevel === 2) {
+                this.secondFloor = newFloor;
+                //Give to second floor physics
+                this.physics.add.existing(this.secondFloor.sprite);
+                // 2nd Steps and second floor should collide with first floor
+                this.physics.add.collider(this.firstFloor.sprite, this.secondFloor.sprite);
+                this.physics.add.collider(this.firstFloor.sprite, steps);
+                // Char and obstacles now should collide with secondfloor
+                this.physics.add.collider(this.secondFloor.sprite, this.character.sprite);
+                this.physics.add.collider(this.secondFloor.sprite, this.obstacleGroup);
+            }
+            if (this.floorLevel === 3) {
+                this.thirdFloor = newFloor;
+                //Give to third floor physics
+                this.physics.add.existing(this.thirdFloor.sprite);
+                this.physics.add.collider(this.secondFloor.sprite, this.thirdFloor.sprite);
+                this.physics.add.collider(this.secondFloor.sprite, steps);
+                // Char and obstacles now should collide with thirdfloor
+                this.physics.add.collider(this.thirdFloor.sprite, this.character.sprite);
+                this.physics.add.collider(this.thirdFloor.sprite, this.obstacleGroup);
+            }
+            newFloor.sprite.setOrigin(-1);
+        }
     }
 
     /**
@@ -293,30 +329,32 @@ export class WorldScene extends Phaser.Scene {
         }
         if (this.stepsGroup.getChildren().length > 0) {
             this.stepsGroup.children.iterate((step: Phaser.GameObjects.Image) => {
-                const playerYBelow = this.character.sprite.y + this.character.sprite.height / HALF_DIVIDER;
-                const stepYBelow = step.y + step.height / HALF_DIVIDER;
-                const stepXEnd = step.x + step.width / HALF_DIVIDER;
-                const playerXStart = this.character.sprite.x - this.character.sprite.width / HALF_DIVIDER;
-                const stepYAbove = step.y - step.height / HALF_DIVIDER;
-                console.log('Y values player/step', playerYBelow, stepYBelow, stepXEnd, playerXStart);
-                // If player Y bottom is same or less that stairs and X is bigger than steps X then go UP!
-                if (step && playerYBelow >= stepYAbove && this.character.sprite.x > step.x) {
-                    // Calculated values that will be possible used for the steps
-                    // const stepXStart = step.x - step.width / HALF_DIVIDER;
-                    // const playerXEnd = this.character.sprite.x + this.character.sprite.width / HALF_DIVIDER;
-                    console.log('GOING UP');
-                    this.character.sprite.setVelocityY(-150);
-                }
-                // If player Y bottom is greater than stairs top and X start of player is greater than X end stairs THEN stop going up!
-                if (step && playerYBelow > stepYAbove && stepXEnd < playerXStart) {
-                    console.log('STOP');
-                    this.character.sprite.setVelocityY(0);
-                }
-                if (step.name === STEPS_KEY && stepXEnd <= 0) {
-                    // If the end is displayed stop the movement
-                    this.stepsGroup.setVelocityX(0);
-                    step.destroy();
-                    this.isEnd = true;
+                if (step) {
+                    const playerYBelow = this.character.sprite.y + this.character.sprite.height / HALF_DIVIDER;
+                    const stepXEnd = step.x + step.width / HALF_DIVIDER;
+                    const playerXStart = this.character.sprite.x - this.character.sprite.width / HALF_DIVIDER;
+                    const stepYAbove = step.y - step.height / HALF_DIVIDER;
+                    // console.log('Y values player/step', playerYBelow, stepYBelow, stepXEnd, playerXStart);
+                    // If player Y bottom is same or less that stairs and X is bigger than steps X then go UP!
+                    if (step && playerYBelow >= stepYAbove && this.character.sprite.x > step.x) {
+                        // const stepYBelow = step.y + step.height / HALF_DIVIDER;
+                        // Calculated values that will be possible used for the steps
+                        // const stepXStart = step.x - step.width / HALF_DIVIDER;
+                        // const playerXEnd = this.character.sprite.x + this.character.sprite.width / HALF_DIVIDER;
+                        // console.log('GOING UP');
+                        this.character.sprite.setVelocityY(-200);
+                    }
+                    // If player Y bottom is greater than stairs top and X start of player is greater than X end stairs THEN stop going up!
+                    if (step && playerYBelow > stepYAbove && stepXEnd < playerXStart) {
+                        // console.log('STOP');
+                        this.character.sprite.setVelocityY(0);
+                    }
+                    if (step.name === STEPS_KEY && stepXEnd <= 0) {
+                        // If the end is displayed stop the movement
+                        this.stepsGroup.setVelocityX(0);
+                        step.destroy();
+                        this.isEnd = true;
+                    }
                 }
             });
         }
@@ -438,6 +476,7 @@ export class WorldScene extends Phaser.Scene {
             this.bushes.sprite.tilePositionX += 1;
             this.firstFloor.sprite.tilePositionX += 2;
             if (this.secondFloor) this.secondFloor.sprite.tilePositionX += 2;
+            if (this.thirdFloor) this.thirdFloor.sprite.tilePositionX += 2;
         }
     }
 }

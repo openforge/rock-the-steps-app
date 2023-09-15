@@ -14,6 +14,7 @@ import {
     REPEAT_FRAME,
     STANDING_FRAME,
     STEPS_KEY,
+    STEPS_OFFSET_X_FOR_CREATION,
     TOURIST_END_FRAME,
     TOURIST_FRAME_KEY,
     TOURIST_FRAME_RATE,
@@ -109,17 +110,17 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
 /**
  * TODO - IMPLEMENT THE STEPS AND PLAYER RUNNING ABOVE IT
  */
-export function createSteps(scene: Scene, initialX: number, initialY: number, floor: Floor) {
+export function createSteps(scene: Scene, initialX: number, initialY: number) {
     console.log('create steps', initialX, initialY);
 
     // First, add the steps
-    const tmpSteps = scene.physics.add.image(initialX - 100, initialY, STEPS_KEY);
+    const tmpSteps = scene.physics.add.image(initialX + STEPS_OFFSET_X_FOR_CREATION, initialY, STEPS_KEY);
+    tmpSteps.originX = 0;
     tmpSteps.setName(STEPS_KEY);
     tmpSteps.body.setImmovable(true);
     tmpSteps.setImmovable(true);
     //tmpSteps.setScale(CONFIG.DEFAULT_WIDTH / tmpSteps.width);
 
-    scene.physics.add.collider(floor.sprite, tmpSteps);
     return tmpSteps;
 }
 
