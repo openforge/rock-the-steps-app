@@ -1,75 +1,88 @@
-.background {
-  width: 100%;
+ion-toolbar {
+  --background: var(--rts-red);
+  --border-width: 0 !important; // * todo paulina
+}
+
+ion-content {
+  --background: var(--rts-red);
   height: 100%;
-  background: var(--rts-red);
-  background-size: cover;
+  width: 100%;
 }
 
-.container-stages {
-  padding: 0 5% 0;
-  height: 80vh;
+ion-title {
+  color: var(--rts-basic-white);
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: 0.2rem;
+  margin: 0;
+  text-transform: uppercase;
 }
 
-.container-stages .row {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap !important;
-  height: 90%;
+ion-header > ion-button {
+  text-decoration: underline;
+}
+
+.list-of-stages {
+  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 1rem;
+  column-gap: 3rem;
+  height: 100%;
+  padding: 3rem 4rem;
 }
 
 .stage {
-  height: 40%;
-  width: 25%;
-  margin: 1rem;
-  text-align: center;
+  align-self: start;
   position: relative;
+  text-align: center;
 }
 
-.stage img {
-  width: auto;
-  height: 100%;
-}
-
-.selectable {
+.is-selectable {
   cursor: pointer;
 }
 
-.stage-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem;
+.stage > img {
+  height: 100%;
+  width: 100%;
+}
+
+.stage > h6 {
+  color: var(--rts-basic-white);
+}
+
+ion-footer {
+  background: var(--rts-red);
+}
+
+.user-information-container {
   align-items: center;
-}
-
-.stage-header > a {
-  color: var(--rts-basic-white);
-}
-
-.stage-header-back {
-  color: var(--rts-basic-white);
   display: flex;
-  align-items: center;
+  height: 15vh;
+  justify-content: center;
 }
 
-.stage-header-back > a {
+.user-points {
   color: var(--rts-basic-white);
-  padding: 0 0 0 0.7rem;
+  font-size: 3rem;
+  text-align: center;
 }
 
-.stage-header-back > ion-icon {
-  font-size: 2rem;
+ion-badge {
+  position: absolute;
+  padding: 1.25rem 0.5rem;
+  font-size: 1rem;
+  border-radius: 50%;
+  right: -1.563rem;
+  top: -0.938rem;
+  color: var(--rts-red);
+  background: white;
 }
 
-.stage-header-title {
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.2rem;
+ion-icon {
+  color: grey;
 }
 
-.stage-header-actions {
-  font-size: 1.2rem;
-  font-weight: bold;
-  text-decoration: underline;
-  text-transform: uppercase;
+ion-icon.is-completed {
+  color: var(--rts-red);
 }

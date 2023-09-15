@@ -92,6 +92,7 @@
     "@capacitor/haptics": "^4.0.0",
     "@capacitor/keyboard": "^4.0.0",
     "@capacitor/status-bar": "^4.0.0",
+    "@capacitor/storage": "^1.2.5",
     "@ionic/angular": "^6.5.6",
     "@nrwl/eslint-plugin-nx": "^13.2.1",
     "@openforge/capacitor-game-connect": "^1.0.2",
