@@ -54,7 +54,7 @@ export function createButtons(scene: Scene, character: Character, spaceBarKey: P
 }
 
 /**
- * Method used to display pause modal
+ * * Method used to display pause modal
  *
  * @private
  */

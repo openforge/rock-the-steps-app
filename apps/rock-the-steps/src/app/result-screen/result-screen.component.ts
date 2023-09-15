@@ -13,8 +13,10 @@ import { TIMEOUT_REDIRECTION_TO_HOME_SCREEN } from '../../../../../libs/shared/d
 })
 export class ResultScreenComponent implements OnInit {
     public displayWinBackground = false; // * Flag used to show conditionally the background for the user
-    public gameSingleton = GameEngineSingleton;
+    public gameSingleton = GameEngineSingleton; // * GameSingleton property used in the template
+
     constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
+
     async ngOnInit(): Promise<void> {
         this.activatedRoute.queryParams.subscribe(params => {
             if (params.r === GameEnum.WIN) {
@@ -27,10 +29,18 @@ export class ResultScreenComponent implements OnInit {
         });
     }
 
+    /**
+     * * Function to replay the current level
+     *
+     */
     public async replayLevel(): Promise<void> {
         await this.router.navigate(['/play-stage']);
     }
 
+    /**
+     * * Function to go to the main menu
+     *
+     */
     public async gotoMainMenu(): Promise<void> {
         await this.router.navigate(['/home']);
     }

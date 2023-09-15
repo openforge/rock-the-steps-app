@@ -15,7 +15,11 @@ export class World {
     public pointsToEndLevel = 0; // * Points to end level
     public pointsTillSteps = 200; // * number of points need to reach until steps are created
     public pixelForNextObstacle = 0; // * Pixel to create next obstacle;
-    public difficultyLevel: DifficultyEnum;
+    public difficultyLevel: DifficultyEnum; // * Property to get difficulty enum used in functions
+    public moveSpeedBackground = 0; // * To get the total speed of the background
+    public moveSpeedBushes = 0; // * To get the total speed of the bushes
+    public moveSpeedFloor = 0; // * To get the total speed of the floor
+
     constructor() {}
 
     /**
@@ -58,6 +62,11 @@ export class World {
         }
     }
 
+    /**
+     * * Function to create and push objects and data for Day Level
+     *
+     * @param world as World
+     */
     public static createDayLevel(world: World): void {
         // * It has apple, gloves, bell, bottle, trashcan, cheese steak, cone, tourist, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
@@ -73,6 +82,11 @@ export class World {
         world.pointsToEndLevel = 999;
     }
 
+    /**
+     * * Function to create and push objects and data for Sunset Level
+     *
+     * @param world as World
+     */
     public static createSunsetLevel(world: World): void {
         // * It has gloves, cheese steak, trashcan, hurdle, anvil, bigpoo, tourist, bell, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
@@ -88,6 +102,11 @@ export class World {
         world.pointsToEndLevel = 1999;
     }
 
+    /**
+     * * Function to create and push objects and data for Night Level
+     *
+     * @param world as World
+     */
     public static createNightLevel(world: World): void {
         // * It has gloves, cheese steak, ghost, hurdle,  anvil, tomb, bell, tourist, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
@@ -103,6 +122,11 @@ export class World {
         world.pointsToEndLevel = 2999;
     }
 
+    /**
+     * * Function to create and push objects and data for China Level
+     *
+     * @param world as World
+     */
     public static createChinaLevel(world: World): void {
         // * It has ken, gloves, bell, crater, chinese food, cheese steak, cone, tourist, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
@@ -118,6 +142,11 @@ export class World {
         world.pointsToEndLevel = 3499;
     }
 
+    /**
+     * * Function to create and push objects and data for Ritten Level
+     *
+     * @param world as World
+     */
     public static createRittenLevel(world: World): void {
         // * It has apple, gloves, bell, bottle, trashcan, cheese steak, stand, tourist, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
@@ -133,6 +162,11 @@ export class World {
         world.pointsToEndLevel = 3899;
     }
 
+    /**
+     * * Function to create and push objects and data for Kelly Level
+     *
+     * @param world as World
+     */
     public static createKellyLevel(world: World): void {
         world.objects.push(new Gloves(world.worldType));
         world.objects.push(new CheeseSteak(world.worldType));
@@ -157,18 +191,30 @@ export class World {
         switch (difficult) {
             case DifficultyEnum.EASY: {
                 world.pixelForNextObstacle = 130;
+                world.moveSpeedBackground = 0.3;
+                world.moveSpeedBushes = 0.8;
+                world.moveSpeedFloor = 1.8;
                 break;
             }
             case DifficultyEnum.MEDIUM: {
                 world.pixelForNextObstacle = 100;
+                world.moveSpeedBackground = 0.6;
+                world.moveSpeedBushes = 1.1;
+                world.moveSpeedFloor = 2.1;
                 break;
             }
             case DifficultyEnum.HARD: {
                 world.pixelForNextObstacle = 80;
+                world.moveSpeedBackground = 0.8;
+                world.moveSpeedBushes = 1.5;
+                world.moveSpeedFloor = 2.5;
                 break;
             }
             default: {
                 world.pixelForNextObstacle = 130;
+                world.moveSpeedBackground = 0.3;
+                world.moveSpeedBushes = 0.8;
+                world.moveSpeedFloor = 1.8;
                 break;
             }
         }

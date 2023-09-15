@@ -3,8 +3,10 @@ import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
 
 export class Trashcan extends WorldObject {
-    name = Objects.TRASHCAN;
+    public name = Objects.TRASHCAN; // * Object name
+
     constructor(level: LevelsEnum) {
+        console.log('trashcan.class.ts', 'constructor()');
         super();
         try {
             this.level = level;

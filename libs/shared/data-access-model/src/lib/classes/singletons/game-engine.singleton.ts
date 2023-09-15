@@ -16,11 +16,11 @@ import { World } from '../World.class';
     imports: [CommonModule],
 })
 export class GameEngineSingleton {
-    public static world = new World(); //* World were all the objects are created
+    public static world = new World(); //* World where all the objects are created
     public static difficult: DifficultyEnum; // * Difficult for the velocity of the game
     public static points = 0; // * Number of points accomplished in the level
     public static totalPoints = 0; // * Number of points accomplished overal
-    public static gameEventBus = new Subject<GameEnum>();
+    public static gameEventType = new Subject<GameEnum>();
 
     /**
      * Method used to initialize the world game and the objects
