@@ -1,7 +1,7 @@
 <ion-menu contentId="main-content" class="rts-menu">
     <ion-content class="ion-padding" class="rts-menu-content">
         <ion-menu-toggle *ngIf="user">
-            <ion-button class="menu-button">
+            <ion-button class="rts-button menu-button" fill="outline" mode="md">
                 <ion-icon name="close-outline" class="menu-button-icon"></ion-icon>
             </ion-button>
         </ion-menu-toggle>
@@ -24,14 +24,14 @@
 <ion-content class="no-scroll" id="main-content">
     <div class="background-room">
         <ion-menu-toggle>
-            <ion-button class="menu-button">
+            <ion-button class="rts-button menu-button" fill="outline" mode="md">
                 <ion-icon name="menu-outline" class="menu-button-icon"></ion-icon>
             </ion-button>
         </ion-menu-toggle>
         <div class="background-room-buttons">
             <ion-row>
                 <ion-col size="10" class="stage-select">
-                    <ion-button expand="block" (click)="goTo(screensEnum.STAGE_SELECTION)">Stage Select</ion-button>
+                    <ion-button class="rts-button" fill="outline" expand="block" mode="md" (click)="goTo(screensEnum.STAGE_SELECTION)">Stage Select</ion-button>
                 </ion-col>
             </ion-row>
         </div>

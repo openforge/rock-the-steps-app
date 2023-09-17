@@ -23,7 +23,6 @@ export class HomePageComponent implements OnInit {
     constructor(private router: Router) {}
 
     async ngOnInit(): Promise<void> {
-        console.log('HomePageComponent', 'ngOnInit');
         await this.gameCenterLogin();
     }
 
