@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { Platform } from '@ionic/angular';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 
@@ -21,7 +22,7 @@ export class AppComponent implements OnDestroy, OnInit {
      *
      */
     private setScreenOrientation(): void {
-        void window.screen.orientation.lock('landscape');
+        void ScreenOrientation.lock({ orientation: 'landscape-primary' });
     }
 
     /**

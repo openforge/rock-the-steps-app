@@ -19,9 +19,9 @@ export class PlayStageComponent implements OnInit {
             GameEngineSingleton.points = 0;
             await this.initStageScene();
         }
-        // * Listen for gameEventBus to know if the user looses or won
+        // * Listen for gameEventType to know if the user looses or won
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        GameEngineSingleton.gameEventBus.subscribe(async (value: GameEnum) => {
+        GameEngineSingleton.gameEventType.subscribe(async (value: GameEnum) => {
             if (GameEnum.WIN === value) {
                 await this.router.navigate(['/finish'], { queryParams: { r: GameEnum.WIN }, replaceUrl: true });
             } else if (GameEnum.EXIT === value) {
