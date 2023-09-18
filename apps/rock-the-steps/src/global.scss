@@ -47,6 +47,8 @@ ion-button.rts-button-clear {
   --color-hover: var(--gray-base);
   --color: var(--rts-basic-white);
   text-decoration: underline;
+  text-wrap: wrap;
+  width: 100%;
 }
 
 ion-button.rts-button {
