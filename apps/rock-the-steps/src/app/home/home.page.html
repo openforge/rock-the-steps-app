@@ -1,6 +1,6 @@
 <ion-menu contentId="main-content" class="rts-menu">
     <ion-content class="ion-padding" class="rts-menu-content">
-        <ion-menu-toggle>
+        <ion-menu-toggle *ngIf="user">
             <ion-button class="rts-button menu-button" fill="outline" mode="md">
                 <ion-icon name="close-outline" class="menu-button-icon"></ion-icon>
             </ion-button>

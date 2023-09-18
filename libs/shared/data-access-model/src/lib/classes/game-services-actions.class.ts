@@ -1,15 +1,24 @@
 import { CapacitorGameConnect } from '@openforge/capacitor-game-connect';
 
 import { GameServicesEnum } from '../enums/game-services.enum';
+import { User } from '../models/user.interface';
 
 export class GameServicesActions {
+    private user: User;
+
     /**
-     * * Functio to sign in a user to the game center
+     * * Function to sign in a user to the game center
      *
      */
-    public async signIn(): Promise<void> {
-        await CapacitorGameConnect.signIn();
+    public async signIn(): Promise<User> {
+        if (!this.user) {
+            this.user = (await CapacitorGameConnect.signIn()) as User;
+            return this.user;
+        } else {
+            return this.user;
+        }
     }
+
     /**
      * * Function to open the achievements interface
      *

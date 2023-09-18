@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GameServicesActions, ScreensEnum } from '@openforge/shared/data-access-model';
+import { GameServicesActions, ScreensEnum, User } from '@openforge/shared/data-access-model';
 
 @Component({
     selector: 'openforge-home',
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit {
+    public user: User;
     public screensEnum = ScreensEnum; // * Enum used for the navigation screen type safe
     private gameServicesActions: GameServicesActions = new GameServicesActions();
 
@@ -20,6 +21,10 @@ export class HomePageComponent {
      * With the delay the canvas size will be set correctly.
      */
     constructor(private router: Router) {}
+
+    async ngOnInit(): Promise<void> {
+        await this.gameCenterLogin();
+    }
 
     /**
      * * Method used to navigate from the main screen
@@ -50,6 +55,6 @@ export class HomePageComponent {
      *
      */
     public async gameCenterLogin(): Promise<void> {
-        await this.gameServicesActions.signIn();
+        this.user = await this.gameServicesActions.signIn();
     }
 }
