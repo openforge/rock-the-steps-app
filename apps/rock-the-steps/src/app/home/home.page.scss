@@ -6,6 +6,10 @@ ion-menu-toggle > ion-button {
   font-size: 2rem;
 }
 
+ion-menu-toggle {
+  padding-right: 2.25rem;
+}
+
 ion-toolbar {
   --background: var(--rts-red);
   --border-width: 0 !important;
@@ -20,9 +24,13 @@ ion-content {
   --background: var(--rts-red);
 }
 
+ion-button.rts-button-clear {
+  width: 100%;
+}
+
 ion-item {
   --background: transparent;
-  --border-color: var(--rts-white);
+  --border-color: var(--rts-basic-white);
   --color: var(--rts-basic-white);
   --padding-start: 0;
   font-weight: bold;
@@ -49,4 +57,8 @@ ion-item {
 
 .stage-select {
   margin: auto;
+}
+
+ion-footer {
+  --background: transparent;
 }

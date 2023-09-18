@@ -1,7 +1,7 @@
 <ion-menu contentId="main-content">
     <ion-header mode="ios">
         <ion-toolbar mode="ios">
-            <ion-menu-toggle slot="end" *ngIf="user">
+            <ion-menu-toggle slot="end">
                 <ion-button class="rts-button menu" fill="outline" mode="md">
                     <ion-icon name="close-outline" class="menu-button-icon"></ion-icon>
                 </ion-button>
@@ -52,6 +52,7 @@
         </div>
     </div>
 </ion-content>
+<ion-footer></ion-footer>
 
 <!-- ! Important:  This is the ID that's required for phaser to run in the phaser instance service. -->
 <div class="phaser" id="forge-main"></div>
