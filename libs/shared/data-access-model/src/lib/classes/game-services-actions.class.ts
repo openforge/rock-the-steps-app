@@ -12,8 +12,7 @@ export class GameServicesActions {
      */
     public async signIn(): Promise<User> {
         if (!this.user) {
-            // * TODO: add back typing into CapacitorGameConnect
-            this.user = (await CapacitorGameConnect.signIn()) as unknown as User;
+            this.user = (await CapacitorGameConnect.signIn()) as User;
             return this.user;
         } else {
             return this.user;
