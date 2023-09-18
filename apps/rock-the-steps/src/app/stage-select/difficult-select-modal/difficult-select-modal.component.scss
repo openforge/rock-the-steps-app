@@ -6,14 +6,17 @@
   justify-content: space-between;
   padding: 0 2rem;
 }
+
 .title-container {
   display: flex;
   justify-content: center;
 }
+
 .title-container h1 {
   color: var(--gray-base);
   font-weight: bold;
 }
+
 .modal-container {
   height: 100%;
   border: 0.5rem solid var(--gray-base);
