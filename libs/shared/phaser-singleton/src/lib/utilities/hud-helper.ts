@@ -7,6 +7,7 @@ import {
     Character,
     CONTROLS_KEY,
     DOWN_EVENT,
+    GameEngineSingleton,
     JUMP_KEY,
     LEFT_KEY,
     PAUSE_BUTTON,
@@ -67,5 +68,6 @@ export function showPauseModal(_scene: Scene): void {
     if (_scene) {
         _scene.scene.pause();
         _scene.scene.run(PAUSE_SCENE);
+        GameEngineSingleton.audioService.pauseBackground();
     }
 }

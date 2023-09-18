@@ -29,3 +29,4 @@ export const BUSHES_KEY = 'bushes-key';
 export const END_KEY = 'end';
 export const STEPS_KEY = 'steps-key';
 export const PIGEON_VARIANT_KEY = 'pigeon-variant';
+export const BACKGROUND_AUDIO_KEY = 'background-audio';

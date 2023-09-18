@@ -1,5 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import {
+    BACKGROUND_AUDIO_KEY,
     Bushes,
     BUSHES_KEY,
     Character,
@@ -73,8 +74,6 @@ export class WorldScene extends Phaser.Scene {
     public thirdFloor: Floor;
     public floorLevel: number = 1;
 
-    private stepsExist = false; // * Used to validate steps in staircases
-
     constructor() {
         console.log('world.scene.ts', 'constructor()');
         super(WORLD_SCENE);
@@ -103,6 +102,9 @@ export class WorldScene extends Phaser.Scene {
             this.load.atlas(CONTROLS_KEY, `assets/buttons/controls.png`, `assets/buttons/controls.json`);
             this.load.atlas(HEALTHBAR_KEY, `assets/objects/healthbar.png`, `assets/objects/healthbar.json`);
             this.load.image(PAUSE_BUTTON, 'assets/buttons/pause-button.png');
+
+            // * Loading audio files
+            this.load.audio(BACKGROUND_AUDIO_KEY, 'assets/audios/background/background-music-for-mobile-casual-video-game-short-8-bit-music-164703.mp3');
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
@@ -118,6 +120,7 @@ export class WorldScene extends Phaser.Scene {
         this.initializeBasicWorld();
         createButtons(this, this.character, this.spaceBarKey);
         createAnimationsCharacter(this.character.sprite);
+        GameEngineSingleton.audioService.playBackground(this, BACKGROUND_AUDIO_KEY);
     }
 
     /**
