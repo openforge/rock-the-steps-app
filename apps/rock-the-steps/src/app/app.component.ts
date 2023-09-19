@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Network } from '@capacitor/network';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { Platform } from '@ionic/angular';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
@@ -15,6 +16,7 @@ export class AppComponent implements OnDestroy, OnInit {
         if (this.platform.is('capacitor')) {
             this.setScreenOrientation();
         }
+        this.checkInternetConnection();
     }
 
     /**
@@ -23,6 +25,17 @@ export class AppComponent implements OnDestroy, OnInit {
      */
     private setScreenOrientation(): void {
         void ScreenOrientation.lock({ orientation: 'landscape-primary' });
+    }
+
+    /**
+     * * Function to check network status
+     *
+     */
+    private checkInternetConnection(): void {
+        void Network.addListener('networkStatusChange', status => {
+            console.log('Network status changed', status);
+            // if (status.connectionType === 'none') {}
+        });
     }
 
     /**
