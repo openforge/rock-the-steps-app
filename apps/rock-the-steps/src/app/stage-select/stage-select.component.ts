@@ -198,7 +198,7 @@ export class StageSelectComponent implements OnInit {
         if (screen === this.screensEnums.LEADERBOARDS) {
             await this.gameServicesActions.openLeaderboards();
         } else {
-            await this.router.navigate([screen]);
+            await this.router.navigate([screen], { replaceUrl: true });
         }
     }
 }
