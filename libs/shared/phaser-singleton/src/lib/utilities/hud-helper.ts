@@ -7,6 +7,7 @@ import {
     Character,
     CONTROLS_KEY,
     DOWN_EVENT,
+    GameEngineSingleton,
     JUMP_KEY,
     LEFT_KEY,
     PAUSE_BUTTON,
@@ -43,7 +44,7 @@ export function createButtons(scene: Scene, character: Character, spaceBarKey: P
     buttonJump.setScale(CONFIG.DEFAULT_CONTROL_SCALE);
     buttonJump.setInteractive();
     buttonJump.setDepth(2);
-    buttonJump.on(POINTER_DOWN_EVENT, () => (character.isJumping = true), scene);
+    buttonJump.on(POINTER_DOWN_EVENT, () => doJumpMovement(scene, character), scene);
     buttonJump.on(POINTER_UP_EVENT, () => (character.isJumping = false), scene);
     spaceBarKey.on(DOWN_EVENT, () => (character.isJumping = true), scene);
     spaceBarKey.on(UP_EVENT, () => (character.isJumping = false), scene);
@@ -57,6 +58,14 @@ export function createButtons(scene: Scene, character: Character, spaceBarKey: P
     pauseButton.on(POINTER_DOWN_EVENT, () => showPauseModal(scene), scene);
 }
 
+// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+export function doJumpMovement(scene: Scene, character: Character): void {
+    if (scene) {
+        character.isJumping = true;
+        GameEngineSingleton.audioService.playJump(scene);
+    }
+}
+
 /**
  * * Method used to display pause modal
  *
@@ -67,5 +76,6 @@ export function showPauseModal(_scene: Scene): void {
     if (_scene) {
         _scene.scene.pause();
         _scene.scene.run(PAUSE_SCENE);
+        GameEngineSingleton.audioService.pauseBackground();
     }
 }

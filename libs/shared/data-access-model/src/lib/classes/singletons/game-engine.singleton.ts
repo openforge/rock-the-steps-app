@@ -4,6 +4,7 @@ import { Preferences } from '@capacitor/preferences';
 import { DifficultyEnum, GameEnum, LevelsEnum } from '@openforge/shared/data-access-model';
 import { Subject } from 'rxjs';
 
+import { AudioService } from '../../services/audio.service';
 import { World } from '../World.class';
 
 /**
@@ -20,7 +21,8 @@ export class GameEngineSingleton {
     public static difficult: DifficultyEnum; // * Difficult for the velocity of the game
     public static points = 0; // * Number of points accomplished in the level
     public static totalPoints = 0; // * Number of points accomplished overal
-    public static gameEventType = new Subject<GameEnum>();
+    public static gameEventType = new Subject<GameEnum>(); // * Property to get the GameEventType Enum
+    public static audioService: AudioService; // * To have access to the audio service functions
 
     /**
      * Method used to initialize the world game and the objects

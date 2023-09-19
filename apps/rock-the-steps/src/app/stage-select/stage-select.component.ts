@@ -4,6 +4,7 @@ import { Preferences } from '@capacitor/preferences';
 import { ModalController } from '@ionic/angular';
 import { DifficultyEnum, GameServicesActions, LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 import { Stage } from 'libs/shared/data-access-model/src/lib/models/stage.interface';
+import { AudioService } from 'libs/shared/data-access-model/src/lib/services/audio.service';
 
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/game-engine.singleton';
 import { DifficultSelectModalComponent } from './difficult-select-modal/difficult-select-modal.component';
@@ -151,7 +152,7 @@ export class StageSelectComponent implements OnInit {
         },
     ];
 
-    constructor(private router: Router, private modalCtrl: ModalController) {}
+    constructor(private router: Router, private modalCtrl: ModalController, private audioService: AudioService) {}
 
     async ngOnInit() {
         this.allPointsEarned = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
@@ -181,6 +182,7 @@ export class StageSelectComponent implements OnInit {
         await modal.onWillDismiss().then(async (action: { role: string; data: number }) => {
             if (action.role !== 'backdrop') {
                 GameEngineSingleton.difficult = action.data;
+                GameEngineSingleton.audioService = this.audioService;
 
                 // * Here load the level
                 void GameEngineSingleton.buildWorld(level, action.data);

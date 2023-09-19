@@ -53,6 +53,7 @@ export class PauseScene extends Phaser.Scene {
     private resumeGame(): void {
         this.scene.stop(); // Delete modal scene
         this.scene.resume('WorldScene');
+        GameEngineSingleton.audioService.resumeBackground();
     }
 
     /**
