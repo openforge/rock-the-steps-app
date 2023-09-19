@@ -10,6 +10,7 @@ export class AudioService {
     private backgroundAudio: Phaser.Sound.BaseSound; // * Property to store background audio actions
     private jumpAudio: Phaser.Sound.BaseSound; // * Property to store jump audio actions
     private failAudio = new Audio(); // * Property to store fail audio actions
+    private successAudio = new Audio(); // * Property to store success audio actions
 
     /**
      * * Function to start playing the background audio file
@@ -66,7 +67,7 @@ export class AudioService {
 
     /**
      * * Function to play fail audio
-     * * Since this is not an audio on the Phaser scene we don't use scene.add.sound instead we use AudioElement from Angular
+     * * Since this is not an audio on the Phaser scene we don't use scene.add.sound, instead we use AudioElement from Angular
      *
      */
     public async playFail(): Promise<void> {
@@ -76,6 +77,21 @@ export class AudioService {
             await this.failAudio.play();
         } catch (e) {
             console.error('Error playing fail audio', e);
+        }
+    }
+
+    /**
+     * * Function to play success audio
+     * * Since this is not an audio on the Phaser scene we don't use scene.add.sound, instead we use AudioElement from Angular
+     *
+     */
+    public async playSuccess(): Promise<void> {
+        this.successAudio.src = 'assets/audios/winner/success-1-6297.mp3';
+        this.successAudio.load();
+        try {
+            await this.successAudio.play();
+        } catch (e) {
+            console.error('Error playing success audio', e);
         }
     }
 }

@@ -20,6 +20,7 @@ export class ResultScreenComponent implements OnInit {
     async ngOnInit(): Promise<void> {
         this.activatedRoute.queryParams.subscribe(params => {
             if (params.r === GameEnum.WIN) {
+                void GameEngineSingleton.audioService.playSuccess();
                 this.displayWinBackground = true;
                 void this.updateUserProgression();
                 void setTimeout(() => {
