@@ -7,7 +7,6 @@ import {
     INVULNERABLE_REPS,
     PLAYER_POS_X,
     PLAYER_POS_Y,
-    VELOCITY_PLAYER,
     VELOCITY_PLAYER_WHEN_AUTOMATICALLY,
     VELOCITY_PLAYER_WHEN_MOVING,
 } from '../../constants/game-units.constants';
@@ -50,13 +49,9 @@ export class Character {
         } else if (this.isMovingRight || cursors.right.isDown) {
             this.sprite.flipX = false;
             this.sprite.setVelocityX(VELOCITY_PLAYER_WHEN_MOVING);
-        } else if (this.isDamaged) {
+        }
+        if (this.isDamaged) {
             this.sprite.play(DAMAGED_ANIMATION);
-        } else {
-            if (this.sprite.body.touching.down) {
-                this.sprite.setVelocityX(-VELOCITY_PLAYER);
-                this.sprite.play(WALKING_ANIMATION, true);
-            }
         }
         if (this.isJumping && this.sprite.body.touching.down) {
             this.sprite.setVelocityY(-HEIGHT_OF_JUMP);
@@ -93,9 +88,10 @@ export class Character {
      * * This is to avoid to get the player going back when the forward arrow is not pressed
      *
      */
-    public moveCharacterAutomatically(): void {
-        if (!this.isMovingRight) {
+    public moveCharacterAutomatically(cursors: Phaser.Types.Input.Keyboard.CursorKeys): void {
+        if (!this.isMovingRight && !this.isMovingLeft && this.sprite.body.touching.down && !cursors.left.isDown && !cursors.right.isDown) {
             this.sprite.setVelocityX(VELOCITY_PLAYER_WHEN_AUTOMATICALLY);
+            this.sprite.play(WALKING_ANIMATION, true);
         }
     }
 }
