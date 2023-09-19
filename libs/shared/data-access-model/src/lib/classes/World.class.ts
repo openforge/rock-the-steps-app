@@ -82,7 +82,7 @@ export class World {
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 999;
         world.pointsToShowSecondFloor = 300;
-        world.pointsToShowSecondFloor = 700;
+        world.pointsToShowThirdFloor = 700;
     }
 
     /**
@@ -104,7 +104,7 @@ export class World {
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 1999;
         world.pointsToShowSecondFloor = 700;
-        world.pointsToShowSecondFloor = 1100;
+        world.pointsToShowThirdFloor = 1100;
     }
 
     /**
@@ -126,7 +126,7 @@ export class World {
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 2999;
         world.pointsToShowSecondFloor = 1100;
-        world.pointsToShowSecondFloor = 2000;
+        world.pointsToShowThirdFloor = 2000;
     }
 
     /**
@@ -149,7 +149,7 @@ export class World {
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 3499;
         world.pointsToShowSecondFloor = 1500;
-        world.pointsToShowSecondFloor = 2500;
+        world.pointsToShowThirdFloor = 2500;
     }
 
     /**
@@ -171,7 +171,7 @@ export class World {
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 3899;
         world.pointsToShowSecondFloor = 1700;
-        world.pointsToShowSecondFloor = 2700;
+        world.pointsToShowThirdFloor = 2700;
     }
 
     /**
@@ -192,7 +192,7 @@ export class World {
         world.objects.push(new Pigeon(world.worldType));
         world.pointsToEndLevel = 4499;
         world.pointsToShowSecondFloor = 1900;
-        world.pointsToShowSecondFloor = 3000;
+        world.pointsToShowThirdFloor = 3000;
     }
 
     /**
