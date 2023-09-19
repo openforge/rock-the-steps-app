@@ -312,9 +312,10 @@ export class WorldScene extends Phaser.Scene {
         if (obstacle.name === Objects.CHEESESTEAK && this.damageValue > DAMAGE_MIN_VALUE && this.damageValue) {
             this.healUp(obstacle);
         } else if (obstacle.name === Objects.CHEESESTEAK && this.damageValue === DAMAGE_MIN_VALUE) {
+            // * If object is a cheesesteak and the player is at full heath, do nothing
             this.obstacleGroup.remove(obstacle);
         } else if (obstacle.name === END_KEY) {
-            // If the end is touched send to winning screen
+            // * If the end is touched send to winning screen
             void this.endGame(GameEnum.WIN);
         } else if (obstacle.name === Objects.GLOVES) {
             //* If gloves is picked up destroy the asset
