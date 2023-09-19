@@ -322,6 +322,8 @@ export class WorldScene extends Phaser.Scene {
             obstacle.destroy();
             this.obstacleGroup.remove(obstacle);
             this.character.makeInvulnerable(this);
+        } else if (this.character.isInvulnerable) {
+            this.obstacleGroup.remove(obstacle);
         } else if (obstacle.name !== Objects.CHEESESTEAK && !this.character.isDamaged && !this.character.isInvulnerable) {
             obstacle.destroy();
             this.receiveDamage();
