@@ -9,6 +9,7 @@ import { BACKGROUND_AUDIO_KEY, JUMP_AUDIO_KEY } from '../constants/game-keys.con
 export class AudioService {
     private backgroundAudio: Phaser.Sound.BaseSound; // * Property to store background audio actions
     private jumpAudio: Phaser.Sound.BaseSound; // * Property to store jump audio actions
+    private failAudio = new Audio(); // * Property to store fail audio actions
 
     /**
      * * Function to start playing the background audio file
@@ -59,7 +60,22 @@ export class AudioService {
         try {
             if (!this.jumpAudio.isPlaying) this.jumpAudio.play();
         } catch (e) {
-            console.error('Error playing background audio', e);
+            console.error('Error playing jump audio', e);
+        }
+    }
+
+    /**
+     * * Function to play fail audio
+     * * Since this is not an audio on the Phaser scene we don't use scene.add.sound instead we use AudioElement from Angular
+     *
+     */
+    public async playFail(): Promise<void> {
+        this.failAudio.src = 'assets/audios/fail/failure-drum-sound-effect-2-7184.mp3';
+        this.failAudio.load();
+        try {
+            await this.failAudio.play();
+        } catch (e) {
+            console.error('Error playing fail audio', e);
         }
     }
 }

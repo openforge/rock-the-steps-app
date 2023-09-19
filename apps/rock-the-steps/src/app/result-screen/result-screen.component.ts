@@ -25,6 +25,8 @@ export class ResultScreenComponent implements OnInit {
                 void setTimeout(() => {
                     void this.gotoMainMenu();
                 }, TIMEOUT_REDIRECTION_TO_HOME_SCREEN as number);
+            } else if (params.r === GameEnum.LOOSE) {
+                void GameEngineSingleton.audioService.playFail();
             }
         });
     }
