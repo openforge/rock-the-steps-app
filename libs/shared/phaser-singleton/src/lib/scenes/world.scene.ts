@@ -311,6 +311,8 @@ export class WorldScene extends Phaser.Scene {
         console.log(`Colliding ${player.name} with ${obstacle.name}`);
         if (obstacle.name === Objects.CHEESESTEAK && this.damageValue > DAMAGE_MIN_VALUE && this.damageValue) {
             this.healUp(obstacle);
+        } else if (obstacle.name === Objects.CHEESESTEAK && this.damageValue === DAMAGE_MIN_VALUE) {
+            this.obstacleGroup.remove(obstacle);
         } else if (obstacle.name === END_KEY) {
             // If the end is touched send to winning screen
             void this.endGame(GameEnum.WIN);
@@ -319,7 +321,7 @@ export class WorldScene extends Phaser.Scene {
             obstacle.destroy();
             this.obstacleGroup.remove(obstacle);
             this.character.makeInvulnerable(this);
-        } else if (!this.character.isDamaged && !this.character.isInvulnerable) {
+        } else if (obstacle.name !== Objects.CHEESESTEAK && !this.character.isDamaged && !this.character.isInvulnerable) {
             obstacle.destroy();
             this.receiveDamage();
         }
