@@ -1,33 +1,48 @@
-<ion-menu contentId="main-content" class="rts-menu">
-    <ion-content class="ion-padding" class="rts-menu-content">
-        <ion-menu-toggle *ngIf="user">
-            <ion-button class="rts-button menu-button" fill="outline" mode="md">
-                <ion-icon name="close-outline" class="menu-button-icon"></ion-icon>
-            </ion-button>
-        </ion-menu-toggle>
-
-        <ion-item class="menu-items" (click)="openLeaderboard()">
-            <ion-label> Leaderboard </ion-label>
+<ion-menu contentId="main-content">
+    <ion-header mode="ios">
+        <ion-toolbar mode="ios">
+            <ion-menu-toggle slot="end">
+                <ion-button class="rts-button menu" fill="outline" mode="md">
+                    <ion-icon name="close-outline" class="menu-button-icon"></ion-icon>
+                </ion-button>
+            </ion-menu-toggle>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+        <ion-item (click)="openLeaderboard()">
+            <ion-label>Leaderboard</ion-label>
         </ion-item>
-        <ion-item class="menu-items" (click)="openAchievements()">
-            <ion-label> Achievements </ion-label>
+        <ion-item (click)="openAchievements()">
+            <ion-label>Achievements</ion-label>
         </ion-item>
 
-        <div class="menu-items-legal">
-            <a>Privacy Policy</a>
-            <a href="https://openforge.io/" target="_blank">Copyright (C) 2022 - Present OPENFORGE, LLC</a>
-            <a>Licence Agreement</a>
-        </div>
+
+        <ion-grid>
+            <ion-row>
+              <ion-col size="4" class="ion-text-center">
+                <ion-button class="rts-button-clear" fill="clear" mode="md" href="https://docs.google.com/document/d/16N4MdX_sLN7Peo3q2ADxdFX-Obsje__C4RuQxOmpPnk/edit?usp=sharing">Privacy Policy</ion-button>
+              </ion-col>
+              <ion-col size="4" class="ion-text-center">
+                <ion-button class="rts-button-clear" fill="clear" mode="md" href="https://openforge.io/" target="_blank">Copyright (C) 2022 - Present OPENFORGE, LLC</ion-button>
+              </ion-col>
+              <ion-col size="4" class="ion-text-center">
+                <ion-button class="rts-button-clear" fill="clear" mode="md" href="https://docs.google.com/document/d/1B_4s1xk22zEY4JZ7W2cmwrPu8Wqx3l3MaeU5uN5HwmA/edit?usp=sharing">Licence Agreement</ion-button>
+              </ion-col>
+            </ion-row>
+        </ion-grid>
     </ion-content>
 </ion-menu>
 
-<ion-content class="no-scroll" id="main-content">
-    <div class="background-room">
-        <ion-menu-toggle>
+
+<ion-content [scrollEvents]="false" id="main-content">
+    <ion-toolbar mode="ios" class="transparent-toolbar">
+        <ion-menu-toggle slot="end">
             <ion-button class="rts-button menu-button" fill="outline" mode="md">
                 <ion-icon name="menu-outline" class="menu-button-icon"></ion-icon>
             </ion-button>
         </ion-menu-toggle>
+    </ion-toolbar>
+    <div class="background-room">
         <div class="background-room-buttons">
             <ion-row>
                 <ion-col size="10" class="stage-select">
@@ -37,5 +52,7 @@
         </div>
     </div>
 </ion-content>
+<ion-footer></ion-footer>
+
 <!-- ! Important:  This is the ID that's required for phaser to run in the phaser instance service. -->
 <div class="phaser" id="forge-main"></div>

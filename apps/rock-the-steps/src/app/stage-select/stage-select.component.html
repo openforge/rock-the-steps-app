@@ -6,7 +6,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content class="no-scroll">
+<ion-content [scrollEvents]="false">
     <div class="list-of-stages" *ngIf="progression">
         <div class="stage" (click)="selectLevel(levelsEnum.DAYTIME)">
             <ion-badge mode="ios">

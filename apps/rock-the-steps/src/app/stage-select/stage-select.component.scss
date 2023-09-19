@@ -1,11 +1,7 @@
 ion-toolbar {
   --background: var(--rts-red);
   --border-width: 0 !important;
-  padding: 1rem;
-}
-
-ion-header ion-toolbar:first-of-type {
-  --padding-top: 1rem;
+  padding: 0 2.25rem;
 }
 
 ion-content {
@@ -16,7 +12,7 @@ ion-content {
 
 ion-title {
   color: var(--rts-basic-white);
-  font-size: 3.5rem;
+  font-size: 2rem;
   font-weight: 700;
   letter-spacing: 0.2rem;
   margin: 0;
@@ -31,10 +27,9 @@ ion-header > ion-button {
   align-items: center;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  row-gap: 1rem;
   column-gap: 3rem;
   height: 100%;
-  padding: 3rem 4rem;
+  padding: 1rem 4rem;
 }
 
 .stage {
@@ -78,12 +73,11 @@ ion-footer {
 .user-information-container {
   align-items: center;
   display: flex;
-  height: 15vh;
   justify-content: center;
 }
 
 .user-points {
   color: var(--rts-basic-white);
-  font-size: 3rem;
+  font-size: 1.25rem;
   text-align: center;
 }
