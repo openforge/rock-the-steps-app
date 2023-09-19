@@ -27,6 +27,7 @@ import {
     INITIAL_HEALTHBAR_Y,
     INITIAL_POINTS_X,
     INITIAL_POINTS_Y,
+    JUMP_AUDIO_KEY,
     JUMP_KEY,
     LevelsEnum,
     OBJECTS_SPRITE_KEY,
@@ -105,6 +106,7 @@ export class WorldScene extends Phaser.Scene {
 
             // * Loading audio files
             this.load.audio(BACKGROUND_AUDIO_KEY, 'assets/audios/background/background-music-for-mobile-casual-video-game-short-8-bit-music-164703.mp3');
+            this.load.audio(JUMP_AUDIO_KEY, 'assets/audios/jump/cartoon-jump-6462.mp3');
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
@@ -120,7 +122,7 @@ export class WorldScene extends Phaser.Scene {
         this.initializeBasicWorld();
         createButtons(this, this.character, this.spaceBarKey);
         createAnimationsCharacter(this.character.sprite);
-        GameEngineSingleton.audioService.playBackground(this, BACKGROUND_AUDIO_KEY);
+        GameEngineSingleton.audioService.playBackground(this);
     }
 
     /**
