@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 import { HomePageComponent } from './home/home.page';
-import { InternetConnectionFailComponent } from './network/internet-connection-fail/internet-connection-fail.component';
 import { PlayStageComponent } from './play-stage/play-stage.component';
 import { ResultScreenComponent } from './result-screen/result-screen.component';
 import { StageSelectComponent } from './stage-select/stage-select.component';
@@ -24,10 +23,6 @@ const routes: Routes = [
     {
         path: 'finish',
         component: ResultScreenComponent,
-    },
-    {
-        path: 'network-error',
-        component: InternetConnectionFailComponent,
     },
     {
         path: '',
