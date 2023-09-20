@@ -3,6 +3,7 @@ import {
     Character,
     Floor,
     FLOOR_KEY,
+    FLOOR_SCREEN_TARGET_PERCENTAGE,
     FLYER_PIGEONS_Y_OFFSET,
     OBJECTS_SPRITE_KEY,
     Pigeon,
@@ -110,6 +111,7 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
  */
 export function createSteps(scene: Scene, initialX: number, initialY: number) {
     console.log('create steps', initialX, initialY);
+    const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE;
 
     //  * First, add the steps
     const tmpSteps = scene.physics.add.image(initialX + -STEPS_OFFSET_X_FOR_CREATION, initialY, STEPS_KEY);
@@ -117,7 +119,7 @@ export function createSteps(scene: Scene, initialX: number, initialY: number) {
     tmpSteps.setName(STEPS_KEY);
     tmpSteps.body.setImmovable(true);
     tmpSteps.setImmovable(true);
-
+    tmpSteps.setScale(1, targetHeight / tmpSteps.height);
     return tmpSteps;
 }
 

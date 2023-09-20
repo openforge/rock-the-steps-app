@@ -71,9 +71,9 @@ export class WorldScene extends Phaser.Scene {
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
     public firstFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
-    public secondFloor: Floor;
-    public thirdFloor: Floor;
-    public floorLevel: number = 1;
+    public secondFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
+    public thirdFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
+    public floorLevel: number = 1; // * Var used to detect the actual flow level
 
     constructor() {
         console.log('world.scene.ts', 'constructor()');
@@ -162,10 +162,28 @@ export class WorldScene extends Phaser.Scene {
         this.character.evaluateMovement(this.cursors);
         this.character.moveCharacterAutomatically(this.cursors);
         this.avoidOutOfBounds();
+        this.drawEndMuseum();
         this.createObjects();
         this.endDetection();
         this.cleanUpObjects();
         this.floorCreationFlow();
+        this.stepsDetection();
+    }
+
+    /**
+     * Method used to draw the end museum if the end has being reached
+     */
+    public drawEndMuseum(): void {
+        const x = this.sys.canvas.width;
+        const y = 0;
+        // Draw the museum if the goal points has been reached
+        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
+            const tmpObject = this.physics.add.image(x, y, END_KEY);
+            tmpObject.setName(END_KEY);
+            tmpObject.setScale(END_OBJECT_SCALE);
+            this.obstacleGroup.add(tmpObject);
+            this.isEndReached = true;
+        }
     }
 
     /**
@@ -173,17 +191,18 @@ export class WorldScene extends Phaser.Scene {
      *
      */
     public floorCreationFlow(): void {
-        if (GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowSecondFloor || GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowThirdFloor)
+        if (GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowSecondFloor || GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowThirdFloor) {
             this.createNewFloorIfApplies();
-        if (this.secondFloor && this.secondFloor.sprite.x > -window.innerWidth) {
-            this.secondFloor.sprite.x -= 1;
         }
-        if (this.thirdFloor && this.thirdFloor.sprite.x > -window.innerWidth) {
-            this.thirdFloor.sprite.x -= 1;
+        if (this.secondFloor && this.secondFloor.sprite.x >= -window.innerWidth) {
+            this.secondFloor.sprite.x -= 4;
+        }
+        if (this.thirdFloor && this.thirdFloor.sprite.x >= -window.innerWidth) {
+            this.thirdFloor.sprite.x -= 4;
         }
         this.stepsGroup.children.iterate((el: Phaser.GameObjects.Image) => {
-            if (el.x > -window.innerWidth) {
-                el.x -= 1;
+            if (el.x >= -window.innerWidth) {
+                el.x -= 4;
             }
         });
     }
@@ -239,14 +258,6 @@ export class WorldScene extends Phaser.Scene {
             }
             this.nextObstaclePoint += GameEngineSingleton.world.pixelForNextObstacle;
         }
-        // Draw the museum if the goal points has been reached
-        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
-            const tmpObject = this.physics.add.image(x, y, END_KEY);
-            tmpObject.setName(END_KEY);
-            tmpObject.setScale(END_OBJECT_SCALE);
-            this.obstacleGroup.add(tmpObject);
-            this.isEndReached = true;
-        }
         this.obstacleGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
 
         this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
@@ -290,6 +301,7 @@ export class WorldScene extends Phaser.Scene {
                 this.thirdFloor = newFloor;
                 //Give to third floor physics
                 this.physics.add.existing(this.thirdFloor.sprite);
+                this.physics.add.collider(this.firstFloor.sprite, this.thirdFloor.sprite);
                 this.physics.add.collider(this.secondFloor.sprite, this.thirdFloor.sprite);
                 this.physics.add.collider(this.secondFloor.sprite, steps);
                 // Char and obstacles now should collide with thirdfloor
@@ -329,25 +341,12 @@ export class WorldScene extends Phaser.Scene {
             this.receiveDamage();
         }
     }
-
     /**
-     * * Method used to detect end of level
+     * * Method used to detect if character should go up the stairs
      *
      * @private
      */
-    private endDetection(): void {
-        if (this.obstacleGroup.getChildren().length > 0) {
-            this.obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
-                if (worldObject) {
-                    const worldObjectXEnd = worldObject.x + worldObject.width / HALF_DIVIDER;
-                    if (worldObject.name === END_KEY && worldObjectXEnd <= window.innerWidth) {
-                        // If the end is displayed stop the movement
-                        this.obstacleGroup.setVelocityX(0);
-                        this.isEnd = true;
-                    }
-                }
-            });
-        }
+    private stepsDetection(): void {
         if (this.stepsGroup.getChildren().length > 0) {
             this.stepsGroup.children.iterate((step: Phaser.GameObjects.Image) => {
                 if (step) {
@@ -374,6 +373,26 @@ export class WorldScene extends Phaser.Scene {
                         // If the end is displayed stop the movement
                         this.stepsGroup.setVelocityX(0);
                         step.destroy();
+                        this.isEnd = true;
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * * Method used to detect end of level
+     *
+     * @private
+     */
+    private endDetection(): void {
+        if (this.obstacleGroup.getChildren().length > 0) {
+            this.obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
+                if (worldObject) {
+                    const worldObjectXEnd = worldObject.x + worldObject.width / HALF_DIVIDER;
+                    if (worldObject.name === END_KEY && worldObjectXEnd <= window.innerWidth) {
+                        // If the end is displayed stop the movement
+                        this.obstacleGroup.setVelocityX(0);
                         this.isEnd = true;
                     }
                 }
@@ -412,7 +431,6 @@ export class WorldScene extends Phaser.Scene {
                 this.obstacleGroup.remove(worldObject);
             }
         });
-        // console.log('Poops ', this.obstaclePigeonGroup);
 
         this.obstaclePigeonGroup.map((worldObject: Pigeon, index) => {
             if (worldObject && worldObject.sprite.x + worldObject.sprite.width < 0 - worldObject.sprite.width) {
