@@ -109,17 +109,18 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
 /**
  * TODO - IMPLEMENT THE STEPS AND PLAYER RUNNING ABOVE IT
  */
-export function createSteps(scene: Scene, initialX: number, initialY: number) {
+export function createSteps(scene: Scene, initialX: number, initialY: number, floorNumber: number) {
     console.log('create steps', initialX, initialY);
-    const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE;
-
-    //  * First, add the steps
     const tmpSteps = scene.physics.add.image(initialX + -STEPS_OFFSET_X_FOR_CREATION, initialY, STEPS_KEY);
+    const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE;
+    tmpSteps.setScale(1, targetHeight / tmpSteps.height);
+    //  * First, add the steps
     tmpSteps.originX = 0;
     tmpSteps.setName(STEPS_KEY);
     tmpSteps.body.setImmovable(true);
     tmpSteps.setImmovable(true);
-    tmpSteps.setScale(1, targetHeight / tmpSteps.height);
+    const positionY = tmpSteps.displayHeight * floorNumber;
+    tmpSteps.setPosition(initialX + -STEPS_OFFSET_X_FOR_CREATION, CONFIG.DEFAULT_HEIGHT - positionY);
     return tmpSteps;
 }
 
