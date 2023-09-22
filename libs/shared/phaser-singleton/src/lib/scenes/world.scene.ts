@@ -124,7 +124,7 @@ export class WorldScene extends Phaser.Scene {
         this.initializeBasicWorld();
         createButtons(this, this.character, this.spaceBarKey);
         createAnimationsCharacter(this.character.sprite);
-        // GameEngineSingleton.audioService.playBackground(this);
+        GameEngineSingleton.audioService.playBackground(this);
     }
 
     /**
@@ -216,7 +216,6 @@ export class WorldScene extends Phaser.Scene {
      * This method is used after 2nd floor is totally displayed to mantain a single main floor and avoid gravity issues
      */
     public drawSecondFloorAsMainFloor(): void {
-        console.warn('Redraw of 2nd floor in process');
         this.drawSecondFloorAsMainFloorFlag = true;
         const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE * 2;
         if (this.secondFloor && this.secondFloor.sprite) this.secondFloor.sprite.destroy();
