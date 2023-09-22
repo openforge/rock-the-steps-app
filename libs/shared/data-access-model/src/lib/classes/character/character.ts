@@ -1,15 +1,22 @@
 import { Scene } from 'phaser';
+import * as Phaser from 'phaser';
 
-import { CHARACTER_SPRITE_KEY, DAMAGED_ANIMATION, JUMPING_ANIMATION, WALKING_ANIMATION } from '../../constants/game-keys.constants';
+import { CHARACTER_SPRITE_KEY, DAMAGED_ANIMATION, HEALTHBAR_KEY, HEALTHBAR_TEXTURE_PREFIX, JUMPING_ANIMATION, WALKING_ANIMATION } from '../../constants/game-keys.constants';
 import {
+    DAMAGE_MAX_VALUE,
+    DAMAGE_TIMER,
     DURATION_INVULNERABLE_REP,
+    HALF_DIVIDER,
     HEIGHT_OF_JUMP,
+    INITIAL_HEALTHBAR_X,
+    INITIAL_HEALTHBAR_Y,
     INVULNERABLE_REPS,
     PLAYER_POS_X,
     PLAYER_POS_Y,
     VELOCITY_PLAYER_WHEN_AUTOMATICALLY,
     VELOCITY_PLAYER_WHEN_MOVING,
 } from '../../constants/game-units.constants';
+import { GameEnum } from '../../enums';
 
 export class Character {
     public name = 'character'; // * Character name
@@ -19,11 +26,14 @@ export class Character {
     public isJumping: boolean = false; // * Flag to detect is character is pressing jump button
     public isDamaged: boolean = false; // * Flag to detect is character is being damaged
     public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
-
+    public damageValue = 0; // * Amount of damaged received by obstacles
+    public damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
+    public healthbar: Phaser.GameObjects.Sprite; // * Healthbar used to show the remaining life of the player
     constructor(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite) {
         this.sprite = scene.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
         this.sprite.anims.play(WALKING_ANIMATION, true);
         this.sprite.setDepth(1);
+        this.healthbar = scene.add.sprite(INITIAL_HEALTHBAR_X, INITIAL_HEALTHBAR_Y, HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}0`);
         this.addFloorCollision(scene, floorTileSprite);
     }
 
@@ -93,5 +103,66 @@ export class Character {
             this.sprite.setVelocityX(VELOCITY_PLAYER_WHEN_AUTOMATICALLY);
             this.sprite.play(WALKING_ANIMATION, true);
         }
+    }
+
+    /**
+     * * Method to avoid player go outside scene
+     *
+     * @return void
+     */
+    public avoidOutOfBounds(): void {
+        const personWidth = this.sprite.width;
+        const xMin = personWidth / HALF_DIVIDER; // Left limit
+        const xMax = window.innerWidth - personWidth / HALF_DIVIDER; // right limit
+        this.sprite.x = Phaser.Math.Clamp(this.sprite.x, xMin, xMax);
+    }
+
+    /**
+     * * Method used to heal up player
+     *
+     * @param worldObject cheesesteak to be destroyed after used
+     * @param obstacleGroup
+     */
+    public healUp(worldObject: Phaser.Types.Physics.Arcade.GameObjectWithBody, obstacleGroup: Phaser.Physics.Arcade.Group): void {
+        this.damageValue--;
+        this.healthbar.setTexture(HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}${this.damageValue}`);
+        worldObject.destroy(); //* If cheesesteak is picked up destroy the asset
+        obstacleGroup.remove(worldObject);
+    }
+
+    /**
+     * * Method used to receive damage to the user
+     *
+     * @return void
+     */
+    public receiveDamage(scene: Phaser.Scene, endGameCallback: (gameState: GameEnum) => void): void {
+        // If is not invulnerable then affect with damage
+        this.damageValue++;
+        this.sprite.setVelocityY(-VELOCITY_PLAYER_WHEN_MOVING);
+        // Make invulnerable for some seconds to avoid multi coalition
+        this.isInvulnerable = true;
+        //if no more damage is allowed send out the player!
+        if (this.damageValue === DAMAGE_MAX_VALUE) {
+            void endGameCallback(GameEnum.LOOSE);
+        }
+        this.healthbar.setTexture(HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}${this.damageValue}`);
+        // Set damaged flag so no other animations break damaged animation
+        // Play damage animation
+        this.isDamaged = true;
+        // Stop and Delete previous same timer (IF EXISTS)
+        if (this.damageTimer) {
+            this.damageTimer.destroy();
+        }
+        //INITS the damage timer with a duration of 2sec (2000 ms)
+        this.damageTimer = scene.time.addEvent({
+            delay: DAMAGE_TIMER,
+            callback: () => {
+                this.sprite.setVelocityY(0);
+                this.isDamaged = false;
+                this.isInvulnerable = false;
+            },
+            callbackScope: this,
+            loop: false,
+        });
     }
 }
