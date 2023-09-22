@@ -1,10 +1,8 @@
-/* eslint-disable prefer-arrow/prefer-arrow-functions */
 import {
-    Character,
-    Floor,
-    FLOOR_KEY,
-    FLOOR_SCREEN_TARGET_PERCENTAGE,
+    END_KEY,
+    END_OBJECT_SCALE,
     FLYER_PIGEONS_Y_OFFSET,
+    GameEngineSingleton,
     OBJECTS_SPRITE_KEY,
     Pigeon,
     PIGEON_END_FRAME,
@@ -14,8 +12,6 @@ import {
     POOP_OBJECTS_VELOCITY_Y,
     REPEAT_FRAME,
     STANDING_FRAME,
-    STEPS_KEY,
-    STEPS_OFFSET_X_FOR_CREATION,
     TOURIST_END_FRAME,
     TOURIST_FRAME_KEY,
     TOURIST_FRAME_RATE,
@@ -23,11 +19,9 @@ import {
     ZERO_PAD_PIGEON,
     ZERO_PAD_TOURIST,
 } from '@openforge/shared/data-access-model';
-import { CONFIG } from '@openforge/shared-phaser-singleton';
 import { WorldObject } from 'libs/shared/data-access-model/src/lib/classes/obstacles/world-object.class';
 import { Objects } from 'libs/shared/data-access-model/src/lib/enums/objects.enum';
-import { Scene } from 'phaser';
-
+import * as Phaser from 'phaser';
 /**
  * Method used to generate dropable objects
  *
@@ -36,7 +30,7 @@ import { Scene } from 'phaser';
  * @param initialY
  * @param objectName
  */
-export function createDropObject(scene: Scene, initialX: number, initialY: number, objectName: string): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
+export function createDropObject(scene: Phaser.Scene, initialX: number, initialY: number, objectName: string): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
     const tmpSprite = scene.physics.add.sprite(initialX, initialY, OBJECTS_SPRITE_KEY, objectName);
     tmpSprite.setName(objectName);
     tmpSprite.setVelocityX(-WORLD_OBJECTS_VELOCITY);
@@ -53,7 +47,7 @@ export function createDropObject(scene: Scene, initialX: number, initialY: numbe
  * @param initialX
  * @param initialY
  */
-export function createPigeonObjectSprite(scene: Scene, pigeon: Pigeon, initialX: number, initialY: number): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
+export function createPigeonObjectSprite(scene: Phaser.Scene, pigeon: Pigeon, initialX: number, initialY: number): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
     let positionY = initialY;
     const isFlying = Math.floor(2 * Math.random()) === 0;
     pigeon.isFlying = isFlying;
@@ -78,7 +72,7 @@ export function createPigeonObjectSprite(scene: Scene, pigeon: Pigeon, initialX:
     });
     return tmpSprite;
 }
-export function createObjects(worldObject: WorldObject, scene: Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group) {
+export function createObjects(worldObject: WorldObject, scene: Phaser.Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group) {
     // * If it's a BELL, Modify how it displays
     if (worldObject.name === Objects.BELL) {
         // TODO - Have bell fall from mid screen instead
@@ -107,30 +101,40 @@ export function createObjects(worldObject: WorldObject, scene: Scene, initialX: 
 }
 
 /**
- * TODO - IMPLEMENT THE STEPS AND PLAYER RUNNING ABOVE IT
+ * Method used to draw the end museum if the end has being reached
  */
-export function createSteps(scene: Scene, initialX: number, initialY: number) {
-    console.log('create steps', initialX, initialY);
-    const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE;
-
-    //  * First, add the steps
-    const tmpSteps = scene.physics.add.image(initialX + -STEPS_OFFSET_X_FOR_CREATION, initialY, STEPS_KEY);
-    tmpSteps.originX = 0;
-    tmpSteps.setName(STEPS_KEY);
-    tmpSteps.body.setImmovable(true);
-    tmpSteps.setImmovable(true);
-    tmpSteps.setScale(1, targetHeight / tmpSteps.height);
-    return tmpSteps;
+export function drawEndMuseum(scene: Phaser.Scene, isEndReached: boolean, obstacleGroup: Phaser.Physics.Arcade.Group): void {
+    const x = scene.sys.canvas.width;
+    const y = 0;
+    // Draw the museum if the goal points has been reached
+    if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !isEndReached) {
+        const tmpObject = scene.physics.add.image(x, y, END_KEY);
+        tmpObject.setName(END_KEY);
+        tmpObject.setScale(END_OBJECT_SCALE);
+        obstacleGroup.add(tmpObject);
+        isEndReached = true;
+    }
 }
 
-export function createFloor(scene: Scene, initialX: number, initialY: number, floor: Floor, character: Character) {
-    // * Always shift it by X + width of the steps so they dont overlap
-    const tmpFloor = scene.add.tileSprite(initialX, initialY, 0, 0, FLOOR_KEY);
-    tmpFloor.setName(FLOOR_KEY);
-    // eslint-disable-next-line no-magic-numbers
-    tmpFloor.setPosition(initialX, CONFIG.DEFAULT_HEIGHT - CONFIG.DEFAULT_HEIGHT * 0.1);
-    scene.physics.add.existing(tmpFloor, true);
+/**
+ * * Method used to remove obstacles after off screened
+ *
+ * @return void
+ */
+export function cleanUpObjects(obstacleGroup: Phaser.Physics.Arcade.Group, obstaclePigeonGroup: Pigeon[]): void {
+    obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
+        if (worldObject && worldObject.x + worldObject.width < 0 - worldObject.width) {
+            worldObject.destroy();
+            obstacleGroup.remove(worldObject);
+        }
+    });
 
-    scene.physics.add.collider(character.sprite, tmpFloor);
-    return tmpFloor;
+    obstaclePigeonGroup.map((worldObject: Pigeon, index) => {
+        if (worldObject && worldObject.sprite.x + worldObject.sprite.width < 0 - worldObject.sprite.width) {
+            worldObject.sprite.destroy();
+        } else if (worldObject && worldObject.sprite.y + worldObject.sprite.height > window.innerHeight + worldObject.sprite.height) {
+            worldObject.sprite.destroy();
+            obstaclePigeonGroup.splice(index, 1);
+        }
+    });
 }
