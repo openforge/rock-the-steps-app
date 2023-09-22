@@ -12,6 +12,7 @@ import {
     DAMAGE_MIN_VALUE,
     DifficultyEnum,
     END_KEY,
+    END_OBJECT_SCALE,
     FIRST_ACHIEVEMENT_ID,
     Floor,
     FLOOR_KEY,
@@ -132,7 +133,7 @@ export class WorldScene extends Phaser.Scene {
 
         this.cityBackground = new CityBackground(this);
         this.bushes = new Bushes(this);
-        this.firstFloor = new Floor(this, 0, 0, 1, this.character, this.obstacleGroup);
+        this.firstFloor = new Floor(this, 0, 0, 1, this.obstacleGroup, this.character);
         this.cursors = this.input.keyboard.createCursorKeys();
         this.obstacleGroup = this.physics.add.group();
         this.stepsGroup = this.physics.add.group();
@@ -184,15 +185,30 @@ export class WorldScene extends Phaser.Scene {
         this.character.evaluateMovement(this.cursors);
         this.character.moveCharacterAutomatically(this.cursors);
         this.character.avoidOutOfBounds();
-        ObstacleHelper.drawEndMuseum(this, this.isEndReached, this.obstacleGroup);
+        this.drawEndMuseum();
         ObstacleHelper.cleanUpObjects(this.obstacleGroup, this.obstaclePigeonGroup);
         StepsHelper.stepsDetection(this.stepsGroup, this.character);
         StepsHelper.floorRotation(this.stepsGroup, this.secondFloor, this.thirdFloor);
         this.createObjects();
         this.endDetection();
         this.floorCreationFlow();
+        this.drawSecondFloorAsMainFloor();
     }
-
+    /**
+     * Method used to draw the end museum if the end has being reached
+     */
+    private drawEndMuseum(): void {
+        const x = this.sys.canvas.width;
+        const y = 0;
+        // Draw the museum if the goal points has been reached
+        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
+            this.isEndReached = true;
+            const tmpObject = this.physics.add.image(x, y, END_KEY);
+            tmpObject.setName(END_KEY);
+            tmpObject.setScale(END_OBJECT_SCALE);
+            this.obstacleGroup.add(tmpObject);
+        }
+    }
     /**
      * Metod to generate new floor if it applies
      *
@@ -207,18 +223,20 @@ export class WorldScene extends Phaser.Scene {
      * This method is used after 2nd floor is totally displayed to mantain a single main floor and avoid gravity issues
      */
     public drawSecondFloorAsMainFloor(): void {
-        this.drawSecondFloorAsMainFloorFlag = true;
-        const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE * 2;
-        if (this.secondFloor && this.secondFloor.sprite) this.secondFloor.sprite.destroy();
-        if (this.firstFloor && this.firstFloor.sprite) this.firstFloor.sprite.destroy();
-        this.firstFloor = new Floor(this, 0, 0, 1);
-        this.firstFloor.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.firstFloor.sprite.width, targetHeight / this.firstFloor.sprite.height);
-        this.firstFloor.sprite.setPosition(0, CONFIG.DEFAULT_HEIGHT - this.firstFloor.sprite.displayHeight);
-        this.firstFloor.sprite.setSize(this.firstFloor.sprite.width, this.firstFloor.sprite.height);
-        this.physics.add.existing(this.firstFloor.sprite, true);
+        if (this.secondFloor && this.secondFloor.sprite.x <= -window.innerWidth && !this.drawSecondFloorAsMainFloorFlag) {
+            this.drawSecondFloorAsMainFloorFlag = true;
+            const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE * 2;
+            if (this.secondFloor && this.secondFloor.sprite) this.secondFloor.sprite.destroy();
+            if (this.firstFloor && this.firstFloor.sprite) this.firstFloor.sprite.destroy();
+            this.firstFloor = new Floor(this, 0, 0, 1);
+            this.firstFloor.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.firstFloor.sprite.width, targetHeight / this.firstFloor.sprite.height);
+            this.firstFloor.sprite.setPosition(0, CONFIG.DEFAULT_HEIGHT - this.firstFloor.sprite.displayHeight);
+            this.firstFloor.sprite.setSize(this.firstFloor.sprite.width, this.firstFloor.sprite.height);
+            this.physics.add.existing(this.firstFloor.sprite, true);
 
-        this.physics.add.collider(this.firstFloor.sprite, this.character.sprite);
-        this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
+            this.physics.add.collider(this.firstFloor.sprite, this.character.sprite);
+            this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
+        }
     }
     /**
      * * Method used to fly pigeons grounded
@@ -304,15 +322,19 @@ export class WorldScene extends Phaser.Scene {
             const steps = StepsHelper.createSteps(this, x, 0, this.floorLevel);
             this.stepsGroup.add(steps);
             if (this.floorLevel === 2) {
-                const newFloor2 = new Floor(this, 0, 0, this.floorLevel, this.character, this.obstacleGroup, this.firstFloor);
+                const newFloor2 = new Floor(this, 0, 0, this.floorLevel, this.obstacleGroup, this.character, this.firstFloor);
                 this.secondFloor = newFloor2;
+                this.physics.add.existing(this.secondFloor.sprite);
                 this.physics.add.collider(this.firstFloor.sprite, steps);
                 newFloor2.sprite.setOrigin(-1);
             }
             if (this.floorLevel === 3) {
-                const newFloor3 = new Floor(this, 0, 0, this.floorLevel, this.character, this.obstacleGroup, this.firstFloor, this.secondFloor);
+                const newFloor3 = new Floor(this, 0, 0, this.floorLevel, this.obstacleGroup, this.character, this.firstFloor, this.secondFloor);
                 this.thirdFloor = newFloor3;
-                this.physics.add.collider(this.secondFloor.sprite, steps);
+                this.physics.add.existing(this.thirdFloor.sprite);
+                // This steps should fall over the first floor
+                // because at that time the first floor has the second floor in the same one
+                this.physics.add.collider(this.firstFloor.sprite, steps);
                 newFloor3.sprite.setOrigin(-1);
             }
         }

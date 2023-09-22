@@ -8,7 +8,7 @@ import { Character } from '../character/character';
 export class Floor {
     public sprite: Phaser.GameObjects.TileSprite; // * Object sprite
 
-    constructor(scene: Phaser.Scene, x: number, y: number, floorNumber: number, character: Character, obstacleGroup: Phaser.Physics.Arcade.Group, firstFloor?: Floor, secondFloor?: Floor) {
+    constructor(scene: Phaser.Scene, x: number, y: number, floorNumber: number, obstacleGroup?: Phaser.Physics.Arcade.Group, character?: Character, firstFloor?: Floor, secondFloor?: Floor) {
         console.log('floor.class.ts', 'constructor()');
         // * have to specify the width to make it full
         this.sprite = scene.add.tileSprite(x, y, 0, 0, FLOOR_KEY);
@@ -21,11 +21,10 @@ export class Floor {
         this.sprite.setPosition(x, CONFIG.DEFAULT_HEIGHT - positionY);
 
         //Give to the floor physics
-        scene.physics.add.existing(this.sprite);
         if (firstFloor) scene.physics.add.collider(firstFloor.sprite, this.sprite);
         if (secondFloor) scene.physics.add.collider(secondFloor.sprite, this.sprite);
         // Char and obstacles now should collide with this new floor
-        scene.physics.add.collider(this.sprite, character.sprite);
-        scene.physics.add.collider(this.sprite, obstacleGroup);
+        if (character) scene.physics.add.collider(this.sprite, character.sprite);
+        if (obstacleGroup) scene.physics.add.collider(this.sprite, obstacleGroup);
     }
 }

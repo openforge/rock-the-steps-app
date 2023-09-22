@@ -1,8 +1,5 @@
 import {
-    END_KEY,
-    END_OBJECT_SCALE,
     FLYER_PIGEONS_Y_OFFSET,
-    GameEngineSingleton,
     OBJECTS_SPRITE_KEY,
     Pigeon,
     PIGEON_END_FRAME,
@@ -98,22 +95,6 @@ export function createObjects(worldObject: WorldObject, scene: Phaser.Scene, ini
     }
     tmpSprite.setName(worldObject.name);
     obstacleGroup.add(tmpSprite);
-}
-
-/**
- * Method used to draw the end museum if the end has being reached
- */
-export function drawEndMuseum(scene: Phaser.Scene, isEndReached: boolean, obstacleGroup: Phaser.Physics.Arcade.Group): void {
-    const x = scene.sys.canvas.width;
-    const y = 0;
-    // Draw the museum if the goal points has been reached
-    if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !isEndReached) {
-        const tmpObject = scene.physics.add.image(x, y, END_KEY);
-        tmpObject.setName(END_KEY);
-        tmpObject.setScale(END_OBJECT_SCALE);
-        obstacleGroup.add(tmpObject);
-        isEndReached = true;
-    }
 }
 
 /**
