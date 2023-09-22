@@ -15,6 +15,7 @@ import {
     FIRST_ACHIEVEMENT_ID,
     Floor,
     FLOOR_KEY,
+    FLOOR_SCREEN_TARGET_PERCENTAGE,
     FLY_GROUNDED_PIGEONS_OFFSET,
     GameEnum,
     GameServicesActions,
@@ -59,6 +60,7 @@ export class WorldScene extends Phaser.Scene {
 
     private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
     private isEndReached: boolean = false; // Boolean to distinguish if the end has been reached
+    private drawSecondFloorAsMainFloorFlag: boolean = false; // Boolean to distinguish if the 2nd floor has been redraw
 
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
@@ -201,7 +203,23 @@ export class WorldScene extends Phaser.Scene {
             this.createNewFloorIfApplies();
         }
     }
+    /**
+     * This method is used after 2nd floor is totally displayed to mantain a single main floor and avoid gravity issues
+     */
+    public drawSecondFloorAsMainFloor(): void {
+        this.drawSecondFloorAsMainFloorFlag = true;
+        const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE * 2;
+        if (this.secondFloor && this.secondFloor.sprite) this.secondFloor.sprite.destroy();
+        if (this.firstFloor && this.firstFloor.sprite) this.firstFloor.sprite.destroy();
+        this.firstFloor = new Floor(this, 0, 0, 1);
+        this.firstFloor.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.firstFloor.sprite.width, targetHeight / this.firstFloor.sprite.height);
+        this.firstFloor.sprite.setPosition(0, CONFIG.DEFAULT_HEIGHT - this.firstFloor.sprite.displayHeight);
+        this.firstFloor.sprite.setSize(this.firstFloor.sprite.width, this.firstFloor.sprite.height);
+        this.physics.add.existing(this.firstFloor.sprite, true);
 
+        this.physics.add.collider(this.firstFloor.sprite, this.character.sprite);
+        this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
+    }
     /**
      * * Method used to fly pigeons grounded
      *
@@ -273,7 +291,32 @@ export class WorldScene extends Phaser.Scene {
             this.setFloorObject(3);
         }
     }
-
+    /**
+     * Method used to add new floor depending on which is the next one
+     *
+     * @param limitLevel
+     * @private
+     */
+    private setFloorObject(limitLevel: number): void {
+        const x = this.sys.canvas.width;
+        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps * this.floorLevel && this.floorLevel < limitLevel) {
+            this.floorLevel++;
+            const steps = StepsHelper.createSteps(this, x, 0, this.floorLevel);
+            this.stepsGroup.add(steps);
+            if (this.floorLevel === 2) {
+                const newFloor2 = new Floor(this, 0, 0, this.floorLevel, this.character, this.obstacleGroup, this.firstFloor);
+                this.secondFloor = newFloor2;
+                this.physics.add.collider(this.firstFloor.sprite, steps);
+                newFloor2.sprite.setOrigin(-1);
+            }
+            if (this.floorLevel === 3) {
+                const newFloor3 = new Floor(this, 0, 0, this.floorLevel, this.character, this.obstacleGroup, this.firstFloor, this.secondFloor);
+                this.thirdFloor = newFloor3;
+                this.physics.add.collider(this.secondFloor.sprite, steps);
+                newFloor3.sprite.setOrigin(-1);
+            }
+        }
+    }
     /**
      * * Method used to detect end of level
      *
@@ -322,38 +365,9 @@ export class WorldScene extends Phaser.Scene {
         // While the end has not reached do the scrolling of level
         if (!this.isEnd) {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
-            this.cityBackground.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedBackground;
-            this.bushes.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedBushes;
             this.firstFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
             if (this.secondFloor) this.secondFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
             if (this.thirdFloor) this.thirdFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
-        }
-    }
-
-    /**
-     * Method used to add new floor depending on which is the next one
-     *
-     * @param limitLevel
-     * @private
-     */
-    private setFloorObject(limitLevel: number): void {
-        const x = this.sys.canvas.width;
-        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps * this.floorLevel && this.floorLevel < limitLevel) {
-            this.floorLevel++;
-            const steps = StepsHelper.createSteps(this, x, CONFIG.DEFAULT_HEIGHT - CONFIG.DEFAULT_HEIGHT * (0.1 * this.floorLevel + 1));
-            this.stepsGroup.add(steps);
-            if (this.floorLevel === 2) {
-                const newFloor2 = new Floor(this, 0, 0, this.floorLevel + 1, this.character, this.obstacleGroup, this.firstFloor);
-                this.secondFloor = newFloor2;
-                this.physics.add.collider(this.firstFloor.sprite, steps);
-                newFloor2.sprite.setOrigin(-1);
-            }
-            if (this.floorLevel === 3) {
-                const newFloor3 = new Floor(this, 0, 0, this.floorLevel + 1, this.character, this.obstacleGroup, this.firstFloor, this.secondFloor);
-                this.thirdFloor = newFloor3;
-                this.physics.add.collider(this.secondFloor.sprite, steps);
-                newFloor3.sprite.setOrigin(-1);
-            }
         }
     }
 }

@@ -17,8 +17,8 @@ export class Floor {
         this.sprite.setOrigin(0, y);
         // * Set the floor height responsively as 10% less than the game height
         // eslint-disable-next-line no-magic-numbers
-        const positionY = floorNumber > 1 ? 0.22 * floorNumber : 0.15;
-        this.sprite.setPosition(x, CONFIG.DEFAULT_HEIGHT - CONFIG.DEFAULT_HEIGHT * positionY);
+        const positionY = this.sprite.displayHeight * (floorNumber > 1 ? floorNumber + 1 : floorNumber);
+        this.sprite.setPosition(x, CONFIG.DEFAULT_HEIGHT - positionY);
 
         //Give to the floor physics
         scene.physics.add.existing(this.sprite);
