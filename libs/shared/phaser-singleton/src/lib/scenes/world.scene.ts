@@ -17,6 +17,7 @@ import {
     FIRST_ACHIEVEMENT_ID,
     Floor,
     FLOOR_KEY,
+    FLOOR_SCREEN_TARGET_PERCENTAGE,
     FLY_GROUNDED_PIGEONS_OFFSET,
     GameEnum,
     GameServicesActions,
@@ -67,6 +68,7 @@ export class WorldScene extends Phaser.Scene {
     private damageValue = 0; // * Amount of damaged received by obstacles
     private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
     private isEndReached: boolean = false; // Boolean to distinguish if the end has been reached
+    private drawSecondFloorAsMainFloorFlag: boolean = false; // Boolean to distinguish if the 2nd floor has been redraw
 
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
@@ -205,6 +207,27 @@ export class WorldScene extends Phaser.Scene {
                 el.x -= 4;
             }
         });
+        if (this.secondFloor && this.secondFloor.sprite.x <= -window.innerWidth && !this.drawSecondFloorAsMainFloorFlag) {
+            this.drawSecondFloorAsMainFloor();
+        }
+    }
+
+    /**
+     * This method is used after 2nd floor is totally displayed to mantain a single main floor and avoid gravity issues
+     */
+    public drawSecondFloorAsMainFloor(): void {
+        this.drawSecondFloorAsMainFloorFlag = true;
+        const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE * 2;
+        if (this.secondFloor && this.secondFloor.sprite) this.secondFloor.sprite.destroy();
+        if (this.firstFloor && this.firstFloor.sprite) this.firstFloor.sprite.destroy();
+        this.firstFloor = new Floor(this, 0, 0, 1);
+        this.firstFloor.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.firstFloor.sprite.width, targetHeight / this.firstFloor.sprite.height);
+        this.firstFloor.sprite.setPosition(0, CONFIG.DEFAULT_HEIGHT - this.firstFloor.sprite.displayHeight);
+        this.firstFloor.sprite.setSize(this.firstFloor.sprite.width, this.firstFloor.sprite.height);
+        this.physics.add.existing(this.firstFloor.sprite, true);
+
+        this.physics.add.collider(this.firstFloor.sprite, this.character.sprite);
+        this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
     }
 
     /**
@@ -283,9 +306,9 @@ export class WorldScene extends Phaser.Scene {
         const x = this.sys.canvas.width;
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps * this.floorLevel && this.floorLevel < limitLevel) {
             this.floorLevel++;
-            const steps = createSteps(this, x, CONFIG.DEFAULT_HEIGHT - CONFIG.DEFAULT_HEIGHT * (0.1 * this.floorLevel + 1));
+            const steps = createSteps(this, x, 0, this.floorLevel);
             this.stepsGroup.add(steps);
-            const newFloor = new Floor(this, 0, 0, this.floorLevel + 1);
+            const newFloor = new Floor(this, 0, 0, this.floorLevel);
             if (this.floorLevel === 2) {
                 this.secondFloor = newFloor;
                 //Give to second floor physics
@@ -302,8 +325,7 @@ export class WorldScene extends Phaser.Scene {
                 //Give to third floor physics
                 this.physics.add.existing(this.thirdFloor.sprite);
                 this.physics.add.collider(this.firstFloor.sprite, this.thirdFloor.sprite);
-                this.physics.add.collider(this.secondFloor.sprite, this.thirdFloor.sprite);
-                this.physics.add.collider(this.secondFloor.sprite, steps);
+                this.physics.add.collider(this.firstFloor.sprite, steps);
                 // Char and obstacles now should collide with thirdfloor
                 this.physics.add.collider(this.thirdFloor.sprite, this.character.sprite);
                 this.physics.add.collider(this.thirdFloor.sprite, this.obstacleGroup);
@@ -362,7 +384,7 @@ export class WorldScene extends Phaser.Scene {
                         // const stepXStart = step.x - step.width / HALF_DIVIDER;
                         // const playerXEnd = this.character.sprite.x + this.character.sprite.width / HALF_DIVIDER;
                         // console.log('GOING UP');
-                        this.character.sprite.setVelocityY(-200);
+                        this.character.sprite.setVelocityY(-300);
                     }
                     // If player Y bottom is greater than stairs top and X start of player is greater than X end stairs THEN stop going up!
                     if (step && playerYBelow > stepYAbove && stepXEnd < playerXStart) {
@@ -511,8 +533,6 @@ export class WorldScene extends Phaser.Scene {
         // While the end has not reached do the scrolling of level
         if (!this.isEnd) {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
-            this.cityBackground.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedBackground;
-            this.bushes.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedBushes;
             this.firstFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
             if (this.secondFloor) this.secondFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
             if (this.thirdFloor) this.thirdFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
