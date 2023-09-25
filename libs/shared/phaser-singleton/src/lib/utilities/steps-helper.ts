@@ -11,7 +11,7 @@ export function createSteps(scene: Phaser.Scene, initialX: number, initialY: num
     const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE;
     tmpSteps.setScale(1, targetHeight / tmpSteps.height);
     //  * First, add the steps
-    tmpSteps.originX = 0;
+    tmpSteps.setOrigin(0);
     tmpSteps.setName(STEPS_KEY);
     tmpSteps.body.setImmovable(true);
     tmpSteps.setImmovable(true);

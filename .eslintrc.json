@@ -35,6 +35,7 @@
                 "plugin:@angular-eslint/recommended--extra"
             ],
             "rules": {
+                "cypress/no-unnecessary-waiting": "off",
                 "prefer-arrow/prefer-arrow-functions": "off",
                 "import/no-unresolved": "off",
                 "@typescript-eslint/restrict-plus-operands": "off",
