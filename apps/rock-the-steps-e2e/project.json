@@ -7,7 +7,7 @@
         "e2e": {
             "executor": "@nrwl/cypress:cypress",
             "options": {
-                "cypressConfig": "apps/rock-the-steps-e2e/cypress.json",
+                "cypressConfig": "apps/rock-the-steps-e2e/cypress.config.js",
                 "devServerTarget": "rock-the-steps:serve:development"
             },
             "configurations": {
