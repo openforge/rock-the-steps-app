@@ -20,7 +20,7 @@
             "executor": "@nrwl/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["apps/rock-the-steps-e2e/**/*.{js,ts}"]
+                "lintFilePatterns": ["apps/rock-the-steps-e2e/**/*.ts"]
             }
         }
     },
