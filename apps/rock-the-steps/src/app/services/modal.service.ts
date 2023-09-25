@@ -5,7 +5,7 @@ import { ModalController, ModalOptions } from '@ionic/angular';
 @Injectable({ providedIn: 'root' })
 export class ModalService {
     public showingModal = false; //* This flag is used to know if the modal is already displayed
-    private modalElement!: HTMLIonModalElement; // * Used to show modal
+    public modalElement!: HTMLIonModalElement; // * Used to show modal
 
     constructor(private modalController: ModalController) {}
 
@@ -23,9 +23,9 @@ export class ModalService {
     /**
      * * This function dismisses a modal and sets a flag indicating that the modal is no longer showing.
      */
-    public async dismiss(): Promise<void> {
+    public async dismiss(parameters?: object): Promise<void> {
         try {
-            await this.modalElement.dismiss();
+            await this.modalElement.dismiss(parameters);
             this.showingModal = false;
         } catch (e) {
             console.warn('Error with dismissing modal - ', e);
