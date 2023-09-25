@@ -1,4 +1,4 @@
-describe('rock-the-steps Home Screen', () => {
+describe('rock-the-steps Play Stage Screen', () => {
     beforeEach(() => {
         cy.visit('/stage-select');
         cy.get('.stage').eq(0).click();
