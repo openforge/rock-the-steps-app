@@ -1,6 +1,6 @@
 export enum GameEnum {
     WIN = 'WIN',
-    LOOSE = 'LOOSE',
+    LOSE = 'LOSE',
     EXIT = 'EXIT',
     PAUSE = 'PAUSE',
 }
