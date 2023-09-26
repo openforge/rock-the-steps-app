@@ -13,7 +13,6 @@ import { ModalService } from './services/modal.service';
     styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnDestroy, OnInit {
-    modalCtrl;
     constructor(public phaserInstance: PhaserSingletonService, public platform: Platform, private modalController: ModalController, private modalService: ModalService) {}
 
     async ngOnInit(): Promise<void> {
