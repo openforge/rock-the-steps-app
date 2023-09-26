@@ -1,10 +1,15 @@
+import { Injectable } from '@angular/core';
 import { CapacitorGameConnect } from '@openforge/capacitor-game-connect';
 
-import { GameServicesEnum } from '../enums/game-services.enum';
+import { GameServicesEnum } from '../enums';
 import { User } from '../models/user.interface';
 
-export class GameServicesActions {
-    private user: User;
+@Injectable({
+    providedIn: 'root',
+})
+export class GameConnectService {
+    public user: User; // * Property to store User data
+    public test = 1;
 
     /**
      * * Function to sign in a user to the game center

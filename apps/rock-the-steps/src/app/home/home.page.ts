@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GameServicesActions, ScreensEnum, User } from '@openforge/shared/data-access-model';
+import { ScreensEnum, User } from '@openforge/shared/data-access-model';
+import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
 
 @Component({
     selector: 'openforge-home',
@@ -10,7 +11,6 @@ import { GameServicesActions, ScreensEnum, User } from '@openforge/shared/data-a
 export class HomePageComponent implements OnInit {
     public user: User;
     public screensEnum = ScreensEnum; // * Enum used for the navigation screen type safe
-    private gameServicesActions: GameServicesActions = new GameServicesActions();
 
     /**
      * * On Init, initilize the Phaser Singleton instance
@@ -20,7 +20,7 @@ export class HomePageComponent implements OnInit {
      * If we don't delay it, the canvas size in preload() and create() will be 0.
      * With the delay the canvas size will be set correctly.
      */
-    constructor(private router: Router) {}
+    constructor(private router: Router, private gameConnectService: GameConnectService) {}
 
     async ngOnInit(): Promise<void> {
         await this.gameCenterLogin();
@@ -40,14 +40,14 @@ export class HomePageComponent implements OnInit {
      *
      */
     public async openAchievements(): Promise<void> {
-        await this.gameServicesActions.showAchievements();
+        await this.gameConnectService.showAchievements();
     }
 
     /**
      * * Function to open the leaderboard interface from game services
      */
     public async openLeaderboard(): Promise<void> {
-        await this.gameServicesActions.openLeaderboards();
+        await this.gameConnectService.openLeaderboards();
     }
 
     /**
@@ -55,6 +55,6 @@ export class HomePageComponent implements OnInit {
      *
      */
     public async gameCenterLogin(): Promise<void> {
-        this.user = await this.gameServicesActions.signIn();
+        this.user = await this.gameConnectService.signIn();
     }
 }

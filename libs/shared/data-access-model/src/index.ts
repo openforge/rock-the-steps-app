@@ -4,7 +4,6 @@ export * from './lib/classes/objects';
 export * from './lib/classes/singletons/game-engine.singleton';
 
 // * Classes
-export * from './lib/classes/game-services-actions.class';
 export * from './lib/classes/character/character';
 
 // * Healers
