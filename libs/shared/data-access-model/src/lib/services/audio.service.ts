@@ -11,6 +11,7 @@ export class AudioService {
     private jumpAudio: Phaser.Sound.BaseSound; // * Property to store jump audio actions
     private failAudio = new Audio(); // * Property to store fail audio actions
     private successAudio = new Audio(); // * Property to store success audio actions
+    public activeMusic = false; //* Property used to know if audio is on or off
 
     /**
      * * Function to start playing the background audio file
@@ -19,6 +20,7 @@ export class AudioService {
      * @param backgroundKey as string
      */
     public playBackground(scene: Scene): void {
+        this.activeMusic = true;
         this.backgroundAudio = scene.sound.add(BACKGROUND_AUDIO_KEY, { loop: true });
         try {
             this.backgroundAudio.play();
@@ -32,6 +34,7 @@ export class AudioService {
      *
      */
     public pauseBackground(): void {
+        this.activeMusic = false;
         if (this.backgroundAudio) {
             this.backgroundAudio.pause();
         } else {

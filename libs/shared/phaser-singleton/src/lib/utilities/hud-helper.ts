@@ -10,6 +10,8 @@ import {
     GameEngineSingleton,
     JUMP_KEY,
     LEFT_KEY,
+    MUSIC_BUTTON,
+    MUTE_BUTTON,
     PAUSE_BUTTON,
     PAUSE_SCENE,
     POINTER_DOWN_EVENT,
@@ -26,7 +28,6 @@ import { CONFIG } from '../config';
  *
  * @private
  */
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 export function createButtons(scene: Scene, character: Character, spaceBarKey: Phaser.Input.Keyboard.Key): void {
     const buttonLeft = scene.add.sprite(BUTTON_LEFT_X, CONFIG.DEFAULT_HEIGHT - BUTTONS_MOVE_Y, CONTROLS_KEY, LEFT_KEY);
     buttonLeft.setScale(CONFIG.DEFAULT_CONTROL_SCALE);
@@ -56,6 +57,15 @@ export function createButtons(scene: Scene, character: Character, spaceBarKey: P
 
     pauseButton.setDepth(2);
     pauseButton.on(POINTER_DOWN_EVENT, () => showPauseModal(scene), scene);
+
+    const musicButton = scene.add
+        .image(CONFIG.DEFAULT_WIDTH * 0.85, CONFIG.DEFAULT_HEIGHT * 0.05, MUSIC_BUTTON)
+        .setScale(0.1)
+        .setOrigin(1, 0)
+        .setInteractive();
+
+    musicButton.setDepth(2);
+    musicButton.on(POINTER_DOWN_EVENT, () => toggleMusic(scene, musicButton), scene);
 }
 
 // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
@@ -71,11 +81,24 @@ export function doJumpMovement(scene: Scene, character: Character): void {
  *
  * @private
  */
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 export function showPauseModal(_scene: Scene): void {
     if (_scene) {
         _scene.scene.pause();
         _scene.scene.run(PAUSE_SCENE);
         GameEngineSingleton.audioService.pauseBackground();
+    }
+}
+/**
+ * * Method used to toggle music
+ *
+ * @private
+ */
+export function toggleMusic(_scene: Scene, musicButton: Phaser.GameObjects.Image): void {
+    if (_scene && GameEngineSingleton.audioService.activeMusic) {
+        GameEngineSingleton.audioService.pauseBackground();
+        musicButton.setTexture(MUTE_BUTTON);
+    } else {
+        GameEngineSingleton.audioService.playBackground(_scene);
+        musicButton.setTexture(MUSIC_BUTTON);
     }
 }
