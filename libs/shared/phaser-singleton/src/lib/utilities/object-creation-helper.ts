@@ -16,6 +16,7 @@ import {
     ZERO_PAD_PIGEON,
     ZERO_PAD_TOURIST,
 } from '@openforge/shared/data-access-model';
+import { CONFIG } from '@openforge/shared-phaser-singleton';
 import { WorldObject } from 'libs/shared/data-access-model/src/lib/classes/obstacles/world-object.class';
 import { Objects } from 'libs/shared/data-access-model/src/lib/enums/objects.enum';
 import * as Phaser from 'phaser';
@@ -69,7 +70,7 @@ export function createPigeonObjectSprite(scene: Phaser.Scene, pigeon: Pigeon, in
     });
     return tmpSprite;
 }
-export function createObjects(worldObject: WorldObject, scene: Phaser.Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group) {
+export function createObjects(worldObject: WorldObject, scene: Phaser.Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group, floorNumber: number, floorHeight: number) {
     // * If it's a BELL, Modify how it displays
     if (worldObject.name === Objects.BELL) {
         // TODO - Have bell fall from mid screen instead
@@ -93,6 +94,11 @@ export function createObjects(worldObject: WorldObject, scene: Phaser.Scene, ini
         });
         tmpSprite.anims.play(STANDING_FRAME, true);
     }
+    const positionY = floorHeight * floorNumber;
+    tmpSprite.setOrigin(0);
+    tmpSprite.body.setImmovable(true);
+    tmpSprite.setImmovable(true);
+    tmpSprite.setPosition(initialX, CONFIG.DEFAULT_HEIGHT - positionY - tmpSprite.displayHeight);
     tmpSprite.setName(worldObject.name);
     obstacleGroup.add(tmpSprite);
 }
