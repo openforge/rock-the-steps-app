@@ -66,6 +66,7 @@ export class WorldScene extends Phaser.Scene {
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
     public firstFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
+    public firstFloorHeight = 0; // * Used to set the height image sprite and then using it into the objects creation
     public secondFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
     public thirdFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
     public floorLevel: number = 1; // * Var used to detect the actual flow level
@@ -134,6 +135,7 @@ export class WorldScene extends Phaser.Scene {
         this.cityBackground = new CityBackground(this);
         this.bushes = new Bushes(this);
         this.firstFloor = new Floor(this, 0, 0, 1, this.obstacleGroup, this.character);
+        this.firstFloorHeight = this.firstFloor.sprite.displayHeight;
         this.cursors = this.input.keyboard.createCursorKeys();
         this.obstacleGroup = this.physics.add.group();
         this.stepsGroup = this.physics.add.group();
@@ -285,7 +287,7 @@ export class WorldScene extends Phaser.Scene {
                 this.physics.add.collider(this.firstFloor.sprite, pigeonSprite);
                 this.physics.add.collider(this.character.sprite, pigeonSprite, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
             } else {
-                ObstacleHelper.createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.obstacleGroup);
+                ObstacleHelper.createObjects(worldObject, this, x, y, this.obstacleGroup, this.floorLevel, this.firstFloorHeight);
             }
             this.nextObstaclePoint += GameEngineSingleton.world.pixelForNextObstacle;
         }
