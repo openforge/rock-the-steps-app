@@ -2,7 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Network } from '@capacitor/network';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { ModalController, Platform } from '@ionic/angular';
+import { LEADERBOARD_ANDROID_ID, LEADERBOARD_IOS_ID, NOT_DEFINED } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
+import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
 
 import { InternetConnectionFailComponent } from './network/internet-connection-fail/internet-connection-fail.component';
 
@@ -12,9 +14,18 @@ import { InternetConnectionFailComponent } from './network/internet-connection-f
     styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnDestroy, OnInit {
-    constructor(public phaserInstance: PhaserSingletonService, public platform: Platform, private modalController: ModalController) {}
+    constructor(public phaserInstance: PhaserSingletonService, public platform: Platform, private modalController: ModalController, private gameConnectService: GameConnectService) {}
 
     async ngOnInit(): Promise<void> {
+        // * Setting the Leaderboard ID based on the platform
+        if (this.platform.is('android')) {
+            this.gameConnectService.leaderboardID = LEADERBOARD_ANDROID_ID;
+        } else if (this.platform.is('ios')) {
+            this.gameConnectService.leaderboardID = LEADERBOARD_IOS_ID;
+        } else {
+            this.gameConnectService.leaderboardID = NOT_DEFINED;
+        }
+        console.log('ram id', this.gameConnectService.leaderboardID);
         if (this.platform.is('capacitor')) {
             this.setScreenOrientation();
         }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CapacitorGameConnect } from '@openforge/capacitor-game-connect';
 
-import { GameServicesEnum } from '../enums';
 import { User } from '../models/user.interface';
 
 @Injectable({
@@ -9,7 +8,7 @@ import { User } from '../models/user.interface';
 })
 export class GameConnectService {
     public user: User; // * Property to store User data
-    public test = 1;
+    public leaderboardID = ''; // * Property to dynamically set the Leaderboard ID based on which platform the user is
 
     /**
      * * Function to sign in a user to the game center
@@ -45,7 +44,7 @@ export class GameConnectService {
      *
      */
     public async openLeaderboards(): Promise<void> {
-        await CapacitorGameConnect.showLeaderboard({ leaderboardID: GameServicesEnum.LEADERBOARDS_ID });
+        await CapacitorGameConnect.showLeaderboard({ leaderboardID: this.leaderboardID });
     }
 
     /**
@@ -54,6 +53,6 @@ export class GameConnectService {
      * @param points as number
      */
     public async submitScore(points: number): Promise<void> {
-        await CapacitorGameConnect.submitScore({ leaderboardID: GameServicesEnum.LEADERBOARDS_ID, totalScoreAmount: points });
+        await CapacitorGameConnect.submitScore({ leaderboardID: this.leaderboardID, totalScoreAmount: points });
     }
 }
