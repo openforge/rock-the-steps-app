@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Network } from '@capacitor/network';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
-import { ModalController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 
 import { InternetConnectionFailComponent } from './network/internet-connection-fail/internet-connection-fail.component';
@@ -13,7 +13,7 @@ import { ModalService } from './services/modal.service';
     styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnDestroy, OnInit {
-    constructor(public phaserInstance: PhaserSingletonService, public platform: Platform, private modalController: ModalController, private modalService: ModalService) {}
+    constructor(public phaserInstance: PhaserSingletonService, public platform: Platform, private modalService: ModalService) {}
 
     async ngOnInit(): Promise<void> {
         if (this.platform.is('capacitor')) {
