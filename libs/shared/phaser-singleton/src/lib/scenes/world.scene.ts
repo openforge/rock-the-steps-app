@@ -27,6 +27,8 @@ import {
     JUMP_AUDIO_KEY,
     JUMP_KEY,
     LevelsEnum,
+    MUSIC_BUTTON,
+    MUTE_BUTTON,
     OBJECTS_SPRITE_KEY,
     PAUSE_BUTTON,
     Pigeon,
@@ -98,6 +100,8 @@ export class WorldScene extends Phaser.Scene {
             this.load.atlas(CONTROLS_KEY, `assets/buttons/controls.png`, `assets/buttons/controls.json`);
             this.load.atlas(HEALTHBAR_KEY, `assets/objects/healthbar.png`, `assets/objects/healthbar.json`);
             this.load.image(PAUSE_BUTTON, 'assets/buttons/pause-button.png');
+            this.load.image(MUSIC_BUTTON, 'assets/buttons/music.png');
+            this.load.image(MUTE_BUTTON, 'assets/buttons/mute.png');
 
             // * Loading audio files
             this.load.audio(BACKGROUND_AUDIO_KEY, 'assets/audios/background/background-music-for-mobile-casual-video-game-short-8-bit-music-164703.mp3');
