@@ -2,5 +2,14 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
 
-include ':openforge-capacitor-game-services'
-project(':openforge-capacitor-game-services').projectDir = new File('../node_modules/@openforge/capacitor-game-services/android')
+include ':capacitor-network'
+project(':capacitor-network').projectDir = new File('../node_modules/@capacitor/network/android')
+
+include ':capacitor-preferences'
+project(':capacitor-preferences').projectDir = new File('../node_modules/@capacitor/preferences/android')
+
+include ':capacitor-screen-orientation'
+project(':capacitor-screen-orientation').projectDir = new File('../node_modules/@capacitor/screen-orientation/android')
+
+include ':openforge-capacitor-game-connect'
+project(':openforge-capacitor-game-connect').projectDir = new File('../node_modules/@openforge/capacitor-game-connect/android')

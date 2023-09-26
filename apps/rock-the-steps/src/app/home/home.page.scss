@@ -1,8 +1,51 @@
-.background-room {
-  width: 100%;
+ion-menu {
+  --width: 100%;
+}
+
+ion-menu-toggle > ion-button {
+  font-size: 2rem;
+}
+
+ion-menu-toggle {
+  padding-right: 2.25rem;
+}
+
+ion-toolbar {
+  --background: var(--rts-red);
+  --border-width: 0 !important;
+}
+
+ion-toolbar.transparent-toolbar {
+  --background: --transparent;
+  position: absolute;
+}
+
+ion-content {
+  --background: var(--rts-red);
+}
+
+ion-button.rts-button-clear {
   height: 100%;
+  width: 100%;
+}
+
+ion-item {
+  --background: transparent;
+  --border-color: var(--rts-basic-white);
+  --color: var(--rts-basic-white);
+  --padding-start: 0;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin: 3rem auto;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.background-room {
   background-image: url('/assets/initial-room.png');
   background-size: 100% 100%;
+  height: 100%;
+  width: 100%;
 }
 
 .background-room-buttons {
@@ -17,42 +60,6 @@
   margin: auto;
 }
 
-.menu-button {
-  margin: auto;
-  right: 2rem;
-  top: 1rem;
-  position: fixed;
-}
-
-.menu-button-icon {
-  font-size: 2rem;
-}
-
-.rts-menu {
-  --width: 100%;
-}
-
-.rts-menu-content {
-  --background: var(--rts-red);
-}
-
-.menu-items {
+ion-footer {
   --background: transparent;
-  --color: var(--rts-basic-white);
-  margin: 3rem auto;
-  width: 70%;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.5rem;
-  text-transform: uppercase;
-}
-
-.menu-items-legal {
-  display: flex;
-  justify-content: space-around;
-}
-
-.menu-items-legal > a {
-  color: var(--rts-basic-white);
-  text-decoration: underline;
 }

@@ -20,7 +20,6 @@ export * from './lib/classes/obstacles/ghost.class';
 export * from './lib/classes/obstacles/liberty-bell.class';
 export * from './lib/classes/obstacles/pigeon.class';
 export * from './lib/classes/obstacles/poop.class';
-export * from './lib/classes/obstacles/pooping-pigeon.class';
 export * from './lib/classes/obstacles/tourist.class';
 export * from './lib/classes/obstacles/trashcan.class';
 export * from './lib/classes/obstacles/wind.class';
@@ -34,6 +33,8 @@ export * from './lib/enums/index';
 
 // * Models
 export * from './lib/models/leaderboards.interface';
+export * from './lib/models/user.interface';
+export * from './lib/models/stage.interface';
 
 // * Constants
 export * from './lib/constants/game-keys.constants';

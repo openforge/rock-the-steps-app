@@ -28,6 +28,7 @@
 /* Custom theme */
 @import './theme/theme.scss';
 @import './theme/custom.scss';
+
 ion-modal {
   --border-radius: 1rem;
   .ion-page {
@@ -38,4 +39,28 @@ ion-modal {
 ion-modal.difficult-modal {
   --height: 45vh;
   --width: 70vw;
+}
+
+ion-button.rts-button-clear {
+  --color-activated: var(--gray-base);
+  --color-focused: var(--gray-base);
+  --color-hover: var(--gray-base);
+  --color: var(--rts-basic-white);
+  text-decoration: underline;
+  white-space: normal;
+}
+
+ion-button.rts-button {
+  --background: var(--rts-red);
+  --border-color: var(--rts-basic-white);
+  --color: var(--rts-basic-white);
+}
+
+ion-button.rts-button > ion-icon {
+  margin-right: 0.25rem;
+}
+
+ion-back-button {
+  color: var(--rts-basic-white);
+  text-decoration: underline;
 }

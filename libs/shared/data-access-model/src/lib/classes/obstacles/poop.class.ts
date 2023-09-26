@@ -3,8 +3,11 @@ import { Objects } from '../../enums/objects.enum';
 import { WorldObject } from './world-object.class';
 
 export class Poop extends WorldObject {
-    name = Objects.POOP;
+    public name = Objects.POOP; // * Object name
+    public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Poop Sprite to be used
+
     constructor(level: LevelsEnum) {
+        console.log('poop.class.ts', 'constructor()');
         super();
         try {
             this.level = level;

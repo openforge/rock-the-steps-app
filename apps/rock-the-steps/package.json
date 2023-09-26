@@ -7,12 +7,15 @@
         "@capacitor/android": "4.7.0",
         "@capacitor/core": "^4.7.0",
         "@capacitor/ios": "4.7.0",
-        "@openforge/capacitor-game-services": "^1.1.2",
+        "@capacitor/network": "^4.1.0",
+        "@capacitor/preferences": "^4.0.2",
+        "@capacitor/screen-orientation": "^4.1.0",
+        "@openforge/capacitor-game-connect": "^1.0.3",
         "cordova-plugin-screen-orientation": "^3.0.3",
         "es6-promise-plugin": "^4.2.2"
     },
     "devDependencies": {
         "@capacitor/assets": "^2.0.4",
-        "@capacitor/cli": "^4.7.0"
+        "@capacitor/cli": "^4.8.0"
     }
 }

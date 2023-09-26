@@ -1,43 +1,36 @@
-.result-screen {
+.win-container {
+  align-items: center;
+  background: url('/assets/background/win-background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.lose-container {
+  background: url('/assets/background/lose-background.jpg');
+  background-size: cover;
   height: 100%;
 }
 
-.all-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.container-buttons {
-  color: white;
-  display: flex;
+.point-alignment {
+  position: relative;
   width: 100%;
-  justify-content: end;
-  margin: 19rem 0 0 0;
 }
 
-.container-buttons .div-button {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.div-button ion-icon {
-  margin: 0 0.5rem 0 0;
-}
-
-.win-background {
-  background: url('/assets/background/win-background.png') center;
-  background-size: cover;
-}
-
-.lose-background {
-  background: url('/assets/background/lose-background.jpg');
-  background-size: cover;
-}
-
-.win-points {
+p.win-points {
   position: absolute;
-  font-size: 3rem;
-  margin: 0 0 0 33%;
+  font-size: 1.5rem;
+  right: 30vw;
+  bottom: -8vh;
+  color: var(--rts-basic-white);
+}
+
+.navigation-options {
+  bottom: 2rem;
+  position: absolute;
+  right: 2rem;
 }

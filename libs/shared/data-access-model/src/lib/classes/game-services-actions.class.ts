@@ -1,21 +1,30 @@
-import { GameServices } from '@openforge/capacitor-game-services';
+import { CapacitorGameConnect } from '@openforge/capacitor-game-connect';
 
 import { GameServicesEnum } from '../enums/game-services.enum';
+import { User } from '../models/user.interface';
 
 export class GameServicesActions {
+    private user: User;
+
     /**
-     * * Functio to sign in a user to the game center
+     * * Function to sign in a user to the game center
      *
      */
-    public async signIn(): Promise<void> {
-        await GameServices.signIn();
+    public async signIn(): Promise<User> {
+        if (!this.user) {
+            this.user = (await CapacitorGameConnect.signIn()) as User;
+            return this.user;
+        } else {
+            return this.user;
+        }
     }
+
     /**
      * * Function to open the achievements interface
      *
      */
     public async showAchievements(): Promise<void> {
-        await GameServices.showAchievements();
+        await CapacitorGameConnect.showAchievements();
     }
 
     /**
@@ -23,7 +32,7 @@ export class GameServicesActions {
      *
      */
     public async unlockAchievement(achievementID: string): Promise<void> {
-        await GameServices.unlockAchievement({ achievementID });
+        await CapacitorGameConnect.unlockAchievement({ achievementID });
     }
 
     /**
@@ -31,6 +40,15 @@ export class GameServicesActions {
      *
      */
     public async openLeaderboards(): Promise<void> {
-        await GameServices.showLeaderboard({ leaderboardId: GameServicesEnum.LEADERBOARDS_ID });
+        await CapacitorGameConnect.showLeaderboard({ leaderboardID: GameServicesEnum.LEADERBOARDS_ID });
+    }
+
+    /**
+     * * Function to submit score to a leaderboard table
+     *
+     * @param points as number
+     */
+    public async submitScore(points: number): Promise<void> {
+        await CapacitorGameConnect.submitScore({ leaderboardID: GameServicesEnum.LEADERBOARDS_ID, totalScoreAmount: points });
     }
 }

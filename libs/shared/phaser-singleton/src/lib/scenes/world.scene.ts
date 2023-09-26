@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
-import { GameServices } from '@openforge/capacitor-game-services';
 import {
+    BACKGROUND_AUDIO_KEY,
     Bushes,
     BUSHES_KEY,
     Character,
@@ -8,30 +8,35 @@ import {
     CITY_KEY,
     CityBackground,
     CONTROLS_KEY,
+    DAMAGE_DECREASE_VALUE,
     DAMAGE_MAX_VALUE,
-    DAMAGE_TIMER,
+    DAMAGE_MIN_VALUE,
+    DifficultyEnum,
     END_KEY,
     END_OBJECT_SCALE,
     FIRST_ACHIEVEMENT_ID,
     Floor,
     FLOOR_KEY,
+    FLOOR_SCREEN_TARGET_PERCENTAGE,
+    FLY_GROUNDED_PIGEONS_OFFSET,
     GameEnum,
-    GameServicesEnum,
+    GameServicesActions,
     HALF_DIVIDER,
     HEALTHBAR_KEY,
-    HEALTHBAR_TEXTURE_PREFIX,
-    INITIAL_HEALTHBAR_X,
-    INITIAL_HEALTHBAR_Y,
     INITIAL_POINTS_X,
     INITIAL_POINTS_Y,
+    JUMP_AUDIO_KEY,
     JUMP_KEY,
     LevelsEnum,
+    MUSIC_BUTTON,
+    MUTE_BUTTON,
     OBJECTS_SPRITE_KEY,
     PAUSE_BUTTON,
+    Pigeon,
+    Poop,
     SKY_KEY,
     STARTER_PIXEL_FLAG,
     STEPS_KEY,
-    VELOCITY_PLAYER_WHEN_MOVING,
     WORLD_OBJECTS_VELOCITY,
     WORLD_SCENE,
 } from '@openforge/shared/data-access-model';
@@ -42,30 +47,35 @@ import { GameEngineSingleton } from '../../../../data-access-model/src/lib/class
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 import { createAnimationsCharacter } from '../utilities/character-animation';
 import { createButtons } from '../utilities/hud-helper';
-import { createObjects } from '../utilities/object-creation-helper';
+import * as ObstacleHelper from '../utilities/object-creation-helper';
+import * as StepsHelper from '../utilities/steps-helper';
 
 export class WorldScene extends Phaser.Scene {
+    private gameServicesActions: GameServicesActions = new GameServicesActions();
     private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
+    private stepsGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the steps has collisions with floor but no with player and no damage
+    private obstaclePigeonGroup: Pigeon[] = []; // * Array of sprites for the pigeon obstacles
+    private obstaclePoopGroup: Poop[] = []; // * Array of sprites for the pigeon obstacles
     private character: Character; // this is the class associated with the player
     private nextObstaclePoint = STARTER_PIXEL_FLAG; // * Pixels flag to know if next worldObject needs to be drawn
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
-    private damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
-    private healthbar: Phaser.GameObjects.Sprite; // * Healthbar used to show the remaining life of the player
     private spaceBarKey: Phaser.Input.Keyboard.Key; // Spacebar key to move the player in pc
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // Cursos keys to move the player in pc
 
-    private damageValue = 0; // * Amount of damaged received by obstacles
     private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
     private isEndReached: boolean = false; // Boolean to distinguish if the end has been reached
+    private drawSecondFloorAsMainFloorFlag: boolean = false; // Boolean to distinguish if the 2nd floor has been redraw
 
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
-    public floor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
-    public secondFloor: Floor;
-
-    private stepsExist = false;
+    public firstFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
+    public firstFloorHeight = 0; // * Used to set the height image sprite and then using it into the objects creation
+    public secondFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
+    public thirdFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
+    public floorLevel: number = 1; // * Var used to detect the actual flow level
 
     constructor() {
+        console.log('world.scene.ts', 'constructor()');
         super(WORLD_SCENE);
     }
 
@@ -80,9 +90,9 @@ export class WorldScene extends Phaser.Scene {
             console.log('world.scene.ts', 'Preloading Assets...');
             this.load.image(SKY_KEY, `assets/city-scene/bg-${GameEngineSingleton.world.worldType}.png`); // * load the sky image
             this.load.image(CITY_KEY, `assets/city-scene/city-${GameEngineSingleton.world.worldType}.png`); // * load the city image
-            this.load.image(FLOOR_KEY, 'assets/city-scene/flat-sidewalk.png'); // * load the floor image
+            this.load.image(FLOOR_KEY, `assets/city-scene/flat-sidewalk-${GameEngineSingleton.world.worldType}.png`); // * load the floor image
             this.load.image(BUSHES_KEY, `assets/city-scene/bushes-DAYTIME.png`); // *  load the bushes image
-            this.load.image(STEPS_KEY, 'assets/steps/steps_day.png');
+            this.load.image(STEPS_KEY, `assets/steps/steps-${GameEngineSingleton.world.worldType}.png`);
             // * Load the objects and the player
             this.load.atlas(OBJECTS_SPRITE_KEY, `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
             this.load.image(END_KEY, 'assets/objects/end.png');
@@ -92,6 +102,12 @@ export class WorldScene extends Phaser.Scene {
             this.load.atlas(CONTROLS_KEY, `assets/buttons/controls.png`, `assets/buttons/controls.json`);
             this.load.atlas(HEALTHBAR_KEY, `assets/objects/healthbar.png`, `assets/objects/healthbar.json`);
             this.load.image(PAUSE_BUTTON, 'assets/buttons/pause-button.png');
+            this.load.image(MUSIC_BUTTON, 'assets/buttons/music.png');
+            this.load.image(MUTE_BUTTON, 'assets/buttons/mute.png');
+
+            // * Loading audio files
+            this.load.audio(BACKGROUND_AUDIO_KEY, 'assets/audios/background/background-music-for-mobile-casual-video-game-short-8-bit-music-164703.mp3');
+            this.load.audio(JUMP_AUDIO_KEY, 'assets/audios/jump/cartoon-jump-6462.mp3');
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
@@ -102,9 +118,12 @@ export class WorldScene extends Phaser.Scene {
      */
     async create(): Promise<void> {
         console.log('world.scene.ts', 'Creating Assets...', this.scale.width, this.scale.height, PhaserSingletonService.activeGame);
+        this.scale.orientation = Phaser.Scale.Orientation.LANDSCAPE; // * We need to set the orientation to landscape for the scene
+        this.scale.lockOrientation('landscape');
         this.initializeBasicWorld();
         createButtons(this, this.character, this.spaceBarKey);
         createAnimationsCharacter(this.character.sprite);
+        GameEngineSingleton.audioService.playBackground(this);
     }
 
     /**
@@ -120,17 +139,52 @@ export class WorldScene extends Phaser.Scene {
 
         this.cityBackground = new CityBackground(this);
         this.bushes = new Bushes(this);
-        this.floor = new Floor(this, 0, 0);
-
+        this.firstFloor = new Floor(this, 0, 0, 1, this.obstacleGroup, this.character);
+        this.firstFloorHeight = this.firstFloor.sprite.displayHeight;
         this.cursors = this.input.keyboard.createCursorKeys();
         this.obstacleGroup = this.physics.add.group();
+        this.stepsGroup = this.physics.add.group();
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.damageValue = 0;
-        this.character = new Character(this, this.floor.sprite);
-        this.healthbar = this.add.sprite(INITIAL_HEALTHBAR_X, INITIAL_HEALTHBAR_Y, HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}0`);
+        this.character = new Character(this, this.firstFloor.sprite);
+        this.physics.add.existing(this.firstFloor.sprite, true);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
     }
-
+    /**
+     * * Method used to listen for collisions with obstacles
+     *
+     * @param player
+     * @param obstacle
+     * @private
+     */
+    private obstacleHandler(player: Phaser.Types.Physics.Arcade.GameObjectWithBody, obstacle: Phaser.Types.Physics.Arcade.GameObjectWithBody): void {
+        console.log(`Colliding ${player.name} with ${obstacle.name}`);
+        if (obstacle.name === Objects.CHEESESTEAK && this.character.damageValue > DAMAGE_MIN_VALUE && this.character.damageValue) {
+            this.character.healUp(obstacle, this.obstacleGroup);
+        } else if (obstacle.name === Objects.CHEESESTEAK && this.character.damageValue === DAMAGE_MIN_VALUE) {
+            // * If object is a cheesesteak and the player is at full heath, do nothing
+            this.obstacleGroup.remove(obstacle);
+        } else if (obstacle.name === END_KEY) {
+            //* By each extra health slice give 100 extra points
+            GameEngineSingleton.points += (DAMAGE_MAX_VALUE - this.character.damageValue) * 100;
+            // * If the end is touched send to winning screen
+            void this.endGame(GameEnum.WIN);
+        } else if (obstacle.name === Objects.GLOVES) {
+            //* If gloves is picked up destroy the asset
+            obstacle.destroy();
+            this.obstacleGroup.remove(obstacle);
+            this.character.makeInvulnerable(this);
+        } else if (this.character.isInvulnerable) {
+            this.obstacleGroup.remove(obstacle);
+        } else if (obstacle.name !== Objects.CHEESESTEAK && !this.character.isDamaged && !this.character.isInvulnerable) {
+            obstacle.destroy();
+            this.character.receiveDamage(this);
+            //if no more damage is allowed send out the player!
+            if (this.character.damageValue === DAMAGE_MAX_VALUE) {
+                void this.endGame(GameEnum.LOOSE);
+            }
+            GameEngineSingleton.points -= GameEngineSingleton.points >= DAMAGE_DECREASE_VALUE ? DAMAGE_DECREASE_VALUE : GameEngineSingleton.points;
+        }
+    }
     /**
      * * Method to used by PHASER to execute every frame refresh
      *
@@ -138,16 +192,79 @@ export class WorldScene extends Phaser.Scene {
      */
     update() {
         this.calculatePoints();
+        this.flyGroundedPigeons();
         this.moveInfiniteBackgrounds();
         this.character.evaluateMovement(this.cursors);
-        this.avoidOutOfBounds();
+        this.character.moveCharacterAutomatically(this.cursors);
+        this.character.avoidOutOfBounds();
+        this.drawEndMuseum();
+        ObstacleHelper.cleanUpObjects(this.obstacleGroup, this.obstaclePigeonGroup);
+        StepsHelper.stepsDetection(this.stepsGroup, this.character);
+        StepsHelper.floorRotation(this.stepsGroup, this.secondFloor, this.thirdFloor);
         this.createObjects();
-        this.objectsDetection();
-        this.cleanUpObjects();
+        this.endDetection();
+        this.floorCreationFlow();
+        this.drawSecondFloorAsMainFloor();
+    }
+    /**
+     * Method used to draw the end museum if the end has being reached
+     */
+    private drawEndMuseum(): void {
+        const x = this.sys.canvas.width;
+        const y = 0;
+        // Draw the museum if the goal points has been reached
+        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
+            this.isEndReached = true;
+            const tmpObject = this.physics.add.image(x, y, END_KEY);
+            tmpObject.setName(END_KEY);
+            tmpObject.setScale(END_OBJECT_SCALE);
+            this.obstacleGroup.add(tmpObject);
+        }
+    }
+    /**
+     * Metod to generate new floor if it applies
+     *
+     * @private
+     */
+    private floorCreationFlow(): void {
+        if (GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowSecondFloor || GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowThirdFloor) {
+            this.createNewFloorIfApplies();
+        }
+    }
+    /**
+     * This method is used after 2nd floor is totally displayed to mantain a single main floor and avoid gravity issues
+     */
+    public drawSecondFloorAsMainFloor(): void {
+        if (this.secondFloor && this.secondFloor.sprite.x <= -window.innerWidth && !this.drawSecondFloorAsMainFloorFlag) {
+            this.drawSecondFloorAsMainFloorFlag = true;
+            const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE * 2;
+            if (this.secondFloor && this.secondFloor.sprite) this.secondFloor.sprite.destroy();
+            if (this.firstFloor && this.firstFloor.sprite) this.firstFloor.sprite.destroy();
+            this.firstFloor = new Floor(this, 0, 0, 1);
+            this.firstFloor.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.firstFloor.sprite.width, targetHeight / this.firstFloor.sprite.height);
+            this.firstFloor.sprite.setPosition(0, CONFIG.DEFAULT_HEIGHT - this.firstFloor.sprite.displayHeight);
+            this.firstFloor.sprite.setSize(this.firstFloor.sprite.width, this.firstFloor.sprite.height);
+            this.physics.add.existing(this.firstFloor.sprite, true);
+
+            this.physics.add.collider(this.firstFloor.sprite, this.character.sprite);
+            this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
+        }
+    }
+    /**
+     * * Method used to fly pigeons grounded
+     *
+     * @private
+     */
+    private flyGroundedPigeons(): void {
+        this.obstaclePigeonGroup.forEach(pigeon => {
+            if (pigeon.sprite.x < window.innerWidth * FLY_GROUNDED_PIGEONS_OFFSET) {
+                pigeon.flyFromTheGround(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+            }
+        });
     }
 
     /**
-     * Method used to calculate the points and update the text in the game
+     * * Method used to calculate the points and update the text in the game
      *
      * @return void
      */
@@ -167,69 +284,87 @@ export class WorldScene extends Phaser.Scene {
         const x = this.sys.canvas.width;
         const y = 0;
 
-        // createObstacles
+        // * createObstacles
         if (GameEngineSingleton.points > this.nextObstaclePoint && GameEngineSingleton.points < GameEngineSingleton.world.pointsToEndLevel) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
             const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
-            createObjects(worldObject, this, x + worldObject.spritePositionX, y, this.obstacleGroup);
+            if (worldObject.name === Objects.PIGEON && worldObject instanceof Pigeon) {
+                const pigeonSprite = ObstacleHelper.createPigeonObjectSprite(this, worldObject, x + worldObject.spritePositionX, y);
+                worldObject.sprite = pigeonSprite;
+                worldObject.fly();
+                worldObject.dropPoop(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+                this.obstaclePigeonGroup.push(worldObject);
+                this.physics.add.collider(this.firstFloor.sprite, pigeonSprite);
+                this.physics.add.collider(this.character.sprite, pigeonSprite, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+            } else {
+                ObstacleHelper.createObjects(worldObject, this, x, y, this.obstacleGroup, this.floorLevel, this.firstFloorHeight);
+            }
             this.nextObstaclePoint += GameEngineSingleton.world.pixelForNextObstacle;
         }
-
-        // createSteps
-        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps && !this.stepsExist) {
-            // TODO - Implement the create steps function to create steps and 2nd level of ground.  Not yet hooked up.
-            // createSteps(this, x, y, this.obstacleGroup, this.character);
-            //this.floor.sprite.setPosition(this.floor.sprite.x, this.floor.sprite.y - 50);
-            this.stepsExist = true;
-        }
-        // Draw the museum if the goal points has been reached
-        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
-            const tmpObject = this.physics.add.image(x, y, END_KEY);
-            tmpObject.setName(END_KEY);
-            tmpObject.setScale(END_OBJECT_SCALE);
-            this.obstacleGroup.add(tmpObject);
-            this.isEndReached = true;
-        }
         this.obstacleGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
-        this.physics.add.collider(this.floor.sprite, this.obstacleGroup);
+
+        this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
+        this.physics.add.collider(this.character.sprite, this.obstacleGroup, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+        //* Group of sprites for the steps has collisions with floor but no with player and no damage\
     }
 
     /**
-     * * Method in progress to create the objects and create the collisions
+     * Method used to create dynamically the sprites for the steps
+     */
+    public createNewFloorIfApplies(): void {
+        if (GameEngineSingleton.difficult === DifficultyEnum.EASY) {
+            this.floorLevel = 0;
+            return;
+        } else if (GameEngineSingleton.difficult === DifficultyEnum.MEDIUM) {
+            this.setFloorObject(2);
+        } else if (GameEngineSingleton.difficult === DifficultyEnum.HARD) {
+            this.setFloorObject(3);
+        }
+    }
+    /**
+     * Method used to add new floor depending on which is the next one
+     *
+     * @param limitLevel
+     * @private
+     */
+    private setFloorObject(limitLevel: number): void {
+        const x = this.sys.canvas.width;
+        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps * this.floorLevel && this.floorLevel < limitLevel) {
+            this.floorLevel++;
+            const steps = StepsHelper.createSteps(this, x, 0, this.floorLevel);
+            this.stepsGroup.add(steps);
+            if (this.floorLevel === 2) {
+                const newFloor2 = new Floor(this, 0, 0, this.floorLevel, this.obstacleGroup, this.character, this.firstFloor);
+                this.secondFloor = newFloor2;
+                this.physics.add.existing(this.secondFloor.sprite);
+                this.physics.add.collider(this.firstFloor.sprite, steps);
+                newFloor2.sprite.setOrigin(-1);
+            }
+            if (this.floorLevel === 3) {
+                const newFloor3 = new Floor(this, 0, 0, this.floorLevel, this.obstacleGroup, this.character, this.firstFloor, this.secondFloor);
+                this.thirdFloor = newFloor3;
+                this.physics.add.existing(this.thirdFloor.sprite);
+                // This steps should fall over the first floor
+                // because at that time the first floor has the second floor in the same one
+                this.physics.add.collider(this.firstFloor.sprite, steps);
+                newFloor3.sprite.setOrigin(-1);
+            }
+        }
+    }
+    /**
+     * * Method used to detect end of level
      *
      * @private
      */
-    private objectsDetection(): void {
+    private endDetection(): void {
         if (this.obstacleGroup.getChildren().length > 0) {
             this.obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
                 if (worldObject) {
-                    const playerYBelow = this.character.sprite.y + this.character.sprite.height / HALF_DIVIDER;
-                    const playerXStart = this.character.sprite.x - this.character.sprite.width / HALF_DIVIDER;
-                    const playerXEnd = this.character.sprite.x + this.character.sprite.width / HALF_DIVIDER;
-                    const worldObjectYAbove = worldObject.y - worldObject.height / HALF_DIVIDER;
-                    const worldObjectXStart = worldObject.x - worldObject.width / HALF_DIVIDER;
                     const worldObjectXEnd = worldObject.x + worldObject.width / HALF_DIVIDER;
                     if (worldObject.name === END_KEY && worldObjectXEnd <= window.innerWidth) {
                         // If the end is displayed stop the movement
                         this.obstacleGroup.setVelocityX(0);
                         this.isEnd = true;
-                    }
-                    // console.log(`COLLISION ${worldObject.name}`, playerXEnd >= worldObjectXStart, playerXStart <= worldObjectXEnd, playerYBelow >= worldObjectYAbove);
-                    // console.log('DAMAGE BOUNDS', playerXEnd, worldObjectXStart, playerXStart, worldObjectXEnd, playerYBelow, worldObjectYAbove);
-                    if (playerXEnd >= worldObjectXStart && playerXStart <= worldObjectXEnd && playerYBelow >= worldObjectYAbove) {
-                        if (worldObject.name === Objects.CHEESESTEAK) {
-                            this.healUp(worldObject);
-                        } else if (worldObject.name === END_KEY) {
-                            // If the end is tuched send to winning screen
-                            void this.endGame(GameEnum.WIN);
-                        } else if (worldObject.name === Objects.GLOVES) {
-                            //* If gloves is picked up destroy the asset
-                            worldObject.destroy();
-                            this.obstacleGroup.remove(worldObject);
-                            this.character.makeInvulnerable(this);
-                        } else if (!this.character.isDamaged && !this.character.isInvulnerable) {
-                            this.receiveDamage();
-                        }
                     }
                 }
             });
@@ -237,7 +372,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     /**
-     * Method used to send the user back to the main screen
+     * * Method used to send the user back to the main screen
      *
      * @param result Result of the game reached WIN/LOSE
      * @return void
@@ -246,87 +381,13 @@ export class WorldScene extends Phaser.Scene {
         this.scene.stop(); // Delete modal scene
         PhaserSingletonService.activeGame.destroy(true);
         PhaserSingletonService.activeGame = undefined;
-        GameEngineSingleton.gameEventBus.next(result);
+        GameEngineSingleton.gameEventType.next(result);
         if (result === GameEnum.WIN) {
-            await GameServices.submitScore({ leaderboardId: GameServicesEnum.LEADERBOARDS_ID, score: GameEngineSingleton.points });
+            await this.gameServicesActions.submitScore(GameEngineSingleton.points);
             if (GameEngineSingleton.world.worldType === LevelsEnum.DAYTIME) {
-                await GameServices.unlockAchievement({ achievementID: FIRST_ACHIEVEMENT_ID });
+                await this.gameServicesActions.unlockAchievement(FIRST_ACHIEVEMENT_ID);
             }
         }
-    }
-
-    /**
-     * Method used to remove obstacles after off screened
-     *
-     * @return void
-     */
-    private cleanUpObjects(): void {
-        this.obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
-            if (worldObject && worldObject.x + worldObject.width < 0 - worldObject.width) {
-                worldObject.destroy();
-                this.obstacleGroup.remove(worldObject);
-            }
-        });
-    }
-
-    /**
-     * Method used to heal up player
-     *
-     * @param worldObject cheesesteak to be destroyed after used
-     */
-    private healUp(worldObject: Phaser.GameObjects.Image): void {
-        this.damageValue--;
-        this.healthbar.setTexture(HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}${this.damageValue}`);
-        worldObject.destroy(); //* If cheesesteak is picked up destroy the asset
-        this.obstacleGroup.remove(worldObject);
-    }
-
-    /**
-     * Method used to receive damage to the user
-     *
-     * @return void
-     */
-    private receiveDamage(): void {
-        // If is not invulnerable then affect with damage
-        this.damageValue++;
-        this.character.sprite.setVelocityY(-VELOCITY_PLAYER_WHEN_MOVING);
-        // Make invulnerable for some seconds to avoid multi coalition
-        this.character.isInvulnerable = true;
-        //if no more damage is allowed send out the player!
-        if (this.damageValue === DAMAGE_MAX_VALUE) {
-            void this.endGame(GameEnum.LOOSE);
-        }
-        this.healthbar.setTexture(HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}${this.damageValue}`);
-        // Set damaged flag so no other animations break damaged animation
-        // Play damage animation
-        this.character.isDamaged = true;
-        // Stop and Delete previous same timer (IF EXISTS)
-        if (this.damageTimer) {
-            this.damageTimer.destroy();
-        }
-        //INITS the damage timer with a duration of 2sec (2000 ms)
-        this.damageTimer = this.time.addEvent({
-            delay: DAMAGE_TIMER,
-            callback: () => {
-                this.character.sprite.setVelocityY(0);
-                this.character.isDamaged = false;
-                this.character.isInvulnerable = false;
-            },
-            callbackScope: this,
-            loop: false,
-        });
-    }
-
-    /**
-     * Method to avoid player go outside scene
-     *
-     * @return void
-     */
-    private avoidOutOfBounds(): void {
-        const personWidth = this.character.sprite.width;
-        const xMin = personWidth / HALF_DIVIDER; // Left limit
-        const xMax = window.innerWidth - personWidth / HALF_DIVIDER; // right limit
-        this.character.sprite.x = Phaser.Math.Clamp(this.character.sprite.x, xMin, xMax);
     }
 
     /**
@@ -338,10 +399,9 @@ export class WorldScene extends Phaser.Scene {
         // While the end has not reached do the scrolling of level
         if (!this.isEnd) {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
-            this.cityBackground.sprite.tilePositionX += 0.5;
-            this.bushes.sprite.tilePositionX += 1;
-            this.floor.sprite.tilePositionX += 2;
-            if (this.secondFloor) this.secondFloor.sprite.tilePositionX += 2;
+            this.firstFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.secondFloor) this.secondFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.thirdFloor) this.thirdFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
         }
     }
 }

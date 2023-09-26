@@ -9,7 +9,10 @@ android {
 
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
-    implementation project(':openforge-capacitor-game-services')
+    implementation project(':capacitor-network')
+    implementation project(':capacitor-preferences')
+    implementation project(':capacitor-screen-orientation')
+    implementation project(':openforge-capacitor-game-connect')
 
 }
 

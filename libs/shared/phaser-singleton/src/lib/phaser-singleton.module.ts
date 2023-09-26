@@ -17,8 +17,8 @@ import { WorldScene } from './scenes/world.scene';
 })
 export class PhaserSingletonService {
     // * We need the Phaser.Game to live inside our own class because extending Phaser.Game would require a super call
-    public static activeGame: Phaser.Game;
-    private static ngZone: NgZone;
+    public static activeGame: Phaser.Game; // * Property to set the active game
+    private static ngZone: NgZone; // * Property to set the ngZone class
     public static actionsHistory: string[] = []; // * Since phaser is a singleton, let's store the history of actions here for all components.
 
     constructor(private _ngZone: NgZone, @Optional() @SkipSelf() parentModule?: PhaserSingletonService) {
@@ -75,8 +75,8 @@ export class PhaserSingletonService {
                 // https://photonstorm.github.io/phaser3-docs/Phaser.Scale.ScaleManager.html
                 PhaserSingletonService.activeGame = new Phaser.Game({
                     type: Phaser.CANVAS, // better for mobile rendering
+                    parent: 'stage-main',
                     scale: {
-                        parent: 'stage-main',
                         mode: Phaser.Scale.FIT,
                         // mode: Phaser.Scale.ENVELOP <-- works well; but would have to manage aspect ratio manually.
                         // mode: Phaser.Scale.RESIZE,on resize its not scaling (it's resizing) so performance consequences
@@ -99,8 +99,11 @@ export class PhaserSingletonService {
                         default: 'arcade',
                         arcade: {
                             gravity: { y: 1000 },
-                            debug: true,
+                            debug: false,
                         },
+                    },
+                    input: {
+                        activePointers: 4, // * This enables the multitouch option. It increments depending of the buttons quantity
                     },
                 });
             }
