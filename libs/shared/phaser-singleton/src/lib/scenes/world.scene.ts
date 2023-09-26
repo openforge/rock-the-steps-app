@@ -8,6 +8,7 @@ import {
     CITY_KEY,
     CityBackground,
     CONTROLS_KEY,
+    DAMAGE_DECREASE_VALUE,
     DAMAGE_MAX_VALUE,
     DAMAGE_MIN_VALUE,
     DifficultyEnum,
@@ -174,7 +175,12 @@ export class WorldScene extends Phaser.Scene {
             this.obstacleGroup.remove(obstacle);
         } else if (obstacle.name !== Objects.CHEESESTEAK && !this.character.isDamaged && !this.character.isInvulnerable) {
             obstacle.destroy();
-            this.character.receiveDamage(this, this.endGame);
+            this.character.receiveDamage(this);
+            //if no more damage is allowed send out the player!
+            if (this.character.damageValue === DAMAGE_MAX_VALUE) {
+                void this.endGame(GameEnum.LOOSE);
+            }
+            GameEngineSingleton.points -= GameEngineSingleton.points >= DAMAGE_DECREASE_VALUE ? DAMAGE_DECREASE_VALUE : GameEngineSingleton.points;
         }
     }
     /**
