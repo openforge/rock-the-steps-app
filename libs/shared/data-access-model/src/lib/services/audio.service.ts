@@ -47,6 +47,7 @@ export class AudioService {
      *
      */
     public resumeBackground(): void {
+        this.activeMusic = true;
         if (this.backgroundAudio) {
             this.backgroundAudio.resume();
         } else {
