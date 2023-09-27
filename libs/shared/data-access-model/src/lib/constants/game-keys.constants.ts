@@ -33,3 +33,5 @@ export const STEPS_KEY = 'steps-key';
 export const PIGEON_VARIANT_KEY = 'pigeon-variant';
 export const BACKGROUND_AUDIO_KEY = 'background-audio';
 export const JUMP_AUDIO_KEY = 'jump-audio';
+export const RIGHT_KEYBOARD = 'ArrowRight';
+export const LEFT_KEYBOARD = 'ArrowLeft';

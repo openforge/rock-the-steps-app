@@ -121,7 +121,7 @@ export class WorldScene extends Phaser.Scene {
         this.scale.orientation = Phaser.Scale.Orientation.LANDSCAPE; // * We need to set the orientation to landscape for the scene
         this.scale.lockOrientation('landscape');
         this.initializeBasicWorld();
-        createButtons(this, this.character, this.spaceBarKey);
+        createButtons(this, this.character, this.spaceBarKey, this.input.keyboard);
         createAnimationsCharacter(this.character.sprite);
         GameEngineSingleton.audioService.playBackground(this);
     }
@@ -142,12 +142,22 @@ export class WorldScene extends Phaser.Scene {
         this.firstFloor = new Floor(this, 0, 0, 1, this.obstacleGroup, this.character);
         this.firstFloorHeight = this.firstFloor.sprite.displayHeight;
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.input.keyboard.on('keydown_RIGHT', () => alert('red'));
         this.obstacleGroup = this.physics.add.group();
         this.stepsGroup = this.physics.add.group();
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.character = new Character(this, this.firstFloor.sprite);
         this.physics.add.existing(this.firstFloor.sprite, true);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
+
+        // const steps = StepsHelper.createSteps(this, this.sys.canvas.width, 0, 2);
+        // // const newFloor2 = new Floor(this, 0, 0, 2, this.obstacleGroup, this.character, this.firstFloor);
+        // // this.secondFloor = newFloor2;
+        // this.stepsGroup.add(steps);
+        //
+        // this.physics.add.collider(this.firstFloor.sprite, steps);
+        // // this.physics.add.existing(this.secondFloor.sprite);
+        // // newFloor2.sprite.setOrigin(-1);
     }
     /**
      * * Method used to listen for collisions with obstacles
@@ -216,6 +226,10 @@ export class WorldScene extends Phaser.Scene {
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
             this.isEndReached = true;
             const tmpObject = this.physics.add.image(x, y, END_KEY);
+            tmpObject.body.setImmovable(true);
+            tmpObject.setImmovable(true);
+            const positionY = this.firstFloorHeight * this.floorLevel;
+            tmpObject.setPosition(x, CONFIG.DEFAULT_HEIGHT - positionY - tmpObject.displayHeight);
             tmpObject.setName(END_KEY);
             tmpObject.setScale(END_OBJECT_SCALE);
             this.obstacleGroup.add(tmpObject);
@@ -289,7 +303,7 @@ export class WorldScene extends Phaser.Scene {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
             const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
             if (worldObject.name === Objects.PIGEON && worldObject instanceof Pigeon) {
-                const pigeonSprite = ObstacleHelper.createPigeonObjectSprite(this, worldObject, x + worldObject.spritePositionX, y);
+                const pigeonSprite = ObstacleHelper.createPigeonObjectSprite(this, worldObject, x + worldObject.spritePositionX, y, this.floorLevel, this.firstFloorHeight);
                 worldObject.sprite = pigeonSprite;
                 worldObject.fly();
                 worldObject.dropPoop(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
@@ -399,9 +413,9 @@ export class WorldScene extends Phaser.Scene {
         // While the end has not reached do the scrolling of level
         if (!this.isEnd) {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
-            this.firstFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
-            if (this.secondFloor) this.secondFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
-            if (this.thirdFloor) this.thirdFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.firstFloor.sprite instanceof Phaser.GameObjects.TileSprite) this.firstFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.secondFloor && this.secondFloor.sprite instanceof Phaser.GameObjects.TileSprite) this.secondFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.thirdFloor && this.thirdFloor.sprite instanceof Phaser.GameObjects.TileSprite) this.thirdFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
         }
     }
 }
