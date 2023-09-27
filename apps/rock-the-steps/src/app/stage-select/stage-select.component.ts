@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
-import { DifficultyEnum, GameServicesActions, LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
+import { DifficultyEnum, LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 import { Stage } from 'libs/shared/data-access-model/src/lib/models/stage.interface';
 import { AudioService } from 'libs/shared/data-access-model/src/lib/services/audio.service';
+import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
 
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/game-engine.singleton';
 import { ModalService } from '../services/modal.service';
@@ -19,7 +20,6 @@ export class StageSelectComponent implements OnInit {
     public levelsEnum = LevelsEnum; // * Enum used to distinguish level selection from user
     public difficultyEnum = DifficultyEnum; // * Enum used to distingush difficulity
     public screensEnums = ScreensEnum; // * Enum used to navigate across the screens
-    private gameServicesActions: GameServicesActions = new GameServicesActions();
     public allPointsEarned = 0; // * Number of points the user has earened playing
 
     // * TODO update this solution to generate in a class
@@ -152,7 +152,7 @@ export class StageSelectComponent implements OnInit {
         },
     ];
 
-    constructor(private router: Router, private audioService: AudioService, private modalService: ModalService) {}
+    constructor(private router: Router, private modalService: ModalService, private audioService: AudioService, private gameConnectService: GameConnectService) {}
 
     async ngOnInit() {
         this.allPointsEarned = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
@@ -197,7 +197,7 @@ export class StageSelectComponent implements OnInit {
      */
     public async goTo(screen: ScreensEnum): Promise<void> {
         if (screen === this.screensEnums.LEADERBOARDS) {
-            await this.gameServicesActions.openLeaderboards();
+            await this.gameConnectService.openLeaderboards();
         } else {
             await this.router.navigate([screen], { replaceUrl: true });
         }
