@@ -19,7 +19,6 @@ import {
     FIRST_ACHIEVEMENT_ID,
     Floor,
     FLOOR_KEY,
-    FLOOR_SCREEN_TARGET_PERCENTAGE,
     FLY_GROUNDED_PIGEONS_OFFSET,
     GameEnum,
     HALF_DIVIDER,
@@ -210,7 +209,6 @@ export class WorldScene extends Phaser.Scene {
         this.createObjects();
         this.endDetection();
         this.floorCreationFlow();
-        this.drawSecondFloorAsMainFloor();
     }
     /**
      * Method used to draw the end museum if the end has being reached
@@ -239,25 +237,6 @@ export class WorldScene extends Phaser.Scene {
     private floorCreationFlow(): void {
         if (GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowSecondFloor || GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowThirdFloor) {
             this.createNewFloorIfApplies();
-        }
-    }
-    /**
-     * This method is used after 2nd floor is totally displayed to mantain a single main floor and avoid gravity issues
-     */
-    public drawSecondFloorAsMainFloor(): void {
-        if (this.secondFloor && this.secondFloor.sprite.x <= -window.innerWidth && !this.drawSecondFloorAsMainFloorFlag) {
-            this.drawSecondFloorAsMainFloorFlag = true;
-            const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE * 2;
-            if (this.secondFloor && this.secondFloor.sprite) this.secondFloor.sprite.destroy();
-            if (this.firstFloor && this.firstFloor.sprite) this.firstFloor.sprite.destroy();
-            this.firstFloor = new Floor(this, 0, 0, 1);
-            this.firstFloor.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.firstFloor.sprite.width, targetHeight / this.firstFloor.sprite.height);
-            this.firstFloor.sprite.setPosition(0, CONFIG.DEFAULT_HEIGHT - this.firstFloor.sprite.displayHeight);
-            this.firstFloor.sprite.setSize(this.firstFloor.sprite.width, this.firstFloor.sprite.height);
-            this.physics.add.existing(this.firstFloor.sprite, true);
-
-            this.physics.add.collider(this.firstFloor.sprite, this.character.sprite);
-            this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
         }
     }
     /**
