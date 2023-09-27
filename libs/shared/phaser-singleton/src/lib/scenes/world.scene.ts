@@ -1,4 +1,5 @@
 /* eslint-disable no-magic-numbers */
+import { Preferences } from '@capacitor/preferences';
 import {
     BACKGROUND_AUDIO_KEY,
     Bushes,
@@ -121,9 +122,13 @@ export class WorldScene extends Phaser.Scene {
         this.scale.orientation = Phaser.Scale.Orientation.LANDSCAPE; // * We need to set the orientation to landscape for the scene
         this.scale.lockOrientation('landscape');
         this.initializeBasicWorld();
-        createButtons(this, this.character, this.spaceBarKey);
+        void createButtons(this, this.character, this.spaceBarKey);
         createAnimationsCharacter(this.character.sprite);
-        GameEngineSingleton.audioService.playBackground(this);
+
+        const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+        if (audioPreference === 'true' || audioPreference === undefined) {
+            void GameEngineSingleton.audioService.playBackground(this);
+        }
     }
 
     /**
@@ -180,7 +185,7 @@ export class WorldScene extends Phaser.Scene {
             this.character.receiveDamage(this);
             //if no more damage is allowed send out the player!
             if (this.character.damageValue === DAMAGE_MAX_VALUE) {
-                void this.endGame(GameEnum.LOOSE);
+                void this.endGame(GameEnum.LOSE);
             }
             GameEngineSingleton.points -= GameEngineSingleton.points >= DAMAGE_DECREASE_VALUE ? DAMAGE_DECREASE_VALUE : GameEngineSingleton.points;
         }
