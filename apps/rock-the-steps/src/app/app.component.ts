@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Network } from '@capacitor/network';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
-import { ModalController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 
 import { InternetConnectionFailComponent } from './network/internet-connection-fail/internet-connection-fail.component';
+import { ModalService } from './services/modal.service';
 
 @Component({
     selector: 'openforge-app-root',
@@ -12,13 +13,27 @@ import { InternetConnectionFailComponent } from './network/internet-connection-f
     styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnDestroy, OnInit {
-    constructor(public phaserInstance: PhaserSingletonService, public platform: Platform, private modalController: ModalController) {}
+    constructor(public phaserInstance: PhaserSingletonService, public platform: Platform, private modalService: ModalService) {}
 
     async ngOnInit(): Promise<void> {
         if (this.platform.is('capacitor')) {
             this.setScreenOrientation();
         }
-        void this.checkInternetConnection();
+
+        const connectionStatus = await Network.getStatus();
+        if (connectionStatus.connectionType === 'none') {
+            void this.showNetworkModal();
+        }
+
+        void Network.addListener('networkStatusChange', status => {
+            if (status.connectionType === 'none') {
+                void this.showNetworkModal();
+            }
+
+            if (status.connectionType !== 'none') {
+                void this.modalService.dismiss();
+            }
+        });
     }
 
     /**
@@ -30,31 +45,14 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     /**
-     * * Function to check network status
-     *
-     */
-    private async checkInternetConnection(): Promise<void> {
-        const connectionStatus = await Network.getStatus();
-        if (connectionStatus.connectionType === 'none') {
-            void this.showNetworkModal();
-        }
-        void Network.addListener('networkStatusChange', status => {
-            if (status.connectionType === 'none') {
-                void this.showNetworkModal();
-            }
-        });
-    }
-
-    /**
      * * Function to display Networt Connection Modal
      *
      */
     private async showNetworkModal(): Promise<void> {
-        const modalCtrl = await this.modalController.create({
+        await this.modalService.showModal({
             component: InternetConnectionFailComponent,
-            canDismiss: false,
+            backdropDismiss: false,
         });
-        await modalCtrl.present();
     }
 
     /**
