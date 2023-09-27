@@ -136,7 +136,7 @@ export function toggleMusic(_scene: Scene, musicButton: Phaser.GameObjects.Image
         void GameEngineSingleton.audioService.pauseBackground();
         musicButton.setTexture(MUTE_BUTTON);
     } else {
-        void GameEngineSingleton.audioService.playBackground(_scene);
+        void GameEngineSingleton.audioService.resumeBackground();
         musicButton.setTexture(MUSIC_BUTTON);
     }
 }

@@ -49,6 +49,7 @@ export class AudioService {
      *
      */
     public async resumeBackground(): Promise<void> {
+        this.activeMusic = true;
         if (this.backgroundAudio) {
             this.backgroundAudio.resume();
             await Preferences.set({ key: 'AUDIO_ON', value: 'true' });
