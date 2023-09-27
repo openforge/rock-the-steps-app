@@ -10,6 +10,7 @@ import {
     INITIAL_HEALTHBAR_X,
     INITIAL_HEALTHBAR_Y,
     INVULNERABLE_REPS,
+    NORMAL_GRAVITY,
     PLAYER_POS_X,
     PLAYER_POS_Y,
     VELOCITY_PLAYER_WHEN_AUTOMATICALLY,
@@ -27,10 +28,11 @@ export class Character {
     public damageValue = 0; // * Amount of damaged received by obstacles
     public damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
     public healthbar: Phaser.GameObjects.Sprite; // * Healthbar used to show the remaining life of the player
-    constructor(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite) {
+    constructor(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite | Phaser.Physics.Arcade.Sprite) {
         this.sprite = scene.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
+        this.sprite.setGravityY(NORMAL_GRAVITY);
         this.sprite.anims.play(WALKING_ANIMATION, true);
-        this.sprite.setDepth(1);
+        this.sprite.setDepth(2);
         this.healthbar = scene.add.sprite(INITIAL_HEALTHBAR_X, INITIAL_HEALTHBAR_Y, HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}0`);
         this.addFloorCollision(scene, floorTileSprite);
     }
@@ -41,7 +43,7 @@ export class Character {
      * @param scene Scene
      * @param floorTileSprite Phaser.GameObjects.TileSprite
      */
-    public addFloorCollision(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite) {
+    public addFloorCollision(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite | Phaser.Physics.Arcade.Sprite) {
         scene.physics.add.collider(this.sprite, floorTileSprite);
     }
 
