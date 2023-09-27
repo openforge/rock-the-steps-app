@@ -37,7 +37,9 @@ export class Pigeon extends WorldObject {
             this.sprite.body.setAllowGravity(false);
             if (!this.isFlying) {
                 this.isFlying = true;
-                this.dropPoop(scene, obstaclePigeonPoopGroup, character, handlerCallback);
+                if (this.sprite.active) {
+                    this.dropPoop(scene, obstaclePigeonPoopGroup, character, handlerCallback);
+                }
             }
         }
     }
