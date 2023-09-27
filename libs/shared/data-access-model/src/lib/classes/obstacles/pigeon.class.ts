@@ -37,7 +37,9 @@ export class Pigeon extends WorldObject {
             this.sprite.body.setAllowGravity(false);
             if (!this.isFlying) {
                 this.isFlying = true;
-                this.dropPoop(scene, obstaclePigeonPoopGroup, character, handlerCallback);
+                if (this.sprite.active) {
+                    this.dropPoop(scene, obstaclePigeonPoopGroup, character, handlerCallback);
+                }
             }
         }
     }
@@ -48,7 +50,6 @@ export class Pigeon extends WorldObject {
     public fly(): void {
         if (this.isFlying) {
             this.sprite.anims.play(STANDING_FRAME, true);
-            this.sprite.body.setAllowGravity(false);
         }
     }
 
@@ -58,7 +59,7 @@ export class Pigeon extends WorldObject {
     public dropPoop(scene: Scene, obstaclePigeonPoopGroup: Poop[], character: Character, handlerCallback: ArcadePhysicsCallback): void {
         const randomPoopTime = (Math.floor(Math.random() * 3) + 6) * ONE_SECOND_TIMEOUT;
         setTimeout(() => {
-            const poopSprite = createDropObject(scene, this.sprite.x, this.sprite.y, this.poop.name);
+            const poopSprite = createDropObject(scene, this.sprite.x, this.sprite.y + this.sprite.displayHeight, this.poop.name);
             obstaclePigeonPoopGroup.push(this.poop);
             scene.physics.add.collider(character.sprite, poopSprite, handlerCallback);
         }, randomPoopTime);

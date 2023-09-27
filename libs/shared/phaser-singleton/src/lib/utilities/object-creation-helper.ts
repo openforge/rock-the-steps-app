@@ -6,6 +6,7 @@ import {
     PIGEON_FRAME_KEY,
     PIGEON_FRAME_RATE,
     PIGEON_START_FRAME,
+    POOP_GRAVITY,
     POOP_OBJECTS_VELOCITY_Y,
     REPEAT_FRAME,
     STANDING_FRAME,
@@ -33,7 +34,7 @@ export function createDropObject(scene: Phaser.Scene, initialX: number, initialY
     tmpSprite.setName(objectName);
     tmpSprite.setVelocityX(-WORLD_OBJECTS_VELOCITY);
     tmpSprite.setVelocityY(POOP_OBJECTS_VELOCITY_Y);
-    tmpSprite.body.setGravityY(POOP_OBJECTS_VELOCITY_Y);
+    tmpSprite.setGravityY(POOP_GRAVITY);
     return tmpSprite;
 }
 
@@ -44,8 +45,17 @@ export function createDropObject(scene: Phaser.Scene, initialX: number, initialY
  * @param pigeon
  * @param initialX
  * @param initialY
+ * @param floorNumber
+ * @param floorHeight
  */
-export function createPigeonObjectSprite(scene: Phaser.Scene, pigeon: Pigeon, initialX: number, initialY: number): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
+export function createPigeonObjectSprite(
+    scene: Phaser.Scene,
+    pigeon: Pigeon,
+    initialX: number,
+    initialY: number,
+    floorNumber: number,
+    floorHeight: number
+): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
     let positionY = initialY;
     const isFlying = Math.floor(2 * Math.random()) === 0;
     pigeon.isFlying = isFlying;
@@ -56,6 +66,13 @@ export function createPigeonObjectSprite(scene: Phaser.Scene, pigeon: Pigeon, in
         positionY = window.innerHeight * FLYER_PIGEONS_Y_OFFSET; // This will be the Y axis of pigeon flying
     }
     const tmpSprite = scene.physics.add.sprite(initialX, positionY, OBJECTS_SPRITE_KEY, pigeon.name);
+    if (!isFlying) {
+        const positionYCalculated = floorHeight * floorNumber;
+        tmpSprite.setOrigin(0);
+        tmpSprite.body.setImmovable(true);
+        tmpSprite.setImmovable(true);
+        tmpSprite.setPosition(initialX, CONFIG.DEFAULT_HEIGHT - positionYCalculated - tmpSprite.displayHeight);
+    }
     tmpSprite.setVelocityX(-WORLD_OBJECTS_VELOCITY);
     tmpSprite.anims.create({
         key: STANDING_FRAME,

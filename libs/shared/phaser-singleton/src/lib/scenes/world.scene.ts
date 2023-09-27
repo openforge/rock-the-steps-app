@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable no-magic-numbers */
+import { Preferences } from '@capacitor/preferences';
 import { NativeAudio } from '@capacitor-community/native-audio';
 import {
     BACKGROUND_AUDIO_KEY,
@@ -18,10 +20,8 @@ import {
     FIRST_ACHIEVEMENT_ID,
     Floor,
     FLOOR_KEY,
-    FLOOR_SCREEN_TARGET_PERCENTAGE,
     FLY_GROUNDED_PIGEONS_OFFSET,
     GameEnum,
-    GameServicesActions,
     HALF_DIVIDER,
     HEALTHBAR_KEY,
     INITIAL_POINTS_X,
@@ -42,6 +42,7 @@ import {
     WORLD_SCENE,
 } from '@openforge/shared/data-access-model';
 import { CONFIG, PhaserSingletonService } from '@openforge/shared-phaser-singleton';
+import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
 import * as Phaser from 'phaser';
 
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/game-engine.singleton';
@@ -52,7 +53,6 @@ import * as ObstacleHelper from '../utilities/object-creation-helper';
 import * as StepsHelper from '../utilities/steps-helper';
 
 export class WorldScene extends Phaser.Scene {
-    private gameServicesActions: GameServicesActions = new GameServicesActions();
     private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private stepsGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the steps has collisions with floor but no with player and no damage
     private obstaclePigeonGroup: Pigeon[] = []; // * Array of sprites for the pigeon obstacles
@@ -75,7 +75,7 @@ export class WorldScene extends Phaser.Scene {
     public thirdFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
     public floorLevel: number = 1; // * Var used to detect the actual flow level
 
-    constructor() {
+    constructor(private gameConnectService: GameConnectService) {
         console.log('world.scene.ts', 'constructor()');
         super(WORLD_SCENE);
     }
@@ -134,9 +134,13 @@ export class WorldScene extends Phaser.Scene {
         this.scale.orientation = Phaser.Scale.Orientation.LANDSCAPE; // * We need to set the orientation to landscape for the scene
         this.scale.lockOrientation('landscape');
         this.initializeBasicWorld();
-        createButtons(this, this.character, this.spaceBarKey);
+        void createButtons(this, this.character, this.spaceBarKey, this.input.keyboard);
         createAnimationsCharacter(this.character.sprite);
-        GameEngineSingleton.audioService.playBackground(this);
+
+        const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+        if (audioPreference === 'true' || audioPreference === undefined) {
+            void GameEngineSingleton.audioService.playBackground(this);
+        }
     }
 
     /**
@@ -155,6 +159,7 @@ export class WorldScene extends Phaser.Scene {
         this.firstFloor = new Floor(this, 0, 0, 1, this.obstacleGroup, this.character);
         this.firstFloorHeight = this.firstFloor.sprite.displayHeight;
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.input.keyboard.on('keydown_RIGHT', () => alert('red'));
         this.obstacleGroup = this.physics.add.group();
         this.stepsGroup = this.physics.add.group();
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -193,7 +198,7 @@ export class WorldScene extends Phaser.Scene {
             this.character.receiveDamage(this);
             //if no more damage is allowed send out the player!
             if (this.character.damageValue === DAMAGE_MAX_VALUE) {
-                void this.endGame(GameEnum.LOOSE);
+                void this.endGame(GameEnum.LOSE);
             }
             GameEngineSingleton.points -= GameEngineSingleton.points >= DAMAGE_DECREASE_VALUE ? DAMAGE_DECREASE_VALUE : GameEngineSingleton.points;
         }
@@ -217,7 +222,6 @@ export class WorldScene extends Phaser.Scene {
         this.createObjects();
         this.endDetection();
         this.floorCreationFlow();
-        this.drawSecondFloorAsMainFloor();
     }
     /**
      * Method used to draw the end museum if the end has being reached
@@ -229,6 +233,10 @@ export class WorldScene extends Phaser.Scene {
         if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
             this.isEndReached = true;
             const tmpObject = this.physics.add.image(x, y, END_KEY);
+            tmpObject.body.setImmovable(true);
+            tmpObject.setImmovable(true);
+            const positionY = this.firstFloorHeight * this.floorLevel;
+            tmpObject.setPosition(x, CONFIG.DEFAULT_HEIGHT - positionY - tmpObject.displayHeight);
             tmpObject.setName(END_KEY);
             tmpObject.setScale(END_OBJECT_SCALE);
             this.obstacleGroup.add(tmpObject);
@@ -242,25 +250,6 @@ export class WorldScene extends Phaser.Scene {
     private floorCreationFlow(): void {
         if (GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowSecondFloor || GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowThirdFloor) {
             this.createNewFloorIfApplies();
-        }
-    }
-    /**
-     * This method is used after 2nd floor is totally displayed to mantain a single main floor and avoid gravity issues
-     */
-    public drawSecondFloorAsMainFloor(): void {
-        if (this.secondFloor && this.secondFloor.sprite.x <= -window.innerWidth && !this.drawSecondFloorAsMainFloorFlag) {
-            this.drawSecondFloorAsMainFloorFlag = true;
-            const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE * 2;
-            if (this.secondFloor && this.secondFloor.sprite) this.secondFloor.sprite.destroy();
-            if (this.firstFloor && this.firstFloor.sprite) this.firstFloor.sprite.destroy();
-            this.firstFloor = new Floor(this, 0, 0, 1);
-            this.firstFloor.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.firstFloor.sprite.width, targetHeight / this.firstFloor.sprite.height);
-            this.firstFloor.sprite.setPosition(0, CONFIG.DEFAULT_HEIGHT - this.firstFloor.sprite.displayHeight);
-            this.firstFloor.sprite.setSize(this.firstFloor.sprite.width, this.firstFloor.sprite.height);
-            this.physics.add.existing(this.firstFloor.sprite, true);
-
-            this.physics.add.collider(this.firstFloor.sprite, this.character.sprite);
-            this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
         }
     }
     /**
@@ -302,7 +291,7 @@ export class WorldScene extends Phaser.Scene {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
             const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
             if (worldObject.name === Objects.PIGEON && worldObject instanceof Pigeon) {
-                const pigeonSprite = ObstacleHelper.createPigeonObjectSprite(this, worldObject, x + worldObject.spritePositionX, y);
+                const pigeonSprite = ObstacleHelper.createPigeonObjectSprite(this, worldObject, x + worldObject.spritePositionX, y, this.floorLevel, this.firstFloorHeight);
                 worldObject.sprite = pigeonSprite;
                 worldObject.fly();
                 worldObject.dropPoop(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
@@ -396,9 +385,9 @@ export class WorldScene extends Phaser.Scene {
         PhaserSingletonService.activeGame = undefined;
         GameEngineSingleton.gameEventType.next(result);
         if (result === GameEnum.WIN) {
-            await this.gameServicesActions.submitScore(GameEngineSingleton.points);
+            await this.gameConnectService.submitScore(GameEngineSingleton.points);
             if (GameEngineSingleton.world.worldType === LevelsEnum.DAYTIME) {
-                await this.gameServicesActions.unlockAchievement(FIRST_ACHIEVEMENT_ID);
+                await this.gameConnectService.unlockAchievement(FIRST_ACHIEVEMENT_ID);
             }
         }
     }
@@ -412,9 +401,9 @@ export class WorldScene extends Phaser.Scene {
         // While the end has not reached do the scrolling of level
         if (!this.isEnd) {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
-            this.firstFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
-            if (this.secondFloor) this.secondFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
-            if (this.thirdFloor) this.thirdFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.firstFloor.sprite instanceof Phaser.GameObjects.TileSprite) this.firstFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.secondFloor && this.secondFloor.sprite instanceof Phaser.GameObjects.TileSprite) this.secondFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.thirdFloor && this.thirdFloor.sprite instanceof Phaser.GameObjects.TileSprite) this.thirdFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
         }
     }
 }
