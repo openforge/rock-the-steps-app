@@ -6,6 +6,7 @@ import {
     PIGEON_FRAME_KEY,
     PIGEON_FRAME_RATE,
     PIGEON_START_FRAME,
+    POOP_GRAVITY,
     POOP_OBJECTS_VELOCITY_Y,
     REPEAT_FRAME,
     STANDING_FRAME,
@@ -33,7 +34,7 @@ export function createDropObject(scene: Phaser.Scene, initialX: number, initialY
     tmpSprite.setName(objectName);
     tmpSprite.setVelocityX(-WORLD_OBJECTS_VELOCITY);
     tmpSprite.setVelocityY(POOP_OBJECTS_VELOCITY_Y);
-    tmpSprite.body.setGravityY(POOP_OBJECTS_VELOCITY_Y);
+    tmpSprite.setGravityY(POOP_GRAVITY);
     return tmpSprite;
 }
 

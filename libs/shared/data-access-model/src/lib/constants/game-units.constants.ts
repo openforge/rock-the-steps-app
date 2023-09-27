@@ -53,5 +53,5 @@ export const FLY_GROUNDED_PIGEONS_OFFSET = 0.9;
 export const ONE_SECOND_TIMEOUT = 1000;
 export const STEPS_OFFSET_X_FOR_CREATION = 71.5;
 export const FLOOR_SCREEN_TARGET_PERCENTAGE = 0.15;
-export const POOP_GRAVITY = 200;
+export const POOP_GRAVITY = 40;
 export const NORMAL_GRAVITY = 1000;
