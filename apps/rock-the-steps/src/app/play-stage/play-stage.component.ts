@@ -27,7 +27,7 @@ export class PlayStageComponent implements OnInit {
             } else if (GameEnum.EXIT === value) {
                 await this.router.navigate(['/home'], { replaceUrl: true });
             } else {
-                await this.router.navigate(['/finish'], { queryParams: { r: GameEnum.LOOSE }, replaceUrl: true });
+                await this.router.navigate(['/finish'], { queryParams: { r: GameEnum.LOSE }, replaceUrl: true });
             }
         });
     }

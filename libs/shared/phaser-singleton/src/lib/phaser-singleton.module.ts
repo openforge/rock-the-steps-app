@@ -98,7 +98,7 @@ export class PhaserSingletonService {
                     physics: {
                         default: 'arcade',
                         arcade: {
-                            gravity: { y: 1000 },
+                            gravity: { y: 0 },
                             debug: false,
                         },
                     },
