@@ -149,15 +149,6 @@ export class WorldScene extends Phaser.Scene {
         this.character = new Character(this, this.firstFloor.sprite);
         this.physics.add.existing(this.firstFloor.sprite, true);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
-
-        // const steps = StepsHelper.createSteps(this, this.sys.canvas.width, 0, 2);
-        // // const newFloor2 = new Floor(this, 0, 0, 2, this.obstacleGroup, this.character, this.firstFloor);
-        // // this.secondFloor = newFloor2;
-        // this.stepsGroup.add(steps);
-        //
-        // this.physics.add.collider(this.firstFloor.sprite, steps);
-        // // this.physics.add.existing(this.secondFloor.sprite);
-        // // newFloor2.sprite.setOrigin(-1);
     }
     /**
      * * Method used to listen for collisions with obstacles
