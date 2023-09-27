@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
-import { ModalController } from '@ionic/angular';
 import { DifficultyEnum, LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 import { Stage } from 'libs/shared/data-access-model/src/lib/models/stage.interface';
 import { AudioService } from 'libs/shared/data-access-model/src/lib/services/audio.service';
 import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
 
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/game-engine.singleton';
+import { ModalService } from '../services/modal.service';
 import { DifficultSelectModalComponent } from './difficult-select-modal/difficult-select-modal.component';
 
 @Component({
@@ -152,7 +152,7 @@ export class StageSelectComponent implements OnInit {
         },
     ];
 
-    constructor(private router: Router, private modalCtrl: ModalController, private audioService: AudioService, private gameConnectService: GameConnectService) {}
+    constructor(private router: Router, private modalService: ModalService, private audioService: AudioService, private gameConnectService: GameConnectService) {}
 
     async ngOnInit() {
         this.allPointsEarned = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
@@ -173,19 +173,20 @@ export class StageSelectComponent implements OnInit {
     public async selectLevel(level: LevelsEnum): Promise<void> {
         console.log(`Selected ${level}`);
 
-        const modal = await this.modalCtrl.create({
-            component: DifficultSelectModalComponent,
-            cssClass: 'difficult-modal',
-        });
-        await modal.present();
+        await this.modalService
+            .showModal({
+                component: DifficultSelectModalComponent,
+                cssClass: 'difficult-modal',
+            })
+            .then(() => this.modalService.modalElement);
 
-        await modal.onWillDismiss().then(async (action: { role: string; data: number }) => {
+        void this.modalService.modalElement.onWillDismiss().then(async (action: { role: string; data: { difficult: number } }) => {
             if (action.role !== 'backdrop') {
-                GameEngineSingleton.difficult = action.data;
+                GameEngineSingleton.difficult = action.data.difficult;
                 GameEngineSingleton.audioService = this.audioService;
 
                 // * Here load the level
-                void GameEngineSingleton.buildWorld(level, action.data);
+                void GameEngineSingleton.buildWorld(level, action.data.difficult);
                 await this.goTo(ScreensEnum.PLAY_STAGE);
             }
         });

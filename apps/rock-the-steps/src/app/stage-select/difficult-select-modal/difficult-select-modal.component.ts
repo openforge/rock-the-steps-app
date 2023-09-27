@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { ModalController } from '@ionic/angular';
 import { DifficultyEnum } from '@openforge/shared/data-access-model';
+
+import { ModalService } from '../../services/modal.service';
 
 @Component({
     selector: 'openforge-difficult-select-modal',
@@ -10,9 +11,9 @@ import { DifficultyEnum } from '@openforge/shared/data-access-model';
 export class DifficultSelectModalComponent {
     public difficultEnum = DifficultyEnum; // * Difficult enum used to select the difficulty from template
 
-    constructor(private modalController: ModalController) {}
+    constructor(private modalService: ModalService) {}
 
     public async dismissModal(difficult: DifficultyEnum): Promise<void> {
-        await this.modalController.dismiss(difficult, 'confirm');
+        await this.modalService.dismiss({ difficult });
     }
 }
