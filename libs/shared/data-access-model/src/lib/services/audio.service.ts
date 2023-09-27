@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Preferences } from '@capacitor/preferences';
 import { Scene } from 'phaser';
 
 import { BACKGROUND_AUDIO_KEY, JUMP_AUDIO_KEY } from '../constants/game-keys.constants';
@@ -19,11 +20,12 @@ export class AudioService {
      * @param scene as Phaser.Scene
      * @param backgroundKey as string
      */
-    public playBackground(scene: Scene): void {
+    public async playBackground(scene: Scene): Promise<void> {
         this.activeMusic = true;
         this.backgroundAudio = scene.sound.add(BACKGROUND_AUDIO_KEY, { loop: true });
         try {
             this.backgroundAudio.play();
+            await Preferences.set({ key: 'AUDIO_ON', value: 'true' });
         } catch (e) {
             console.error('Error playing background audio', e);
         }
@@ -33,7 +35,7 @@ export class AudioService {
      * * Function to pause background audio file
      *
      */
-    public pauseBackground(): void {
+    public async pauseBackground(): Promise<void> {
         this.activeMusic = false;
         if (this.backgroundAudio) {
             this.backgroundAudio.pause();
@@ -46,9 +48,10 @@ export class AudioService {
      * * Function to resume the background audio file
      *
      */
-    public resumeBackground(): void {
+    public async resumeBackground(): Promise<void> {
         if (this.backgroundAudio) {
             this.backgroundAudio.resume();
+            await Preferences.set({ key: 'AUDIO_ON', value: 'true' });
         } else {
             console.error('No backgroundAudio key was found');
         }

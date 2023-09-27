@@ -1,4 +1,5 @@
 /* eslint-disable no-magic-numbers */
+import { Preferences } from '@capacitor/preferences';
 import {
     BUTTON_JUMP_X,
     BUTTON_LEFT_X,
@@ -31,7 +32,7 @@ import { CONFIG } from '../config';
  *
  * @private
  */
-export function createButtons(scene: Scene, character: Character, spaceBarKey: Phaser.Input.Keyboard.Key, keyboard: Phaser.Input.Keyboard.KeyboardPlugin): void {
+export async function createButtons(scene: Scene, character: Character, spaceBarKey: Phaser.Input.Keyboard.Key, keyboard: Phaser.Input.Keyboard.KeyboardPlugin): Promise<void> {
     const buttonLeft = scene.add.sprite(BUTTON_LEFT_X, CONFIG.DEFAULT_HEIGHT - BUTTONS_MOVE_Y, CONTROLS_KEY, LEFT_KEY);
     buttonLeft.setScale(CONFIG.DEFAULT_CONTROL_SCALE);
     buttonLeft.setInteractive();
@@ -84,8 +85,15 @@ export function createButtons(scene: Scene, character: Character, spaceBarKey: P
     pauseButton.setDepth(3);
     pauseButton.on(POINTER_DOWN_EVENT, () => showPauseModal(scene), scene);
 
+    const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+
+    let audioButton = MUTE_BUTTON;
+    if (audioPreference === 'true' || audioPreference === undefined) {
+        audioButton = MUSIC_BUTTON;
+    }
+
     const musicButton = scene.add
-        .image(CONFIG.DEFAULT_WIDTH * 0.85, CONFIG.DEFAULT_HEIGHT * 0.05, MUSIC_BUTTON)
+        .image(CONFIG.DEFAULT_WIDTH * 0.85, CONFIG.DEFAULT_HEIGHT * 0.05, audioButton)
         .setScale(0.1)
         .setOrigin(1, 0)
         .setInteractive();
@@ -98,7 +106,9 @@ export function createButtons(scene: Scene, character: Character, spaceBarKey: P
 export function doJumpMovement(scene: Scene, character: Character): void {
     if (scene) {
         character.isJumping = true;
-        GameEngineSingleton.audioService.playJump(scene);
+        if (GameEngineSingleton.audioService.activeMusic) {
+            GameEngineSingleton.audioService.playJump(scene);
+        }
     }
 }
 
@@ -111,7 +121,9 @@ export function showPauseModal(_scene: Scene): void {
     if (_scene) {
         _scene.scene.pause();
         _scene.scene.run(PAUSE_SCENE);
-        GameEngineSingleton.audioService.pauseBackground();
+        if (GameEngineSingleton.audioService.activeMusic) {
+            void GameEngineSingleton.audioService.pauseBackground();
+        }
     }
 }
 /**
@@ -121,10 +133,10 @@ export function showPauseModal(_scene: Scene): void {
  */
 export function toggleMusic(_scene: Scene, musicButton: Phaser.GameObjects.Image): void {
     if (_scene && GameEngineSingleton.audioService.activeMusic) {
-        GameEngineSingleton.audioService.pauseBackground();
+        void GameEngineSingleton.audioService.pauseBackground();
         musicButton.setTexture(MUTE_BUTTON);
     } else {
-        GameEngineSingleton.audioService.playBackground(_scene);
+        void GameEngineSingleton.audioService.playBackground(_scene);
         musicButton.setTexture(MUSIC_BUTTON);
     }
 }
