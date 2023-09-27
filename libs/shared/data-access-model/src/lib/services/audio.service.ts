@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { NativeAudio } from '@capacitor-community/native-audio';
 import { Scene } from 'phaser';
 
 import { BACKGROUND_AUDIO_KEY, JUMP_AUDIO_KEY } from '../constants/game-keys.constants';
-
 @Injectable({
     providedIn: 'root',
 })
@@ -74,13 +74,10 @@ export class AudioService {
      *
      */
     public async playFail(): Promise<void> {
-        this.failAudio.src = 'assets/audios/fail/failure-drum-sound-effect-2-7184.mp3';
-        this.failAudio.load();
-        try {
-            await this.failAudio.play();
-        } catch (e) {
-            console.error('Error playing fail audio', e);
-        }
+        void NativeAudio.play({
+            assetId: 'fail',
+            time: 0,
+        });
     }
 
     /**
@@ -89,12 +86,9 @@ export class AudioService {
      *
      */
     public async playSuccess(): Promise<void> {
-        this.successAudio.src = 'assets/audios/winner/success-1-6297.mp3';
-        this.successAudio.load();
-        try {
-            await this.successAudio.play();
-        } catch (e) {
-            console.error('Error playing success audio', e);
-        }
+        void NativeAudio.play({
+            assetId: 'success',
+            time: 0,
+        });
     }
 }

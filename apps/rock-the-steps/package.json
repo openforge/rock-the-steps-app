@@ -4,6 +4,7 @@
     "license": "MIT",
     "private": true,
     "dependencies": {
+        "@capacitor-community/native-audio": "^4.0.0",
         "@capacitor/android": "4.7.0",
         "@capacitor/core": "^4.7.0",
         "@capacitor/ios": "4.7.0",
