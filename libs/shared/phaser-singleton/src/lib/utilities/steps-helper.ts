@@ -66,14 +66,14 @@ export function stepsDetection(stepsGroup: Phaser.Physics.Arcade.Group, characte
  */
 export function floorRotation(stepsGroup: Phaser.Physics.Arcade.Group, secondFloor: Floor, thirdFloor: Floor): void {
     if (secondFloor && secondFloor.sprite.x >= -window.innerWidth) {
-        secondFloor.sprite.x -= 4;
+        secondFloor.sprite.x -= 5;
     }
     if (thirdFloor && thirdFloor.sprite.x >= -window.innerWidth) {
-        thirdFloor.sprite.x -= 4;
+        thirdFloor.sprite.x -= 5;
     }
     stepsGroup.children.iterate((el: Phaser.GameObjects.Image) => {
         if (el.x >= -window.innerWidth) {
-            el.x -= 4;
+            el.x -= 5;
         }
     });
 }

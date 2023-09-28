@@ -49,6 +49,6 @@ export function createAnimationsCharacter(player: Phaser.Types.Physics.Arcade.Sp
             zeroPad: ZERO_PAD_PLAYER,
         }),
         frameRate: FRAME_RATE_DAMAGE,
-        repeat: 0,
+        repeat: REPEAT_FRAME,
     });
 }

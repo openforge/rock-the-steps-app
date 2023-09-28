@@ -11,8 +11,11 @@ import {
     INITIAL_HEALTHBAR_Y,
     INVULNERABLE_REPS,
     NORMAL_GRAVITY,
+    ORIGIN_CHARACTER_TEXT,
     PLAYER_POS_X,
     PLAYER_POS_Y,
+    TEXT_CHARACTER_OFFSET,
+    TIMEOUT_TEXT_CHARACTER,
     VELOCITY_PLAYER_WHEN_AUTOMATICALLY,
     VELOCITY_PLAYER_WHEN_MOVING,
 } from '../../constants/game-units.constants';
@@ -69,7 +72,19 @@ export class Character {
             this.sprite.play(JUMPING_ANIMATION);
         }
     }
+    showTextAbove(scene: Phaser.Scene, color: string, text: string) {
+        const textoDanio = scene.add
+            .text(this.sprite.x, this.sprite.y - TEXT_CHARACTER_OFFSET, text, {
+                fontFamily: 'Arial',
+                fontSize: '20px',
+                color, // Color rojo
+            })
+            .setOrigin(ORIGIN_CHARACTER_TEXT);
 
+        scene.time.delayedCall(TIMEOUT_TEXT_CHARACTER, () => {
+            textoDanio.destroy();
+        });
+    }
     /**
      * Method used to enable gloves
      *
@@ -99,7 +114,7 @@ export class Character {
      *
      */
     public moveCharacterAutomatically(cursors: Phaser.Types.Input.Keyboard.CursorKeys): void {
-        if (!this.isMovingRight && !this.isMovingLeft && this.sprite.body.touching.down && !cursors.left.isDown && !cursors.right.isDown) {
+        if (!this.isMovingRight && !this.isMovingLeft && this.sprite.body.touching.down && !cursors.left.isDown && !cursors.right.isDown && !this.isDamaged) {
             this.sprite.setVelocityX(VELOCITY_PLAYER_WHEN_AUTOMATICALLY);
             this.sprite.play(WALKING_ANIMATION, true);
         }

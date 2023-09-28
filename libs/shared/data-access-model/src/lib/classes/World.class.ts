@@ -12,15 +12,12 @@ import { WorldObject } from './obstacles/world-object.class';
 export class World {
     public objects: WorldObject[] = []; // * WorldObjects to be shown in the world
     public worldType: LevelsEnum = LevelsEnum.DAYTIME; // * Location where the world level will be located
-    public pointsToEndLevel = 0; // * Points to end level
-    public pointsTillSteps = 100; // * number of points need to reach until steps are created
     public pixelForNextObstacle = 0; // * Pixel to create next obstacle;
     public difficultyLevel: DifficultyEnum; // * Property to get difficulty enum used in functions
     public moveSpeedBackground = 0; // * To get the total speed of the background
     public moveSpeedBushes = 0; // * To get the total speed of the bushes
     public moveSpeedFloor = 0; // * To get the total speed of the floor
-    public pointsToShowSecondFloor = 0; // * To show second floor at x points quantity
-    public pointsToShowThirdFloor = 0; // * To show third floor at x points quantity
+    public secondsToShowNextFloor = 0; // * To show 2nd and 3rd floor at x seconds quantity
     constructor() {}
 
     /**
@@ -80,9 +77,7 @@ export class World {
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new Tourist(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
-        world.pointsToEndLevel = 999;
-        world.pointsToShowSecondFloor = 300;
-        world.pointsToShowThirdFloor = 700;
+        world.secondsToShowNextFloor = 12000;
     }
 
     /**
@@ -102,9 +97,7 @@ export class World {
         world.objects.push(new BigPoo(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
-        world.pointsToEndLevel = 1999;
-        world.pointsToShowSecondFloor = 700;
-        world.pointsToShowThirdFloor = 1100;
+        world.secondsToShowNextFloor = 13000;
     }
 
     /**
@@ -124,9 +117,7 @@ export class World {
         world.objects.push(new Ghost(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
-        world.pointsToEndLevel = 2999;
-        world.pointsToShowSecondFloor = 1100;
-        world.pointsToShowThirdFloor = 2000;
+        world.secondsToShowNextFloor = 14000;
     }
 
     /**
@@ -147,9 +138,7 @@ export class World {
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new Tourist(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
-        world.pointsToEndLevel = 3499;
-        world.pointsToShowSecondFloor = 1500;
-        world.pointsToShowThirdFloor = 2500;
+        world.secondsToShowNextFloor = 15000;
     }
 
     /**
@@ -169,9 +158,7 @@ export class World {
         world.objects.push(new Bottle(world.worldType));
         world.objects.push(new Stand(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
-        world.pointsToEndLevel = 3899;
-        world.pointsToShowSecondFloor = 1700;
-        world.pointsToShowThirdFloor = 2700;
+        world.secondsToShowNextFloor = 16000;
     }
 
     /**
@@ -190,9 +177,7 @@ export class World {
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
-        world.pointsToEndLevel = 4499;
-        world.pointsToShowSecondFloor = 1900;
-        world.pointsToShowThirdFloor = 3000;
+        world.secondsToShowNextFloor = 17000;
     }
 
     /**
@@ -204,21 +189,21 @@ export class World {
     private static setWorldDifficultObjects(world: World, difficult: DifficultyEnum): void {
         switch (difficult) {
             case DifficultyEnum.EASY: {
-                world.pixelForNextObstacle = 130;
+                world.pixelForNextObstacle = 100;
                 world.moveSpeedBackground = 0.3;
                 world.moveSpeedBushes = 0.8;
                 world.moveSpeedFloor = 1.8;
                 break;
             }
             case DifficultyEnum.MEDIUM: {
-                world.pixelForNextObstacle = 100;
+                world.pixelForNextObstacle = 70;
                 world.moveSpeedBackground = 0.6;
                 world.moveSpeedBushes = 1.1;
                 world.moveSpeedFloor = 2.1;
                 break;
             }
             case DifficultyEnum.HARD: {
-                world.pixelForNextObstacle = 80;
+                world.pixelForNextObstacle = 50;
                 world.moveSpeedBackground = 0.8;
                 world.moveSpeedBushes = 1.3;
                 world.moveSpeedFloor = 2.3;
