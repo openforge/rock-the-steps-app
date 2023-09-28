@@ -182,6 +182,7 @@ export class WorldScene extends Phaser.Scene {
         console.log(`Colliding ${player.name} with ${obstacle.name}`);
         if (obstacle.name === Objects.CHEESESTEAK && this.character.damageValue > DAMAGE_MIN_VALUE && this.character.damageValue) {
             this.character.healUp(obstacle, this.obstacleGroup);
+            this.character.showTextAbove(this, '#066506', `HEALTH UP!!!`);
         } else if (obstacle.name === Objects.CHEESESTEAK && this.character.damageValue === DAMAGE_MIN_VALUE) {
             // * If object is a cheesesteak and the player is at full heath, do nothing
             this.obstacleGroup.remove(obstacle);
@@ -191,6 +192,7 @@ export class WorldScene extends Phaser.Scene {
         } else if (obstacle.name === Objects.GLOVES) {
             //* If gloves is picked up destroy the asset
             obstacle.destroy();
+            this.character.showTextAbove(this, '#000000', `SUPERPOWERS!!!`);
             this.obstacleGroup.remove(obstacle);
             this.character.makeInvulnerable(this);
         } else if (this.character.isInvulnerable) {
@@ -198,6 +200,7 @@ export class WorldScene extends Phaser.Scene {
         } else if (obstacle.name !== Objects.CHEESESTEAK && !this.character.isDamaged && !this.character.isInvulnerable) {
             obstacle.destroy();
             this.character.receiveDamage(this);
+            this.character.showTextAbove(this, '#FF0000', `-${DAMAGE_DECREASE_VALUE}`);
             //if no more damage is allowed send out the player!
             if (this.character.damageValue === DAMAGE_MAX_VALUE) {
                 void this.endGame(GameEnum.LOSE);

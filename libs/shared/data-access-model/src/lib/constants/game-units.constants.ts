@@ -55,3 +55,6 @@ export const STEPS_OFFSET_X_FOR_CREATION = 71.5;
 export const FLOOR_SCREEN_TARGET_PERCENTAGE = 0.15;
 export const POOP_GRAVITY = 40;
 export const NORMAL_GRAVITY = 1000;
+export const TEXT_CHARACTER_OFFSET = 60;
+export const ORIGIN_CHARACTER_TEXT = 0.5;
+export const TIMEOUT_TEXT_CHARACTER = 800;
