@@ -153,6 +153,23 @@ export class WorldScene extends Phaser.Scene {
         this.character = new Character(this, this.firstFloor.sprite);
         this.physics.add.existing(this.firstFloor.sprite, true);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
+        this.time.addEvent({ delay: GameEngineSingleton.world.secondsToShowNextFloor, callback: () => this.createNewFloorIfApplies(), callbackScope: this, loop: true });
+        this.time.delayedCall(this.calculateSecondsToEndLevel(), () => this.drawEndMuseum(), [], this);
+    }
+
+    /**
+     * Method used to calculate the long of a level
+     *
+     * @private
+     */
+    private calculateSecondsToEndLevel(): number {
+        if (GameEngineSingleton.difficult === DifficultyEnum.EASY) {
+            return GameEngineSingleton.world.secondsToShowNextFloor;
+        } else if (GameEngineSingleton.difficult === DifficultyEnum.MEDIUM) {
+            return GameEngineSingleton.world.secondsToShowNextFloor * 2;
+        } else if (GameEngineSingleton.difficult === DifficultyEnum.HARD) {
+            return GameEngineSingleton.world.secondsToShowNextFloor * 3;
+        }
     }
     /**
      * * Method used to listen for collisions with obstacles
@@ -169,8 +186,6 @@ export class WorldScene extends Phaser.Scene {
             // * If object is a cheesesteak and the player is at full heath, do nothing
             this.obstacleGroup.remove(obstacle);
         } else if (obstacle.name === END_KEY) {
-            //* By each extra health slice give 100 extra points
-            GameEngineSingleton.points += (DAMAGE_MAX_VALUE - this.character.damageValue) * 100;
             // * If the end is touched send to winning screen
             void this.endGame(GameEnum.WIN);
         } else if (obstacle.name === Objects.GLOVES) {
@@ -202,13 +217,11 @@ export class WorldScene extends Phaser.Scene {
         this.character.evaluateMovement(this.cursors);
         this.character.moveCharacterAutomatically(this.cursors);
         this.character.avoidOutOfBounds();
-        this.drawEndMuseum();
         ObstacleHelper.cleanUpObjects(this.obstacleGroup, this.obstaclePigeonGroup);
         StepsHelper.stepsDetection(this.stepsGroup, this.character);
         StepsHelper.floorRotation(this.stepsGroup, this.secondFloor, this.thirdFloor);
         this.createObjects();
         this.endDetection();
-        this.floorCreationFlow();
     }
     /**
      * Method used to draw the end museum if the end has being reached
@@ -217,7 +230,7 @@ export class WorldScene extends Phaser.Scene {
         const x = this.sys.canvas.width;
         const y = 0;
         // Draw the museum if the goal points has been reached
-        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsToEndLevel && !this.isEndReached) {
+        if (!this.isEndReached) {
             this.isEndReached = true;
             const tmpObject = this.physics.add.image(x, y, END_KEY);
             tmpObject.body.setImmovable(true);
@@ -227,16 +240,6 @@ export class WorldScene extends Phaser.Scene {
             tmpObject.setName(END_KEY);
             tmpObject.setScale(END_OBJECT_SCALE);
             this.obstacleGroup.add(tmpObject);
-        }
-    }
-    /**
-     * Metod to generate new floor if it applies
-     *
-     * @private
-     */
-    private floorCreationFlow(): void {
-        if (GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowSecondFloor || GameEngineSingleton.points === GameEngineSingleton.world.pointsToShowThirdFloor) {
-            this.createNewFloorIfApplies();
         }
     }
     /**
@@ -258,9 +261,9 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private calculatePoints(): void {
+        this.pointsText.setText(`${GameEngineSingleton.points}`);
         if (!this.isEndReached) {
             GameEngineSingleton.points++;
-            this.pointsText.setText(`${GameEngineSingleton.points}`);
         }
     }
 
@@ -274,7 +277,7 @@ export class WorldScene extends Phaser.Scene {
         const y = 0;
 
         // * createObstacles
-        if (GameEngineSingleton.points > this.nextObstaclePoint && GameEngineSingleton.points < GameEngineSingleton.world.pointsToEndLevel) {
+        if (GameEngineSingleton.points > this.nextObstaclePoint && !this.isEndReached) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
             const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
             if (worldObject.name === Objects.PIGEON && worldObject instanceof Pigeon) {
@@ -302,7 +305,7 @@ export class WorldScene extends Phaser.Scene {
      */
     public createNewFloorIfApplies(): void {
         if (GameEngineSingleton.difficult === DifficultyEnum.EASY) {
-            this.floorLevel = 0;
+            this.floorLevel = 1;
             return;
         } else if (GameEngineSingleton.difficult === DifficultyEnum.MEDIUM) {
             this.setFloorObject(2);
@@ -318,7 +321,7 @@ export class WorldScene extends Phaser.Scene {
      */
     private setFloorObject(limitLevel: number): void {
         const x = this.sys.canvas.width;
-        if (GameEngineSingleton.points > GameEngineSingleton.world.pointsTillSteps * this.floorLevel && this.floorLevel < limitLevel) {
+        if (this.floorLevel && this.floorLevel < limitLevel) {
             this.floorLevel++;
             const steps = StepsHelper.createSteps(this, x, 0, this.floorLevel);
             this.stepsGroup.add(steps);

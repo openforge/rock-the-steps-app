@@ -99,7 +99,7 @@ export class Character {
      *
      */
     public moveCharacterAutomatically(cursors: Phaser.Types.Input.Keyboard.CursorKeys): void {
-        if (!this.isMovingRight && !this.isMovingLeft && this.sprite.body.touching.down && !cursors.left.isDown && !cursors.right.isDown) {
+        if (!this.isMovingRight && !this.isMovingLeft && this.sprite.body.touching.down && !cursors.left.isDown && !cursors.right.isDown && !this.isDamaged) {
             this.sprite.setVelocityX(VELOCITY_PLAYER_WHEN_AUTOMATICALLY);
             this.sprite.play(WALKING_ANIMATION, true);
         }
