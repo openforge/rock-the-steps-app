@@ -4,14 +4,13 @@ import { NativeAudio } from '@capacitor-community/native-audio';
 import { Scene } from 'phaser';
 
 import { BACKGROUND_AUDIO_KEY, JUMP_AUDIO_KEY } from '../constants/game-keys.constants';
+import { GameEnum } from '../enums';
 @Injectable({
     providedIn: 'root',
 })
 export class AudioService {
     private backgroundAudio: Phaser.Sound.BaseSound; // * Property to store background audio actions
     private jumpAudio: Phaser.Sound.BaseSound; // * Property to store jump audio actions
-    private failAudio = new Audio(); // * Property to store fail audio actions
-    private successAudio = new Audio(); // * Property to store success audio actions
     public activeMusic = false; //* Property used to know if audio is on or off
 
     /**
@@ -79,7 +78,7 @@ export class AudioService {
      */
     public async playFail(): Promise<void> {
         void NativeAudio.play({
-            assetId: 'fail',
+            assetId: GameEnum.LOSE,
             time: 0,
         });
     }
@@ -91,7 +90,7 @@ export class AudioService {
      */
     public async playSuccess(): Promise<void> {
         void NativeAudio.play({
-            assetId: 'success',
+            assetId: GameEnum.WIN,
             time: 0,
         });
     }

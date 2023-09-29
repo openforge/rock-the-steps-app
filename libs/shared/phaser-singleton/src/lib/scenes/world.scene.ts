@@ -110,13 +110,13 @@ export class WorldScene extends Phaser.Scene {
             this.load.audio(BACKGROUND_AUDIO_KEY, 'assets/phaser-audios/background/background-music-for-mobile-casual-video-game-short-8-bit-music-164703.mp3');
             this.load.audio(JUMP_AUDIO_KEY, 'assets/phaser-audios/jump/cartoon-jump-6462.mp3');
             void NativeAudio.preload({
-                assetId: 'fail',
+                assetId: GameEnum.LOSE,
                 assetPath: 'public/assets/capacitor-sounds/failure-drum-sound-effect-2-7184.mp3',
                 audioChannelNum: 1,
                 isUrl: false,
             });
             void NativeAudio.preload({
-                assetId: 'success',
+                assetId: GameEnum.WIN,
                 assetPath: 'public/assets/capacitor-sounds/success-1-6297.mp3',
                 audioChannelNum: 1,
                 isUrl: false,
