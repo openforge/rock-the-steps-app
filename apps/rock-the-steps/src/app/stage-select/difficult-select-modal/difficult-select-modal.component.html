@@ -1,10 +1,22 @@
 <div class="modal-container">
+    <ion-button class="rts-button button-close" (click)="dismissModal()">
+        <ion-icon name="close" color="red"></ion-icon>
+    </ion-button>
     <div class="title-container">
         <h1>SELECT DIFFICULTY</h1>
     </div>
     <div class="buttons-container">
-        <ion-button id="difficulty-easy" class="rts-button" fill="outline" mode="md" (click)="dismissModal(difficultEnum.EASY)">EASY</ion-button>
-        <ion-button id="difficulty-medium" class="rts-button" fill="outline" mode="md" (click)="dismissModal(difficultEnum.MEDIUM)">MEDIUM</ion-button>
-        <ion-button id="difficulty-hard" class="rts-button" fill="outline" mode="md" (click)="dismissModal(difficultEnum.HARD)">HARD</ion-button>
+        <div class="container-points">
+            <h3>Goal Points: {{levelDifficulties.easyWorld.maxPointsAchievable}}</h3>
+            <ion-button id="difficulty-easy" class="rts-button" fill="outline" mode="md" (click)="dismissModal(difficultEnum.EASY)">EASY</ion-button>
+        </div>
+        <div class="container-points">
+            <h3>Goal Points: {{levelDifficulties.midWorld.maxPointsAchievable}}</h3>
+            <ion-button id="difficulty-medium" class="rts-button" fill="outline" mode="md" (click)="dismissModal(difficultEnum.MEDIUM)">MEDIUM</ion-button>
+        </div>
+        <div class="container-points">
+            <h3>Goal Points: {{levelDifficulties.hardWorld.maxPointsAchievable}}</h3>
+            <ion-button id="difficulty-hard" class="rts-button" fill="outline" mode="md" (click)="dismissModal(difficultEnum.HARD)">HARD</ion-button>
+        </div>
     </div>
 </div>

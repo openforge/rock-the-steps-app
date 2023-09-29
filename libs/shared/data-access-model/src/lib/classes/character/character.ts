@@ -77,6 +77,8 @@ export class Character {
             .text(this.sprite.x, this.sprite.y - TEXT_CHARACTER_OFFSET, text, {
                 fontFamily: 'Arial',
                 fontSize: '20px',
+                strokeThickness: 3,
+                stroke: '#000000',
                 color, // Color rojo
             })
             .setOrigin(ORIGIN_CHARACTER_TEXT);

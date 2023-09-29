@@ -1,6 +1,26 @@
 /* eslint-disable no-magic-numbers */
-import { Anvil, Apple, BigPoo, Bottle, CheeseSteak, ChineseFood, Cone, Flowers, Ghost, Gloves, Hurdle, LibertyBell, Pigeon, Tourist, Trashcan, Wind } from '../..';
-import { DifficultyEnum, LevelsEnum } from '../enums/levels.enum';
+import {
+    Anvil,
+    Apple,
+    BigPoo,
+    Bottle,
+    CheeseSteak,
+    ChineseFood,
+    Cone,
+    DifficultyEnum,
+    Flowers,
+    Ghost,
+    Gloves,
+    Hurdle,
+    LibertyBell,
+    MILLISECONDS_100,
+    Pigeon,
+    POINTS_PER_TICK,
+    Tourist,
+    Trashcan,
+    Wind,
+} from '../..';
+import { LevelsEnum } from '../enums/levels.enum';
 import { Crater } from './obstacles/crater.class';
 import { Stand } from './obstacles/stand.class';
 import { Tomb } from './obstacles/tomb.class';
@@ -18,6 +38,7 @@ export class World {
     public moveSpeedBushes = 0; // * To get the total speed of the bushes
     public moveSpeedFloor = 0; // * To get the total speed of the floor
     public secondsToShowNextFloor = 0; // * To show 2nd and 3rd floor at x seconds quantity
+    public maxPointsAchievable = 0; // * A calculated property that is being displayed in the difficulty selection
     constructor() {}
 
     /**
@@ -53,10 +74,20 @@ export class World {
                     this.createKellyLevel(tmp_world);
                     break;
             }
+            this.calculateMaxPointsOfWorld(tmp_world, difficulty);
             this.setWorldDifficultObjects(tmp_world, difficulty);
             return tmp_world;
         } catch (e) {
             console.error(e);
+        }
+    }
+    private static calculateMaxPointsOfWorld(world: World, difficulty: DifficultyEnum): void {
+        if (difficulty === DifficultyEnum.EASY) {
+            world.maxPointsAchievable = (world.secondsToShowNextFloor * POINTS_PER_TICK) / MILLISECONDS_100;
+        } else if (difficulty === DifficultyEnum.MEDIUM) {
+            world.maxPointsAchievable = (world.secondsToShowNextFloor * 2 * POINTS_PER_TICK) / MILLISECONDS_100;
+        } else {
+            world.maxPointsAchievable = (world.secondsToShowNextFloor * 3 * POINTS_PER_TICK) / MILLISECONDS_100;
         }
     }
 

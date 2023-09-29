@@ -177,11 +177,15 @@ export class StageSelectComponent implements OnInit {
             .showModal({
                 component: DifficultSelectModalComponent,
                 cssClass: 'difficult-modal',
+                backdropDismiss: false,
+                componentProps: {
+                    level,
+                },
             })
             .then(() => this.modalService.modalElement);
 
         void this.modalService.modalElement.onWillDismiss().then(async (action: { role: string; data: { difficult: number } }) => {
-            if (action.role !== 'backdrop') {
+            if (action.role !== 'backdrop' && action.data.difficult) {
                 GameEngineSingleton.difficult = action.data.difficult;
                 GameEngineSingleton.audioService = this.audioService;
 
