@@ -28,15 +28,18 @@ import {
     JUMP_AUDIO_KEY,
     JUMP_KEY,
     LevelsEnum,
+    MILLISECONDS_100,
     MUSIC_BUTTON,
     MUTE_BUTTON,
     OBJECTS_SPRITE_KEY,
     PAUSE_BUTTON,
     Pigeon,
+    POINTS_PER_TICK,
     Poop,
     SKY_KEY,
     STARTER_PIXEL_FLAG,
     STEPS_KEY,
+    TIMEOUT_OBSTACLES,
     WORLD_OBJECTS_VELOCITY,
     WORLD_SCENE,
 } from '@openforge/shared/data-access-model';
@@ -154,6 +157,22 @@ export class WorldScene extends Phaser.Scene {
         this.physics.add.existing(this.firstFloor.sprite, true);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
         this.time.addEvent({ delay: GameEngineSingleton.world.secondsToShowNextFloor, callback: () => this.createNewFloorIfApplies(), callbackScope: this, loop: true });
+        this.time.addEvent({
+            delay: MILLISECONDS_100,
+            callback: () => {
+                if (!this.isEndReached) {
+                    GameEngineSingleton.points += POINTS_PER_TICK;
+                }
+            },
+            callbackScope: this,
+            loop: true,
+        });
+        this.time.addEvent({
+            delay: TIMEOUT_OBSTACLES,
+            callback: () => this.createObjects(),
+            callbackScope: this,
+            loop: true,
+        });
         this.time.delayedCall(this.calculateSecondsToEndLevel(), () => this.drawEndMuseum(), [], this);
     }
 
@@ -186,17 +205,19 @@ export class WorldScene extends Phaser.Scene {
         } else if (obstacle.name === Objects.CHEESESTEAK && this.character.damageValue === DAMAGE_MIN_VALUE) {
             // * If object is a cheesesteak and the player is at full heath, do nothing
             this.obstacleGroup.remove(obstacle);
+            obstacle.destroy();
         } else if (obstacle.name === END_KEY) {
             // * If the end is touched send to winning screen
             void this.endGame(GameEnum.WIN);
         } else if (obstacle.name === Objects.GLOVES) {
             //* If gloves is picked up destroy the asset
             obstacle.destroy();
-            this.character.showTextAbove(this, '#000000', `SUPERPOWERS!!!`);
+            this.character.showTextAbove(this, '#FFFFFF', `SUPERPOWERS!!!`);
             this.obstacleGroup.remove(obstacle);
             this.character.makeInvulnerable(this);
         } else if (this.character.isInvulnerable) {
             this.obstacleGroup.remove(obstacle);
+            obstacle.destroy();
         } else if (obstacle.name !== Objects.CHEESESTEAK && !this.character.isDamaged && !this.character.isInvulnerable) {
             obstacle.destroy();
             this.character.receiveDamage(this);
@@ -214,7 +235,7 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     update() {
-        this.calculatePoints();
+        this.updatePointsText();
         this.flyGroundedPigeons();
         this.moveInfiniteBackgrounds();
         this.character.evaluateMovement(this.cursors);
@@ -223,7 +244,6 @@ export class WorldScene extends Phaser.Scene {
         ObstacleHelper.cleanUpObjects(this.obstacleGroup, this.obstaclePigeonGroup);
         StepsHelper.stepsDetection(this.stepsGroup, this.character);
         StepsHelper.floorRotation(this.stepsGroup, this.secondFloor, this.thirdFloor);
-        this.createObjects();
         this.endDetection();
     }
     /**
@@ -263,11 +283,8 @@ export class WorldScene extends Phaser.Scene {
      *
      * @return void
      */
-    private calculatePoints(): void {
+    private updatePointsText(): void {
         this.pointsText.setText(`${GameEngineSingleton.points}`);
-        if (!this.isEndReached) {
-            GameEngineSingleton.points++;
-        }
     }
 
     /**
@@ -276,11 +293,12 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private createObjects(): void {
+        console.warn('Creating objects');
         const x = this.sys.canvas.width;
         const y = 0;
 
         // * createObstacles
-        if (GameEngineSingleton.points > this.nextObstaclePoint && !this.isEndReached) {
+        if (!this.isEndReached) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
             const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
             if (worldObject.name === Objects.PIGEON && worldObject instanceof Pigeon) {

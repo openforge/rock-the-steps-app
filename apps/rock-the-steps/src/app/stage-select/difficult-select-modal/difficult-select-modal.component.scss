@@ -11,7 +11,9 @@
   display: flex;
   justify-content: center;
 }
-
+.container-points h3 {
+  color: var(--gray-base);
+}
 .title-container h1 {
   color: var(--gray-base);
   font-weight: bold;
@@ -26,4 +28,17 @@
   align-items: center;
   flex-direction: column;
   background-color: rgb(237, 242, 246, 1.5);
+  position: relative;
+}
+.container-points {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  padding: 0 1vw;
+}
+.button-close {
+  position: absolute;
+  top: 1vw;
+  right: 1vw;
 }
