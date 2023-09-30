@@ -1,5 +1,5 @@
 <div class="phaser" id="stage-main"></div>
-<div class="controls">
+<div class="controls" (window:keydown)="onKeyboardPress($event, true)" (window:keyup)="onKeyboardPress($event, false)">
     <div class="controls-arrow">
         <ion-button class="controls-arrow-left" (mousedown)="moveToLeft(true)" (mouseup)="moveToLeft(false)">
             <ion-icon name="arrow-back-circle"></ion-icon>
