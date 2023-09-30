@@ -10,7 +10,6 @@ import {
     CITY_KEY,
     CityBackground,
     CONTROLS_KEY,
-    DAMAGE_DECREASE_VALUE,
     DAMAGE_MAX_VALUE,
     DAMAGE_MIN_VALUE,
     DifficultyEnum,
@@ -37,7 +36,6 @@ import {
     POINTS_PER_TICK,
     Poop,
     SKY_KEY,
-    STARTER_PIXEL_FLAG,
     STEPS_KEY,
     TIMEOUT_OBSTACLES,
     WORLD_OBJECTS_VELOCITY,
@@ -53,6 +51,7 @@ import { createAnimationsCharacter } from '../utilities/character-animation';
 import { createButtons } from '../utilities/hud-helper';
 import * as ObstacleHelper from '../utilities/object-creation-helper';
 import * as StepsHelper from '../utilities/steps-helper';
+import { createTileSprite } from '../utilities/steps-helper';
 
 export class WorldScene extends Phaser.Scene {
     private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
@@ -60,13 +59,12 @@ export class WorldScene extends Phaser.Scene {
     private obstaclePigeonGroup: Pigeon[] = []; // * Array of sprites for the pigeon obstacles
     private obstaclePoopGroup: Poop[] = []; // * Array of sprites for the pigeon obstacles
     private character: Character; // this is the class associated with the player
-    private nextObstaclePoint = STARTER_PIXEL_FLAG; // * Pixels flag to know if next worldObject needs to be drawn
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
     private spaceBarKey: Phaser.Input.Keyboard.Key; // Spacebar key to move the player in pc
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // Cursos keys to move the player in pc
 
     private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
-    private isEndReached: boolean = false; // Boolean to distinguish if the end has been reached
+    private isMuseumDisplayed: boolean = false; // Boolean to distinguish if the end has been reached
     private drawSecondFloorAsMainFloorFlag: boolean = false; // Boolean to distinguish if the 2nd floor has been redraw
 
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
@@ -74,6 +72,8 @@ export class WorldScene extends Phaser.Scene {
     public firstFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
     public firstFloorHeight = 0; // * Used to set the height image sprite and then using it into the objects creation
     public secondFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
+    public secondFloorTile: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
+    public thirdFloorTile: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
     public thirdFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
     public floorLevel: number = 1; // * Var used to detect the actual flow level
 
@@ -160,7 +160,7 @@ export class WorldScene extends Phaser.Scene {
         this.time.addEvent({
             delay: MILLISECONDS_100,
             callback: () => {
-                if (!this.isEndReached) {
+                if (!this.isMuseumDisplayed) {
                     GameEngineSingleton.points += POINTS_PER_TICK;
                 }
             },
@@ -168,26 +168,13 @@ export class WorldScene extends Phaser.Scene {
             loop: true,
         });
         this.time.addEvent({
-            delay: TIMEOUT_OBSTACLES,
+            delay: TIMEOUT_OBSTACLES * GameEngineSingleton.world.modifierForNextObstacle,
             callback: () => this.createObjects(),
             callbackScope: this,
             loop: true,
         });
-        this.time.delayedCall(this.calculateSecondsToEndLevel(), () => this.drawEndMuseum(), [], this);
-    }
-
-    /**
-     * Method used to calculate the long of a level
-     *
-     * @private
-     */
-    private calculateSecondsToEndLevel(): number {
-        if (GameEngineSingleton.difficult === DifficultyEnum.EASY) {
-            return GameEngineSingleton.world.secondsToShowNextFloor;
-        } else if (GameEngineSingleton.difficult === DifficultyEnum.MEDIUM) {
-            return GameEngineSingleton.world.secondsToShowNextFloor * 2;
-        } else if (GameEngineSingleton.difficult === DifficultyEnum.HARD) {
-            return GameEngineSingleton.world.secondsToShowNextFloor * 3;
+        if (GameEngineSingleton.difficult !== DifficultyEnum.ENDLESS) {
+            this.time.delayedCall(GameEngineSingleton.world.secondsToShowNextFloor * GameEngineSingleton.world.difficultyNumber, () => this.drawEndMuseum(), [], this);
         }
     }
     /**
@@ -220,13 +207,13 @@ export class WorldScene extends Phaser.Scene {
             obstacle.destroy();
         } else if (obstacle.name !== Objects.CHEESESTEAK && !this.character.isDamaged && !this.character.isInvulnerable) {
             obstacle.destroy();
-            this.character.receiveDamage(this);
-            this.character.showTextAbove(this, '#FF0000', `-${DAMAGE_DECREASE_VALUE}`);
+            this.character.receiveDamage(this, GameEngineSingleton.world.difficultyNumber);
+            this.character.showTextAbove(this, '#FF0000', `-${GameEngineSingleton.world.damageDecreaseValue}`);
             //if no more damage is allowed send out the player!
-            if (this.character.damageValue === DAMAGE_MAX_VALUE) {
+            if (this.character.damageValue >= DAMAGE_MAX_VALUE) {
                 void this.endGame(GameEnum.LOSE);
             }
-            GameEngineSingleton.points -= GameEngineSingleton.points >= DAMAGE_DECREASE_VALUE ? DAMAGE_DECREASE_VALUE : GameEngineSingleton.points;
+            GameEngineSingleton.points -= GameEngineSingleton.points >= GameEngineSingleton.world.damageDecreaseValue ? GameEngineSingleton.world.damageDecreaseValue : GameEngineSingleton.points;
         }
     }
     /**
@@ -250,11 +237,12 @@ export class WorldScene extends Phaser.Scene {
      * Method used to draw the end museum if the end has being reached
      */
     private drawEndMuseum(): void {
+        console.log('DRAWIN MUSEUM');
         const x = this.sys.canvas.width;
         const y = 0;
         // Draw the museum if the goal points has been reached
-        if (!this.isEndReached) {
-            this.isEndReached = true;
+        if (!this.isMuseumDisplayed) {
+            this.isMuseumDisplayed = true;
             const tmpObject = this.physics.add.image(x, y, END_KEY);
             tmpObject.body.setImmovable(true);
             tmpObject.setImmovable(true);
@@ -293,12 +281,11 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private createObjects(): void {
-        console.warn('Creating objects');
         const x = this.sys.canvas.width;
         const y = 0;
 
         // * createObstacles
-        if (!this.isEndReached) {
+        if (!this.isMuseumDisplayed) {
             const worldObjectNumber = Math.floor(Math.random() * GameEngineSingleton.world.objects.length);
             const worldObject = GameEngineSingleton.world.objects[worldObjectNumber];
             if (worldObject.name === Objects.PIGEON && worldObject instanceof Pigeon) {
@@ -312,13 +299,12 @@ export class WorldScene extends Phaser.Scene {
             } else {
                 ObstacleHelper.createObjects(worldObject, this, x, y, this.obstacleGroup, this.floorLevel, this.firstFloorHeight);
             }
-            this.nextObstaclePoint += GameEngineSingleton.world.pixelForNextObstacle;
+            this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
+            this.physics.add.collider(this.character.sprite, this.obstacleGroup, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
         }
-        this.obstacleGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
-
-        this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
-        this.physics.add.collider(this.character.sprite, this.obstacleGroup, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
-        //* Group of sprites for the steps has collisions with floor but no with player and no damage\
+        if (!this.isEnd) {
+            this.obstacleGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
+        }
     }
 
     /**
@@ -330,7 +316,7 @@ export class WorldScene extends Phaser.Scene {
             return;
         } else if (GameEngineSingleton.difficult === DifficultyEnum.MEDIUM) {
             this.setFloorObject(2);
-        } else if (GameEngineSingleton.difficult === DifficultyEnum.HARD) {
+        } else if ([DifficultyEnum.HARD, DifficultyEnum.ENDLESS].includes(GameEngineSingleton.difficult)) {
             this.setFloorObject(3);
         }
     }
@@ -409,12 +395,21 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private moveInfiniteBackgrounds(): void {
+        // The first floors works as platform where the users can land and walk and they are different from tile sprites
+        // Tile sprites are only the rectangles displaying the texture again and again
+        // WE CANNOT USE TILESPRITES AS PLATFORMS BECAUSE THEY WILL FALL
+        if (this.secondFloor && this.secondFloor.sprite.x <= -window.innerWidth && !this.secondFloorTile) {
+            this.secondFloorTile = createTileSprite(this, 2);
+        }
+        if (this.thirdFloor && this.thirdFloor.sprite.x <= -window.innerWidth && !this.thirdFloorTile) {
+            this.thirdFloorTile = createTileSprite(this, 3);
+        }
         // While the end has not reached do the scrolling of level
         if (!this.isEnd) {
             // Move the ground to the left of the screen and once it is off of screen adds it next the current one
             if (this.firstFloor.sprite instanceof Phaser.GameObjects.TileSprite) this.firstFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
-            if (this.secondFloor && this.secondFloor.sprite instanceof Phaser.GameObjects.TileSprite) this.secondFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
-            if (this.thirdFloor && this.thirdFloor.sprite instanceof Phaser.GameObjects.TileSprite) this.thirdFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.secondFloorTile) this.secondFloorTile.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+            if (this.thirdFloorTile) this.thirdFloorTile.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
         }
     }
 }
