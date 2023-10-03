@@ -51,6 +51,7 @@ import { createAnimationsCharacter } from '../utilities/character-animation';
 import { createButtons } from '../utilities/hud-helper';
 import * as ObstacleHelper from '../utilities/object-creation-helper';
 import * as StepsHelper from '../utilities/steps-helper';
+import { createTouchZones } from '../utilities/touch-zones-helper';
 
 export class WorldScene extends Phaser.Scene {
     private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
@@ -118,6 +119,7 @@ export class WorldScene extends Phaser.Scene {
         this.scale.lockOrientation('landscape');
         this.initializeBasicWorld();
         void createButtons(this);
+        void createTouchZones(this);
         createAnimationsCharacter(this.character.sprite);
 
         const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;

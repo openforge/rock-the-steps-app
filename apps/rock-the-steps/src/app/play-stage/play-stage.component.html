@@ -1,16 +1,1 @@
 <div class="phaser" id="stage-main"></div>
-<div class="controls" (window:keydown)="onKeyboardPress($event, true)" (window:keyup)="onKeyboardPress($event, false)">
-    <div class="controls-arrow">
-        <ion-button class="controls-arrow-left" (mousedown)="moveToLeft(true)" (mouseup)="moveToLeft(false)">
-            <ion-icon name="arrow-back-circle"></ion-icon>
-        </ion-button>
-        <ion-button class="controls-arrow-right" (mousedown)="moveToRight(true)" (mouseup)="moveToRight(false)">
-            <ion-icon name="arrow-forward-circle"></ion-icon>
-        </ion-button>
-    </div>
-    <div class="controls-jump">
-        <ion-button (mousedown)="doJump(true)" (mouseup)="doJump(false)">
-            <ion-icon name="arrow-up-circle"></ion-icon>
-        </ion-button>
-    </div>
-</div>
