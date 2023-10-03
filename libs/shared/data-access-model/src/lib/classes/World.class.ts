@@ -32,13 +32,15 @@ import { WorldObject } from './obstacles/world-object.class';
 export class World {
     public objects: WorldObject[] = []; // * WorldObjects to be shown in the world
     public worldType: LevelsEnum = LevelsEnum.DAYTIME; // * Location where the world level will be located
-    public pixelForNextObstacle = 0; // * Pixel to create next obstacle;
+    public modifierForNextObstacle = 1; // * Pixel to create next obstacle;
     public difficultyLevel: DifficultyEnum; // * Property to get difficulty enum used in functions
     public moveSpeedBackground = 0; // * To get the total speed of the background
     public moveSpeedBushes = 0; // * To get the total speed of the bushes
     public moveSpeedFloor = 0; // * To get the total speed of the floor
     public secondsToShowNextFloor = 0; // * To show 2nd and 3rd floor at x seconds quantity
     public maxPointsAchievable = 0; // * A calculated property that is being displayed in the difficulty selection
+    public difficultyNumber = 1; // * Difficulty number used by calculations
+    public damageDecreaseValue = 50; // * Difficulty damage number used by calculations
     constructor() {}
 
     /**
@@ -74,20 +76,10 @@ export class World {
                     this.createKellyLevel(tmp_world);
                     break;
             }
-            this.calculateMaxPointsOfWorld(tmp_world, difficulty);
-            this.setWorldDifficultObjects(tmp_world, difficulty);
+            this.setWorldDifficultSpecs(tmp_world, difficulty);
             return tmp_world;
         } catch (e) {
             console.error(e);
-        }
-    }
-    private static calculateMaxPointsOfWorld(world: World, difficulty: DifficultyEnum): void {
-        if (difficulty === DifficultyEnum.EASY) {
-            world.maxPointsAchievable = (world.secondsToShowNextFloor * POINTS_PER_TICK) / MILLISECONDS_100;
-        } else if (difficulty === DifficultyEnum.MEDIUM) {
-            world.maxPointsAchievable = (world.secondsToShowNextFloor * 2 * POINTS_PER_TICK) / MILLISECONDS_100;
-        } else {
-            world.maxPointsAchievable = (world.secondsToShowNextFloor * 3 * POINTS_PER_TICK) / MILLISECONDS_100;
         }
     }
 
@@ -108,7 +100,7 @@ export class World {
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new Tourist(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
-        world.secondsToShowNextFloor = 12000;
+        world.secondsToShowNextFloor = 5000;
     }
 
     /**
@@ -217,36 +209,45 @@ export class World {
      * @param world as World
      * @param difficult as DifficultyEnum
      */
-    private static setWorldDifficultObjects(world: World, difficult: DifficultyEnum): void {
+    private static setWorldDifficultSpecs(world: World, difficult: DifficultyEnum): void {
         switch (difficult) {
             case DifficultyEnum.EASY: {
-                world.pixelForNextObstacle = 100;
+                world.modifierForNextObstacle = 1;
                 world.moveSpeedBackground = 0.3;
                 world.moveSpeedBushes = 0.8;
                 world.moveSpeedFloor = 1.8;
+                world.difficultyNumber = 1;
+                world.damageDecreaseValue = 50;
                 break;
             }
             case DifficultyEnum.MEDIUM: {
-                world.pixelForNextObstacle = 70;
+                world.modifierForNextObstacle = 0.9;
                 world.moveSpeedBackground = 0.6;
                 world.moveSpeedBushes = 1.1;
                 world.moveSpeedFloor = 2.1;
+                world.difficultyNumber = 2;
+                world.damageDecreaseValue = 75;
                 break;
             }
             case DifficultyEnum.HARD: {
-                world.pixelForNextObstacle = 50;
+                world.modifierForNextObstacle = 0.8;
                 world.moveSpeedBackground = 0.8;
                 world.moveSpeedBushes = 1.3;
                 world.moveSpeedFloor = 2.3;
+                world.difficultyNumber = 3;
+                world.damageDecreaseValue = 100;
                 break;
             }
             default: {
-                world.pixelForNextObstacle = 130;
+                world.modifierForNextObstacle = 0.6;
                 world.moveSpeedBackground = 0.3;
                 world.moveSpeedBushes = 0.8;
                 world.moveSpeedFloor = 1.8;
+                world.difficultyNumber = 1;
+                world.damageDecreaseValue = 100;
                 break;
             }
         }
+        world.maxPointsAchievable = (world.secondsToShowNextFloor * world.difficultyNumber * POINTS_PER_TICK) / MILLISECONDS_100;
     }
 }
