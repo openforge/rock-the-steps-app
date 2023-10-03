@@ -47,6 +47,10 @@ function zoneClicked(zoneType: ZoneType, action: boolean, scene: WorldScene) {
     switch (zoneType) {
         case ZoneType.JUMP:
             scene.character.isJumping = action;
+            // * We set a timeout to prevent the character to keep jumping when user slides the controls
+            setTimeout(() => {
+                scene.character.isJumping = false;
+            }, 500);
             if (GameEngineSingleton.audioService.activeMusic && action) {
                 GameEngineSingleton.audioService.playJump(scene);
             }
