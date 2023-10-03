@@ -1,4 +1,32 @@
+ion-icon {
+  font-size: 3rem;
+}
+
+ion-button {
+  height: 10vh;
+
+  --background: transparent;
+  --box-shadow: none;
+}
+
 .phaser {
   background-color: navajowhite; /* any area not filled by canvas will be filled by this color */
   height: 100%;
+}
+
+.controls {
+  position: fixed;
+  bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 5rem 0 5rem;
+}
+
+.controls-arrow-left {
+  margin-right: 1.3rem;
+}
+
+.controls-arrow-right {
+  margin-left: 1.3rem;
 }

@@ -10,7 +10,6 @@ import {
     CHARACTER_SPRITE_KEY,
     CITY_KEY,
     CityBackground,
-    CONTROLS_KEY,
     DAMAGE_MAX_VALUE,
     DAMAGE_MIN_VALUE,
     DifficultyEnum,
@@ -26,7 +25,6 @@ import {
     INITIAL_POINTS_X,
     INITIAL_POINTS_Y,
     JUMP_AUDIO_KEY,
-    JUMP_KEY,
     LevelsEnum,
     MILLISECONDS_100,
     MUSIC_BUTTON,
@@ -53,20 +51,19 @@ import { createButtons } from '../utilities/hud-helper';
 import * as ObstacleHelper from '../utilities/object-creation-helper';
 import * as StepsHelper from '../utilities/steps-helper';
 import { createTileSprite } from '../utilities/steps-helper';
+import { createTouchZones } from '../utilities/touch-zones-helper';
 
 export class WorldScene extends Phaser.Scene {
     private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
     private stepsGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the steps has collisions with floor but no with player and no damage
     private obstaclePigeonGroup: Pigeon[] = []; // * Array of sprites for the pigeon obstacles
     private obstaclePoopGroup: Poop[] = []; // * Array of sprites for the pigeon obstacles
-    private character: Character; // this is the class associated with the player
+    public character: Character; // this is the class associated with the player
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
-    private spaceBarKey: Phaser.Input.Keyboard.Key; // Spacebar key to move the player in pc
-    private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // Cursos keys to move the player in pc
+    private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // * Cursor keys to move the player in pc
 
     private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
     private isMuseumDisplayed: boolean = false; // Boolean to distinguish if the end has been reached
-    private drawSecondFloorAsMainFloorFlag: boolean = false; // Boolean to distinguish if the 2nd floor has been redraw
 
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
@@ -101,9 +98,6 @@ export class WorldScene extends Phaser.Scene {
             this.load.atlas(OBJECTS_SPRITE_KEY, `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
             this.load.image(END_KEY, 'assets/objects/end.png');
             this.load.atlas(CHARACTER_SPRITE_KEY, `assets/character/character-sprite.png`, `assets/character/character-sprite.json`);
-            // * load the HUD buttons
-            this.load.image(JUMP_KEY, `assets/buttons/jump.png`);
-            this.load.atlas(CONTROLS_KEY, `assets/buttons/controls.png`, `assets/buttons/controls.json`);
             this.load.atlas(HEALTHBAR_KEY, `assets/objects/healthbar.png`, `assets/objects/healthbar.json`);
             this.load.image(PAUSE_BUTTON, 'assets/buttons/pause-button.png');
             this.load.image(MUSIC_BUTTON, 'assets/buttons/music.png');
@@ -137,7 +131,8 @@ export class WorldScene extends Phaser.Scene {
         this.scale.orientation = Phaser.Scale.Orientation.LANDSCAPE; // * We need to set the orientation to landscape for the scene
         this.scale.lockOrientation('landscape');
         this.initializeBasicWorld();
-        void createButtons(this, this.character, this.spaceBarKey, this.input.keyboard);
+        void createButtons(this);
+        void createTouchZones(this);
         createAnimationsCharacter(this.character.sprite);
 
         const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
@@ -165,7 +160,6 @@ export class WorldScene extends Phaser.Scene {
         this.input.keyboard.on('keydown_RIGHT', () => alert('red'));
         this.obstacleGroup = this.physics.add.group();
         this.stepsGroup = this.physics.add.group();
-        this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.character = new Character(this, this.firstFloor.sprite);
         this.physics.add.existing(this.firstFloor.sprite, true);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
