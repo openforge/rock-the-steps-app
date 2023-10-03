@@ -18,11 +18,10 @@ export class ResultScreenComponent implements OnInit {
     constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
     async ngOnInit(): Promise<void> {
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        this.activatedRoute.queryParams.subscribe(async params => {
+        this.activatedRoute.queryParams.subscribe(params => {
             if (params.r === GameEnum.WIN) {
                 this.displayWinBackground = true;
-                void (await this.setWinFunctionality());
+                void this.setWinFunctionality();
             } else if (params.r === GameEnum.LOSE) {
                 void this.setLoseFunctionality();
             }
