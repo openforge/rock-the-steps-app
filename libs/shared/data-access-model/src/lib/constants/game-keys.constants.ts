@@ -29,6 +29,7 @@ export const SKY_KEY = 'sky-key';
 export const FLOOR_KEY = 'flat-key';
 export const BUSHES_KEY = 'bushes-key';
 export const END_KEY = 'end';
+export const MOON_KEY = 'moon';
 export const STEPS_KEY = 'steps-key';
 export const PIGEON_VARIANT_KEY = 'pigeon-variant';
 export const BACKGROUND_AUDIO_KEY = 'background-audio';

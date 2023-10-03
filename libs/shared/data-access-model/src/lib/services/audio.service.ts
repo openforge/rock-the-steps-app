@@ -12,7 +12,6 @@ export class AudioService {
     private jumpAudio: Phaser.Sound.BaseSound; // * Property to store jump audio actions
     private failAudio = new Audio(); // * Property to store fail audio actions
     private successAudio = new Audio(); // * Property to store success audio actions
-    public activeMusic = false; //* Property used to know if audio is on or off
 
     /**
      * * Function to start playing the background audio file
@@ -21,7 +20,6 @@ export class AudioService {
      * @param backgroundKey as string
      */
     public async playBackground(scene: Scene): Promise<void> {
-        this.activeMusic = true;
         this.backgroundAudio = scene.sound.add(BACKGROUND_AUDIO_KEY, { loop: true });
         try {
             this.backgroundAudio.play();
@@ -36,7 +34,6 @@ export class AudioService {
      *
      */
     public async pauseBackground(): Promise<void> {
-        this.activeMusic = false;
         if (this.backgroundAudio) {
             this.backgroundAudio.pause();
         } else {
@@ -49,8 +46,8 @@ export class AudioService {
      *
      */
     public async resumeBackground(): Promise<void> {
-        this.activeMusic = true;
-        if (this.backgroundAudio) {
+        const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+        if (this.backgroundAudio && audioPreference === 'true') {
             this.backgroundAudio.resume();
             await Preferences.set({ key: 'AUDIO_ON', value: 'true' });
         } else {

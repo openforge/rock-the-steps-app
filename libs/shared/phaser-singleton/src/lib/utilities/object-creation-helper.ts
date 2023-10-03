@@ -10,17 +10,14 @@ import {
     POOP_OBJECTS_VELOCITY_Y,
     REPEAT_FRAME,
     STANDING_FRAME,
-    TOURIST_END_FRAME,
-    TOURIST_FRAME_KEY,
-    TOURIST_FRAME_RATE,
     WORLD_OBJECTS_VELOCITY,
     ZERO_PAD_PIGEON,
-    ZERO_PAD_TOURIST,
 } from '@openforge/shared/data-access-model';
 import { CONFIG } from '@openforge/shared-phaser-singleton';
 import { WorldObject } from 'libs/shared/data-access-model/src/lib/classes/obstacles/world-object.class';
 import { Objects } from 'libs/shared/data-access-model/src/lib/enums/objects.enum';
 import * as Phaser from 'phaser';
+
 /**
  * Method used to generate dropable objects
  *
@@ -93,24 +90,29 @@ export function createObjects(worldObject: WorldObject, scene: Phaser.Scene, ini
         // TODO - Have bell fall from mid screen instead
         // initialX = scene.sys.canvas.width + scene.sys.canvas.width / HALF_DIVIDER;
     }
-
-    // * Here we set the Sprite Object, with or without modification for Bell
-    const tmpSprite = scene.physics.add.sprite(initialX, initialY, OBJECTS_SPRITE_KEY, worldObject.name);
-
-    // * This is an obstacle!  Don't hit the tourists :)
-    if (worldObject.name === Objects.TOURIST) {
-        tmpSprite.anims.create({
-            key: STANDING_FRAME,
-            frames: scene.anims.generateFrameNames(OBJECTS_SPRITE_KEY, {
-                prefix: TOURIST_FRAME_KEY,
-                end: TOURIST_END_FRAME,
-                zeroPad: ZERO_PAD_TOURIST,
-            }),
-            frameRate: TOURIST_FRAME_RATE,
-            repeat: REPEAT_FRAME,
-        });
-        tmpSprite.anims.play(STANDING_FRAME, true);
+    let tmpSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody | Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
+    if (worldObject.name === Objects.MOON) {
+        tmpSprite = scene.physics.add.image(initialX, initialY, worldObject.name);
     }
+    //else {
+    //     // * Here we set the Sprite Object, with or without modification for Bell
+    //     tmpSprite = scene.physics.add.sprite(initialX, initialY, OBJECTS_SPRITE_KEY, worldObject.name);
+    // }
+    //
+    // if (worldObject.name === Objects.TOURIST && tmpSprite instanceof Phaser.Physics.Arcade.Sprite) {
+    //     // * This is an obstacle!  Don't hit the tourists :)
+    //     tmpSprite.anims.create({
+    //         key: STANDING_FRAME,
+    //         frames: scene.anims.generateFrameNames(OBJECTS_SPRITE_KEY, {
+    //             prefix: TOURIST_FRAME_KEY,
+    //             end: TOURIST_END_FRAME,
+    //             zeroPad: ZERO_PAD_TOURIST,
+    //         }),
+    //         frameRate: TOURIST_FRAME_RATE,
+    //         repeat: REPEAT_FRAME,
+    //     });
+    //     tmpSprite.anims.play(STANDING_FRAME, true);
+    // }
     const positionY = floorHeight * floorNumber;
     tmpSprite.setOrigin(0);
     tmpSprite.body.setImmovable(true);

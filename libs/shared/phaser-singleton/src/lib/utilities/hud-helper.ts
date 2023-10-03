@@ -74,7 +74,7 @@ export async function createButtons(scene: Scene, character: Character, spaceBar
     buttonJump.setDepth(3);
     buttonJump.on(POINTER_DOWN_EVENT, () => doJumpMovement(scene, character), scene);
     buttonJump.on(POINTER_UP_EVENT, () => (character.isJumping = false), scene);
-    spaceBarKey.on(DOWN_EVENT, () => (character.isJumping = true), scene);
+    spaceBarKey.on(DOWN_EVENT, () => doJumpMovement(scene, character), scene);
     spaceBarKey.on(UP_EVENT, () => (character.isJumping = false), scene);
     const pauseButton = scene.add
         .image(CONFIG.DEFAULT_WIDTH * 0.95, CONFIG.DEFAULT_HEIGHT * 0.05, PAUSE_BUTTON)
@@ -103,10 +103,11 @@ export async function createButtons(scene: Scene, character: Character, spaceBar
 }
 
 // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
-export function doJumpMovement(scene: Scene, character: Character): void {
+export async function doJumpMovement(scene: Scene, character: Character): Promise<void> {
+    const audioPreference = (await Preferences.get({ key: 'EFFECTS_ON' })).value;
     if (scene) {
         character.isJumping = true;
-        if (GameEngineSingleton.audioService.activeMusic) {
+        if (audioPreference === 'true') {
             GameEngineSingleton.audioService.playJump(scene);
         }
     }
@@ -117,11 +118,12 @@ export function doJumpMovement(scene: Scene, character: Character): void {
  *
  * @private
  */
-export function showPauseModal(_scene: Scene): void {
+export async function showPauseModal(_scene: Scene): Promise<void> {
+    const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
     if (_scene) {
         _scene.scene.pause();
         _scene.scene.run(PAUSE_SCENE);
-        if (GameEngineSingleton.audioService.activeMusic) {
+        if (audioPreference === 'true') {
             void GameEngineSingleton.audioService.pauseBackground();
         }
     }
@@ -131,11 +133,14 @@ export function showPauseModal(_scene: Scene): void {
  *
  * @private
  */
-export function toggleMusic(_scene: Scene, musicButton: Phaser.GameObjects.Image): void {
-    if (_scene && GameEngineSingleton.audioService.activeMusic) {
+export async function toggleMusic(_scene: Scene, musicButton: Phaser.GameObjects.Image): Promise<void> {
+    const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+    if (_scene && audioPreference === 'true') {
+        await Preferences.set({ key: 'AUDIO_ON', value: 'false' });
         void GameEngineSingleton.audioService.pauseBackground();
         musicButton.setTexture(MUTE_BUTTON);
     } else {
+        await Preferences.set({ key: 'AUDIO_ON', value: 'true' });
         void GameEngineSingleton.audioService.resumeBackground();
         musicButton.setTexture(MUSIC_BUTTON);
     }

@@ -1,0 +1,61 @@
+.buttons-container {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0 0 0;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.title-container {
+  display: flex;
+  justify-content: center;
+}
+.container-points h3 {
+  color: var(--gray-base);
+}
+h6 {
+  font-size: 1.5rem;
+}
+.title-container h1,
+.row h6 {
+  color: var(--gray-base);
+  font-weight: bold;
+}
+
+.modal-container {
+  height: 100%;
+  border: 0.5rem solid var(--gray-base);
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgb(237, 242, 246, 1.5);
+  position: relative;
+}
+.container-points {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  padding: 0 1vw;
+}
+.button-close {
+  position: absolute;
+  top: 1vw;
+  right: 1vw;
+}
+.row {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: end;
+}
+.col-8 {
+  flex: 2;
+  text-align: center;
+}
+.col-4 {
+  flex: 1;
+}

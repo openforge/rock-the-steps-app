@@ -187,7 +187,6 @@ export class StageSelectComponent implements OnInit {
         void this.modalService.modalElement.onWillDismiss().then(async (action: { role: string; data: { difficult: number } }) => {
             if (action.role !== 'backdrop' && action.data.difficult) {
                 GameEngineSingleton.difficult = action.data.difficult;
-                GameEngineSingleton.audioService = this.audioService;
 
                 // * Here load the level
                 void GameEngineSingleton.buildWorld(level, action.data.difficult);

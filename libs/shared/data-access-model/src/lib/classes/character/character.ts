@@ -7,9 +7,12 @@ import {
     DURATION_INVULNERABLE_REP,
     HALF_DIVIDER,
     HEIGHT_OF_JUMP,
+    HEIGHT_OF_MOON_JUMP,
     INITIAL_HEALTHBAR_X,
     INITIAL_HEALTHBAR_Y,
     INVULNERABLE_REPS,
+    MOON_GRAVITY,
+    MOONSHOES_TIMER,
     NORMAL_GRAVITY,
     ORIGIN_CHARACTER_TEXT,
     PLAYER_POS_X,
@@ -27,6 +30,7 @@ export class Character {
     public isMovingRight: boolean = false; // * Flag to detect is character is pressing right button
     public isJumping: boolean = false; // * Flag to detect is character is pressing jump button
     public isDamaged: boolean = false; // * Flag to detect is character is being damaged
+    public hasMoonShoes: boolean = false; // * Flag to detect is character has moon shoes
     public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
     public damageValue = 0; // * Amount of damaged received by obstacles
     public damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
@@ -51,6 +55,25 @@ export class Character {
     }
 
     /**
+     * Method used to add moon shoes to the player so he can jump higher and smoother
+     *
+     * @param scene
+     */
+    public addMoonShoes(scene: Phaser.Scene): void {
+        this.hasMoonShoes = true;
+        this.sprite.setGravityY(MOON_GRAVITY);
+        this.damageTimer = scene.time.addEvent({
+            delay: MOONSHOES_TIMER,
+            callback: () => {
+                this.hasMoonShoes = false;
+                this.sprite.setGravityY(NORMAL_GRAVITY);
+            },
+            callbackScope: this,
+            loop: false,
+        });
+    }
+
+    /**
      * * Method that performs behaviors of char_sprite depending on flags
      *
      * @return void
@@ -67,7 +90,11 @@ export class Character {
             this.sprite.play(DAMAGED_ANIMATION);
         }
         if (this.isJumping && this.sprite.body.touching.down) {
-            this.sprite.setVelocityY(-HEIGHT_OF_JUMP);
+            if (this.hasMoonShoes) {
+                this.sprite.setVelocityY(-HEIGHT_OF_MOON_JUMP);
+            } else {
+                this.sprite.setVelocityY(-HEIGHT_OF_JUMP);
+            }
             this.sprite.setVelocityX(0);
             this.sprite.play(JUMPING_ANIMATION);
         }
