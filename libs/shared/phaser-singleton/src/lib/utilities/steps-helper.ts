@@ -1,6 +1,7 @@
 import {
     Character,
     Floor,
+    FLOOR_KEY,
     FLOOR_SCREEN_TARGET_PERCENTAGE,
     HALF_DIVIDER,
     STEPS_KEY,
@@ -76,4 +77,18 @@ export function floorRotation(stepsGroup: Phaser.Physics.Arcade.Group, secondFlo
             el.x -= 5;
         }
     });
+}
+export function createTileSprite(scene: Phaser.Scene, tileNumber: number): Phaser.GameObjects.TileSprite {
+    const tile = scene.add.tileSprite(0, 0, 0, 0, FLOOR_KEY);
+    const targetHeight = CONFIG.DEFAULT_HEIGHT * FLOOR_SCREEN_TARGET_PERCENTAGE;
+    tile.setScale(CONFIG.DEFAULT_WIDTH / tile.width, targetHeight / tile.height);
+    tile.setOrigin(0, 0);
+    // * Set the floor height responsively as 10% less than the game height
+    if (tile instanceof Phaser.Physics.Arcade.Sprite) {
+        tile.setImmovable(true);
+    }
+    const positionY = tile.displayHeight * tileNumber;
+    tile.setPosition(0, CONFIG.DEFAULT_HEIGHT - positionY);
+    tile.setDepth(3);
+    return tile;
 }
