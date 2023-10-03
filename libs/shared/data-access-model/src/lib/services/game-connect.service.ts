@@ -55,4 +55,9 @@ export class GameConnectService {
     public async submitScore(points: number): Promise<void> {
         await CapacitorGameConnect.submitScore({ leaderboardID: this.leaderboardID, totalScoreAmount: points });
     }
+
+    public async getUserScore(): Promise<{ player_score: number }> {
+        const playerScore = await CapacitorGameConnect.getUserTotalScore({ leaderboardID: this.leaderboardID });
+        return playerScore;
+    }
 }
