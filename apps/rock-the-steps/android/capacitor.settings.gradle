@@ -15,4 +15,4 @@ include ':capacitor-screen-orientation'
 project(':capacitor-screen-orientation').projectDir = new File('../node_modules/@capacitor/screen-orientation/android')
 
 include ':openforge-capacitor-game-connect'
-project(':openforge-capacitor-game-connect').projectDir = new File('../../../../capacitor-game-connect/android')
+project(':openforge-capacitor-game-connect').projectDir = new File('../node_modules/@openforge/capacitor-game-connect/android')
