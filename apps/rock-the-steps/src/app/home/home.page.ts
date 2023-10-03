@@ -11,7 +11,6 @@ import { GameConnectService } from 'libs/shared/data-access-model/src/lib/servic
 export class HomePageComponent implements OnInit {
     public user: User;
     public screensEnum = ScreensEnum; // * Enum used for the navigation screen type safe
-    public playerScore = 0;
 
     /**
      * * On Init, initilize the Phaser Singleton instance
@@ -57,10 +56,5 @@ export class HomePageComponent implements OnInit {
      */
     public async gameCenterLogin(): Promise<void> {
         this.user = await this.gameConnectService.signIn();
-    }
-
-    public async getUserScore(): Promise<void> {
-        const data = await this.gameConnectService.getUserScore();
-        this.playerScore = data.player_score;
     }
 }
