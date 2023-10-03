@@ -18,9 +18,11 @@ export class ResultScreenComponent implements OnInit {
     constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
     async ngOnInit(): Promise<void> {
-        this.activatedRoute.queryParams.subscribe(params => {
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        this.activatedRoute.queryParams.subscribe(async params => {
             if (params.r === GameEnum.WIN) {
-                void this.setWinFunctionality();
+                this.displayWinBackground = true;
+                void (await this.setWinFunctionality());
             } else if (params.r === GameEnum.LOSE) {
                 void this.setLoseFunctionality();
             }
@@ -32,8 +34,6 @@ export class ResultScreenComponent implements OnInit {
         if (audioPreference === 'true') {
             void GameEngineSingleton.audioService.playSuccess();
         }
-
-        this.displayWinBackground = true;
         void this.updateUserProgression();
         void setTimeout(() => {
             void this.gotoMainMenu();
