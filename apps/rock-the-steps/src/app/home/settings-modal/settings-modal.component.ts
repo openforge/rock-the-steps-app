@@ -13,14 +13,24 @@ export class SettingsModalComponent implements OnInit {
     public effectsEnabled = false; //* prop used in the html use to track if effects  is enabled
     constructor(private modalService: ModalService) {}
 
+    /**
+     * Implementation of OnInit to setup the sound flag according user selection
+     */
     async ngOnInit() {
         this.musicEnabled = (await Preferences.get({ key: 'AUDIO_ON' })).value === 'true';
         this.effectsEnabled = (await Preferences.get({ key: 'EFFECTS_ON' })).value === 'true';
     }
 
+    /**
+     * Method used to close the modal and continue on stage selection
+     */
     public async dismissModal(): Promise<void> {
         await this.modalService.dismiss();
     }
+
+    /**
+     * Method used to toggle either music or effects of the game
+     */
     public async toggleMusic(): Promise<void> {
         const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
         if (audioPreference === 'true') {

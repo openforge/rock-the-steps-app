@@ -175,13 +175,16 @@ export class Character {
     }
 
     /**
-     * * Method used to receive damage to the user
+     * * Method used to receive damage to the user based on difficulty factor
+     * 1 slice in Easy
+     * 2 slice in Mid
+     * 3 slice Hard
      *
      * @return void
      */
-    public receiveDamage(scene: Phaser.Scene): void {
+    public receiveDamage(scene: Phaser.Scene, difficultyFactor: number): void {
         // If is not invulnerable then affect with damage
-        this.damageValue++;
+        this.damageValue += difficultyFactor;
         this.sprite.setVelocityY(-VELOCITY_PLAYER_WHEN_MOVING);
         // Make invulnerable for some seconds to avoid multi coalition
         this.isInvulnerable = true;

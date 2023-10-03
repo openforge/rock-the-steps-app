@@ -19,7 +19,6 @@ export class Floor {
         this.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.sprite.width, targetHeight / this.sprite.height);
         this.sprite.setOrigin(0, y);
         // * Set the floor height responsively as 10% less than the game height
-        // eslint-disable-next-line no-magic-numbers
         if (this.sprite instanceof Phaser.Physics.Arcade.Sprite) {
             this.sprite.setImmovable(true);
         }

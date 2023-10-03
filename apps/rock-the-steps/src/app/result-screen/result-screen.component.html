@@ -1,17 +1,15 @@
-<ion-content>
-    <div [ngClass]="displayWinBackground ? 'win-container' : 'lose-container'">
-        <div class="point-alignment">
-            <p *ngIf="displayWinBackground" class="win-points">{{ gameSingleton.points }}</p>
-        </div>
-        <div *ngIf="!displayWinBackground" class="navigation-options ">
-            <ion-button class="rts-button" fill="outline" mode="md" (click)="replayLevel()">
-                <ion-icon name="refresh-outline"></ion-icon>
-                Replay</ion-button
-            >
-            <ion-button class="rts-button" fill="outline" mode="md" (click)="gotoMainMenu()">
-                <ion-icon name="arrow-back-outline"></ion-icon>
-                Main Menu</ion-button
-            >
-        </div>
+<div [ngClass]="displayWinBackground ? 'win-container' : 'lose-container'">
+    <div class="point-alignment">
+        <p *ngIf="displayWinBackground" class="win-points">{{ gameSingleton.points }}</p>
     </div>
-</ion-content>
+    <div *ngIf="!displayWinBackground" class="navigation-options">
+        <ion-button class="rts-button" fill="outline" mode="md" (click)="replayLevel()">
+            <ion-icon name="refresh-outline"></ion-icon>
+            Replay</ion-button
+        >
+        <ion-button class="rts-button" fill="outline" mode="md" (click)="gotoMainMenu()">
+            <ion-icon name="arrow-back-outline"></ion-icon>
+            Main Menu</ion-button
+        >
+    </div>
+</div>

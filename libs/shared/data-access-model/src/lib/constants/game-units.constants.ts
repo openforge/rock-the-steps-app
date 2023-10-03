@@ -1,6 +1,7 @@
 export const DIFFICULT_EASY = 1.2;
 export const DIFFICULT_MEDIUM = 1.8;
 export const DIFFICULT_HARD = 2.4;
+export const DIFFICULT_ENDLESS = 2.6;
 export const INITIAL_X_REGULAR_ASSET_START = 70;
 export const TIMEOUT_REDIRECTION_TO_HOME_SCREEN = 3000;
 export const VELOCITY_PLAYER = 200;
@@ -18,7 +19,6 @@ export const HALF_DIVIDER = 2;
 export const MOVING_X_BACKGROUNDS = 2;
 export const DAMAGE_MAX_VALUE = 5;
 export const DAMAGE_MIN_VALUE = 0;
-export const DAMAGE_DECREASE_VALUE = 50;
 export const DURATION_INVULNERABLE_REP = 200;
 export const INVULNERABLE_REPS = 15;
 export const WORLD_OBJECTS_VELOCITY = 130;
