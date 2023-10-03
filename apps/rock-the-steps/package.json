@@ -11,7 +11,7 @@
         "@capacitor/network": "^4.1.0",
         "@capacitor/preferences": "^4.0.2",
         "@capacitor/screen-orientation": "^4.1.0",
-        "@openforge/capacitor-game-connect": "^1.0.3",
+        "@openforge/capacitor-game-connect": "^1.0.4",
         "cordova-plugin-screen-orientation": "^3.0.3",
         "es6-promise-plugin": "^4.2.2"
     },
