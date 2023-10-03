@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Network } from '@capacitor/network';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { Platform } from '@ionic/angular';
-import { LEADERBOARD_ANDROID_ID, LEADERBOARD_IOS_ID, NOT_DEFINED } from '@openforge/shared/data-access-model';
+import { GameEngineSingleton, LEADERBOARD_ANDROID_ID, LEADERBOARD_IOS_ID, NOT_DEFINED } from '@openforge/shared/data-access-model';
 import { PhaserSingletonService } from '@openforge/shared-phaser-singleton';
 import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
 
+import { AudioService } from '../../../../libs/shared/data-access-model/src/lib/services/audio.service';
 import { InternetConnectionFailComponent } from './network/internet-connection-fail/internet-connection-fail.component';
 import { ModalService } from './services/modal.service';
 
@@ -15,9 +16,16 @@ import { ModalService } from './services/modal.service';
     styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnDestroy, OnInit {
-    constructor(public phaserInstance: PhaserSingletonService, public platform: Platform, private modalService: ModalService, private gameConnectService: GameConnectService) {}
+    constructor(
+        public phaserInstance: PhaserSingletonService,
+        public platform: Platform,
+        private modalService: ModalService,
+        private gameConnectService: GameConnectService,
+        private audioService: AudioService
+    ) {}
 
     async ngOnInit(): Promise<void> {
+        GameEngineSingleton.audioService = this.audioService;
         // * Setting the Leaderboard ID based on the platform
         if (this.platform.is('android')) {
             this.gameConnectService.leaderboardID = LEADERBOARD_ANDROID_ID;

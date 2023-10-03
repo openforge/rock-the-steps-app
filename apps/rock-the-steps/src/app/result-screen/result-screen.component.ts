@@ -29,7 +29,7 @@ export class ResultScreenComponent implements OnInit {
     }
 
     public async setWinFunctionality(): Promise<void> {
-        const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+        const audioPreference = (await Preferences.get({ key: 'EFFECTS_ON' })).value;
         if (audioPreference === 'true') {
             void GameEngineSingleton.audioService.playSuccess();
         }
@@ -40,7 +40,7 @@ export class ResultScreenComponent implements OnInit {
     }
 
     public async setLoseFunctionality(): Promise<void> {
-        const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+        const audioPreference = (await Preferences.get({ key: 'EFFECTS_ON' })).value;
         if (audioPreference === 'true') {
             void GameEngineSingleton.audioService.playFail();
         }

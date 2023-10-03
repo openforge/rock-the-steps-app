@@ -1,4 +1,5 @@
 /* eslint-disable no-magic-numbers */
+import { Preferences } from '@capacitor/preferences';
 import { GameEngineSingleton, ZoneType } from '@openforge/shared/data-access-model';
 import { CONFIG } from '@openforge/shared-phaser-singleton';
 
@@ -43,7 +44,8 @@ export function createTouchZones(scene: WorldScene): void {
  * @param action as the action to set
  * @param scene as WorldScene
  */
-function zoneClicked(zoneType: ZoneType, action: boolean, scene: WorldScene) {
+async function zoneClicked(zoneType: ZoneType, action: boolean, scene: WorldScene): Promise<void> {
+    const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
     switch (zoneType) {
         case ZoneType.JUMP:
             scene.character.isJumping = action;
@@ -51,7 +53,7 @@ function zoneClicked(zoneType: ZoneType, action: boolean, scene: WorldScene) {
             setTimeout(() => {
                 scene.character.isJumping = false;
             }, 500);
-            if (GameEngineSingleton.audioService.activeMusic && action) {
+            if (audioPreference === 'true' && action) {
                 GameEngineSingleton.audioService.playJump(scene);
             }
             break;

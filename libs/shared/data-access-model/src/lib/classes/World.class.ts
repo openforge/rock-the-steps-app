@@ -22,6 +22,7 @@ import {
 } from '../..';
 import { LevelsEnum } from '../enums/levels.enum';
 import { Crater } from './obstacles/crater.class';
+import { Moon } from './obstacles/moon.class';
 import { Stand } from './obstacles/stand.class';
 import { Tomb } from './obstacles/tomb.class';
 import { WorldObject } from './obstacles/world-object.class';
@@ -100,7 +101,8 @@ export class World {
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new Tourist(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
-        world.secondsToShowNextFloor = 5000;
+        world.objects.push(new Moon(world.worldType));
+        world.secondsToShowNextFloor = 12000;
     }
 
     /**
@@ -120,6 +122,7 @@ export class World {
         world.objects.push(new BigPoo(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
+        world.objects.push(new Moon(world.worldType));
         world.secondsToShowNextFloor = 13000;
     }
 
@@ -140,6 +143,7 @@ export class World {
         world.objects.push(new Ghost(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
+        world.objects.push(new Moon(world.worldType));
         world.secondsToShowNextFloor = 14000;
     }
 
@@ -161,6 +165,7 @@ export class World {
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new Tourist(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
+        world.objects.push(new Moon(world.worldType));
         world.secondsToShowNextFloor = 15000;
     }
 
@@ -181,6 +186,7 @@ export class World {
         world.objects.push(new Bottle(world.worldType));
         world.objects.push(new Stand(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
+        world.objects.push(new Moon(world.worldType));
         world.secondsToShowNextFloor = 16000;
     }
 
@@ -200,6 +206,7 @@ export class World {
         world.objects.push(new Cone(world.worldType));
         world.objects.push(new LibertyBell(world.worldType));
         world.objects.push(new Pigeon(world.worldType));
+        world.objects.push(new Moon(world.worldType));
         world.secondsToShowNextFloor = 17000;
     }
 

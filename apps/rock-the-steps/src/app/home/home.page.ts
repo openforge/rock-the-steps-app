@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { ScreensEnum, User } from '@openforge/shared/data-access-model';
 import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
 
+import { ModalService } from '../services/modal.service';
+import { SettingsModalComponent } from './settings-modal/settings-modal.component';
+
 @Component({
     selector: 'openforge-home',
     templateUrl: 'home.page.html',
@@ -20,7 +23,7 @@ export class HomePageComponent implements OnInit {
      * If we don't delay it, the canvas size in preload() and create() will be 0.
      * With the delay the canvas size will be set correctly.
      */
-    constructor(private router: Router, private gameConnectService: GameConnectService) {}
+    constructor(private router: Router, private gameConnectService: GameConnectService, private modalService: ModalService) {}
 
     async ngOnInit(): Promise<void> {
         await this.gameCenterLogin();
@@ -48,6 +51,18 @@ export class HomePageComponent implements OnInit {
      */
     public async openLeaderboard(): Promise<void> {
         await this.gameConnectService.openLeaderboards();
+    }
+
+    public async openSettings(): Promise<void> {
+        await this.modalService
+            .showModal({
+                component: SettingsModalComponent,
+                cssClass: 'difficult-modal',
+                backdropDismiss: false,
+            })
+            .then(() => this.modalService.modalElement);
+
+        void this.modalService.modalElement.onWillDismiss();
     }
 
     /**

@@ -19,4 +19,5 @@ export enum Objects {
     WIND = 'wind',
     CHEESESTEAK = 'cheesesteak',
     GLOVES = 'gloves',
+    MOON = 'moon',
 }

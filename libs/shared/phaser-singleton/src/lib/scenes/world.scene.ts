@@ -27,6 +27,7 @@ import {
     JUMP_AUDIO_KEY,
     LevelsEnum,
     MILLISECONDS_100,
+    MOON_KEY,
     MUSIC_BUTTON,
     MUTE_BUTTON,
     OBJECTS_SPRITE_KEY,
@@ -97,6 +98,7 @@ export class WorldScene extends Phaser.Scene {
             // * Load the objects and the player
             this.load.atlas(OBJECTS_SPRITE_KEY, `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
             this.load.image(END_KEY, 'assets/objects/end.png');
+            this.load.image(MOON_KEY, 'assets/objects/moon.png');
             this.load.atlas(CHARACTER_SPRITE_KEY, `assets/character/character-sprite.png`, `assets/character/character-sprite.json`);
             this.load.atlas(HEALTHBAR_KEY, `assets/objects/healthbar.png`, `assets/objects/healthbar.json`);
             this.load.image(PAUSE_BUTTON, 'assets/buttons/pause-button.png');
@@ -210,6 +212,10 @@ export class WorldScene extends Phaser.Scene {
             this.obstacleGroup.remove(obstacle);
             this.character.makeInvulnerable(this);
         } else if (this.character.isInvulnerable) {
+            this.obstacleGroup.remove(obstacle);
+            obstacle.destroy();
+        } else if (obstacle.name === Objects.MOON) {
+            this.character.addMoonShoes(this);
             this.obstacleGroup.remove(obstacle);
             obstacle.destroy();
         } else if (obstacle.name !== Objects.CHEESESTEAK && !this.character.isDamaged && !this.character.isInvulnerable) {
