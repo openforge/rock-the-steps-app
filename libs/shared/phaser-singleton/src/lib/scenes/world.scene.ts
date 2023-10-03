@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable no-magic-numbers */
 import { Preferences } from '@capacitor/preferences';
+import { NativeAudio } from '@capacitor-community/native-audio';
 import {
     BACKGROUND_AUDIO_KEY,
     Bushes,
@@ -109,8 +110,20 @@ export class WorldScene extends Phaser.Scene {
             this.load.image(MUTE_BUTTON, 'assets/buttons/mute.png');
 
             // * Loading audio files
-            this.load.audio(BACKGROUND_AUDIO_KEY, 'assets/audios/background/background-music-for-mobile-casual-video-game-short-8-bit-music-164703.mp3');
-            this.load.audio(JUMP_AUDIO_KEY, 'assets/audios/jump/cartoon-jump-6462.mp3');
+            this.load.audio(BACKGROUND_AUDIO_KEY, 'assets/phaser-audios/background/background-music-for-mobile-casual-video-game-short-8-bit-music-164703.mp3');
+            this.load.audio(JUMP_AUDIO_KEY, 'assets/phaser-audios/jump/cartoon-jump-6462.mp3');
+            void NativeAudio.preload({
+                assetId: GameEnum.LOSE,
+                assetPath: 'public/assets/capacitor-sounds/failure-drum-sound-effect-2-7184.mp3',
+                audioChannelNum: 1,
+                isUrl: false,
+            });
+            void NativeAudio.preload({
+                assetId: GameEnum.WIN,
+                assetPath: 'public/assets/capacitor-sounds/success-1-6297.mp3',
+                audioChannelNum: 1,
+                isUrl: false,
+            });
         } catch (e) {
             console.error('preloader.scene.ts', 'error preloading', e);
         }
