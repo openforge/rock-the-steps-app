@@ -1,0 +1,58 @@
+.buttons-container-intro {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0 0 0;
+  width: 100%;
+  justify-content: center;
+  padding: 0 2rem;
+}
+.title-container {
+  display: flex;
+  justify-content: center;
+}
+.title-container h1 {
+  color: var(--gray-base);
+  font-weight: bold;
+  font-size: 2.5rem;
+}
+
+.modal-container {
+  height: 100%;
+  border: 0.5rem solid var(--gray-base);
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgb(237, 242, 246, 1.5);
+  position: relative;
+}
+.button-close {
+  position: absolute;
+  top: 1vw;
+  right: 1vw;
+}
+.row {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+.col {
+  flex: 1;
+  padding: 1vw;
+}
+.container-obstacles img {
+  height: 5vh;
+  width: auto;
+}
+.container .col img {
+  height: 20vh;
+  width: auto;
+}
+
+.intro-text {
+  font-size: 2rem;
+  color: var(--gray-base);
+  padding: 0 15vw;
+  text-align: center;
+}

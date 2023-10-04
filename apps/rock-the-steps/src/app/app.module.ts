@@ -14,6 +14,7 @@ import { ResultScreenComponent } from './result-screen/result-screen.component';
 import { ModalService } from './services/modal.service';
 import { DifficultSelectModalComponent } from './stage-select/difficult-select-modal/difficult-select-modal.component';
 import { StageSelectComponent } from './stage-select/stage-select.component';
+import { TutorialModalComponent } from './stage-select/tutorial-modal/tutorial-modal.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { StageSelectComponent } from './stage-select/stage-select.component';
         ResultScreenComponent,
         InternetConnectionFailComponent,
         SettingsModalComponent,
+        TutorialModalComponent,
     ],
     imports: [BrowserModule, IonicModule.forRoot(), PhaserSingletonService.forRoot(), AppRoutingModule],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, ModalService],
