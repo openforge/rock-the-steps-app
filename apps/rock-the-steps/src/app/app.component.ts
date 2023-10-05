@@ -53,7 +53,12 @@ export class AppComponent implements OnDestroy, OnInit {
             }
         });
     }
-
+    /**
+     * * Need to handle the destroy method so we dont lock up our computer!
+     */
+    ngOnDestroy(): void {
+        PhaserSingletonService.destroyActiveGame();
+    }
     /**
      * * Function to set screen orientation to only use landscape
      *
@@ -71,12 +76,5 @@ export class AppComponent implements OnDestroy, OnInit {
             component: InternetConnectionFailComponent,
             backdropDismiss: false,
         });
-    }
-
-    /**
-     * * Need to handle the destroy method so we dont lock up our computer!
-     */
-    ngOnDestroy(): void {
-        PhaserSingletonService.destroyActiveGame();
     }
 }
