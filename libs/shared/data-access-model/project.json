@@ -6,7 +6,7 @@
     "prefix": "openforge",
     "targets": {
         "test": {
-            "executor": "@nrwl/jest:jest",
+            "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/libs/shared/data-access-model"],
             "options": {
                 "jestConfig": "libs/shared/data-access-model/jest.config.ts",
@@ -14,7 +14,7 @@
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "options": {
                 "lintFilePatterns": ["libs/shared/data-access-model/src/**/*.ts", "libs/shared/data-access-model/src/**/*.html"]
             }

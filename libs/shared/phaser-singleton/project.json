@@ -6,7 +6,7 @@
     "prefix": "openforge",
     "targets": {
         "test": {
-            "executor": "@nrwl/jest:jest",
+            "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/libs/shared/phaser-singleton"],
             "options": {
                 "jestConfig": "libs/shared/phaser-singleton/jest.config.ts",
@@ -14,7 +14,7 @@
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "options": {
                 "lintFilePatterns": ["libs/shared/phaser-singleton/src/**/*.ts", "libs/shared/phaser-singleton/src/**/*.html"]
             }
