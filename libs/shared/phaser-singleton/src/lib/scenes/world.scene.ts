@@ -55,17 +55,7 @@ import { createTileSprite } from '../utilities/steps-helper';
 import { createTouchZones } from '../utilities/touch-zones-helper';
 
 export class WorldScene extends Phaser.Scene {
-    private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
-    private stepsGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the steps has collisions with floor but no with player and no damage
-    private obstaclePigeonGroup: Pigeon[] = []; // * Array of sprites for the pigeon obstacles
-    private obstaclePoopGroup: Poop[] = []; // * Array of sprites for the pigeon obstacles
     public character: Character; // this is the class associated with the player
-    private pointsText: Phaser.GameObjects.Text; // * Text to display the points
-    private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // * Cursor keys to move the player in pc
-
-    private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
-    private isMuseumDisplayed: boolean = false; // Boolean to distinguish if the end has been reached
-
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
     public firstFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
@@ -75,6 +65,16 @@ export class WorldScene extends Phaser.Scene {
     public thirdFloorTile: Phaser.GameObjects.TileSprite; // * Used to set the image sprite and then using it into the infinite movement function
     public thirdFloor: Floor; // * Used to set the image sprite and then using it into the infinite movement function
     public floorLevel: number = 1; // * Var used to detect the actual flow level
+    private obstacleGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the obstacles
+    private stepsGroup: Phaser.Physics.Arcade.Group; // * Group of sprites for the steps has collisions with floor but no with player and no damage
+    private obstaclePigeonGroup: Pigeon[] = []; // * Array of sprites for the pigeon obstacles
+    private obstaclePoopGroup: Poop[] = []; // * Array of sprites for the pigeon obstacles
+    private pointsText: Phaser.GameObjects.Text; // * Text to display the points
+    private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // * Cursor keys to move the player in pc
+
+    private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
+
+    private isMuseumDisplayed: boolean = false; // Boolean to distinguish if the end has been reached
 
     constructor(private gameConnectService: GameConnectService) {
         console.log('world.scene.ts', 'constructor()');
@@ -142,7 +142,23 @@ export class WorldScene extends Phaser.Scene {
             void GameEngineSingleton.audioService.playBackground(this);
         }
     }
-
+    /**
+     * * Method to used by PHASER to execute every frame refresh
+     *
+     * @return void
+     */
+    update() {
+        this.updatePointsText();
+        this.flyGroundedPigeons();
+        this.moveInfiniteBackgrounds();
+        this.character.evaluateMovement(this.cursors);
+        this.character.moveCharacterAutomatically(this.cursors);
+        this.character.avoidOutOfBounds();
+        ObstacleHelper.cleanUpObjects(this.obstacleGroup, this.obstaclePigeonGroup);
+        StepsHelper.stepsDetection(this.stepsGroup, this.character);
+        StepsHelper.floorRotation(this.stepsGroup, this.secondFloor, this.thirdFloor);
+        this.endDetection();
+    }
     /**
      * * Method used to initialize the groups, player, animations,texts.
      *
@@ -229,23 +245,7 @@ export class WorldScene extends Phaser.Scene {
             GameEngineSingleton.points -= GameEngineSingleton.points >= GameEngineSingleton.world.damageDecreaseValue ? GameEngineSingleton.world.damageDecreaseValue : GameEngineSingleton.points;
         }
     }
-    /**
-     * * Method to used by PHASER to execute every frame refresh
-     *
-     * @return void
-     */
-    update() {
-        this.updatePointsText();
-        this.flyGroundedPigeons();
-        this.moveInfiniteBackgrounds();
-        this.character.evaluateMovement(this.cursors);
-        this.character.moveCharacterAutomatically(this.cursors);
-        this.character.avoidOutOfBounds();
-        ObstacleHelper.cleanUpObjects(this.obstacleGroup, this.obstaclePigeonGroup);
-        StepsHelper.stepsDetection(this.stepsGroup, this.character);
-        StepsHelper.floorRotation(this.stepsGroup, this.secondFloor, this.thirdFloor);
-        this.endDetection();
-    }
+
     /**
      * Method used to draw the end museum if the end has being reached
      */
@@ -323,7 +323,7 @@ export class WorldScene extends Phaser.Scene {
     /**
      * Method used to create dynamically the sprites for the steps
      */
-    public createNewFloorIfApplies(): void {
+    private createNewFloorIfApplies(): void {
         if (GameEngineSingleton.difficult === DifficultyEnum.EASY) {
             this.floorLevel = 1;
             return;
