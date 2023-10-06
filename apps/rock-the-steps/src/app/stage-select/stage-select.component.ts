@@ -9,6 +9,7 @@ import { GameConnectService } from 'libs/shared/data-access-model/src/lib/servic
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/game-engine.singleton';
 import { ModalService } from '../services/modal.service';
 import { DifficultSelectModalComponent } from './difficult-select-modal/difficult-select-modal.component';
+import { TutorialModalComponent } from './tutorial-modal/tutorial-modal.component';
 
 @Component({
     selector: 'openforge-stage-select',
@@ -156,7 +157,11 @@ export class StageSelectComponent implements OnInit {
 
     async ngOnInit() {
         this.allPointsEarned = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
-
+        const alreadySawTutorial = await Preferences.get({ key: 'TUTORIAL' });
+        if (!alreadySawTutorial.value) {
+            await this.showTutorial();
+            await Preferences.set({ key: 'TUTORIAL', value: 'true' });
+        }
         const userProgression = await Preferences.get({ key: 'PROGRESSION' });
         if (!userProgression.value) {
             await Preferences.set({ key: 'PROGRESSION', value: JSON.stringify(this.progression) });
@@ -166,6 +171,21 @@ export class StageSelectComponent implements OnInit {
     }
 
     /**
+     * method used to show the tutorial to teach the players
+     */
+    public async showTutorial(): Promise<void> {
+        await this.modalService
+            .showModal({
+                component: TutorialModalComponent,
+                cssClass: 'tutorial-modal',
+                backdropDismiss: false,
+            })
+            .then(() => this.modalService.modalElement);
+
+        void this.modalService.modalElement.onWillDismiss();
+    }
+
+    /*
      * Method used to load the selected level
      *
      * @param level selected level
@@ -180,6 +200,7 @@ export class StageSelectComponent implements OnInit {
                 backdropDismiss: false,
                 componentProps: {
                     level,
+                    difficulties: this.progression.filter(stg => stg.levelName === level),
                 },
             })
             .then(() => this.modalService.modalElement);
