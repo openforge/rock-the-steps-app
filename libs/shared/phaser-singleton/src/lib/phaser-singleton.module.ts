@@ -17,9 +17,9 @@ import { WorldScene } from './scenes/world.scene';
 })
 export class PhaserSingletonService {
     // * We need the Phaser.Game to live inside our own class because extending Phaser.Game would require a super call
+    public static actionsHistory: string[] = []; // * Since phaser is a singleton, let's store the history of actions here for all components.
     public static activeGame: Phaser.Game; // * Property to set the active game
     private static ngZone: NgZone; // * Property to set the ngZone class
-    public static actionsHistory: string[] = []; // * Since phaser is a singleton, let's store the history of actions here for all components.
 
     constructor(private _ngZone: NgZone, @Optional() @SkipSelf() parentModule?: PhaserSingletonService) {
         if (parentModule) {

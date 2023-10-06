@@ -38,7 +38,6 @@ export async function createButtons(scene: Scene): Promise<void> {
     musicButton.on(POINTER_DOWN_EVENT, () => toggleMusic(scene, musicButton), scene);
 }
 
-// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
 export async function doJumpMovement(scene: Scene, character: Character): Promise<void> {
     const audioPreference = (await Preferences.get({ key: 'EFFECTS_ON' })).value;
     if (scene) {
