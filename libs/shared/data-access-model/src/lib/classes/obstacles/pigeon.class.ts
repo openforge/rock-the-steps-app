@@ -58,10 +58,14 @@ export class Pigeon extends WorldObject {
      */
     public dropPoop(scene: Scene, obstaclePigeonPoopGroup: Poop[], character: Character, handlerCallback: ArcadePhysicsCallback): void {
         const randomPoopTime = (Math.floor(Math.random() * 3) + 6) * ONE_SECOND_IN_MILLISECONDS;
+        // If the sprite is active dont drop the poop
+        // because it means that the pigeon has been destroyed
         setTimeout(() => {
-            const poopSprite = createDropObject(scene, this.sprite.x, this.sprite.y + this.sprite.displayHeight, this.poop.name);
-            obstaclePigeonPoopGroup.push(this.poop);
-            scene.physics.add.collider(character.sprite, poopSprite, handlerCallback);
+            if (this.sprite.active) {
+                const poopSprite = createDropObject(scene, this.sprite.x, this.sprite.y + this.sprite.displayHeight, this.poop.name);
+                obstaclePigeonPoopGroup.push(this.poop);
+                scene.physics.add.collider(character.sprite, poopSprite, handlerCallback);
+            }
         }, randomPoopTime);
     }
 }

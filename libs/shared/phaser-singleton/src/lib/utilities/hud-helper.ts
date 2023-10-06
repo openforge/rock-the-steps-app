@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import { Preferences } from '@capacitor/preferences';
-import { Character, GameEngineSingleton, MUSIC_BUTTON, MUTE_BUTTON, PAUSE_BUTTON, PAUSE_SCENE, POINTER_DOWN_EVENT } from '@openforge/shared/data-access-model';
+import { Character, DOWN_EVENT, GameEngineSingleton, MUSIC_BUTTON, MUTE_BUTTON, PAUSE_BUTTON, PAUSE_SCENE, POINTER_DOWN_EVENT, UP_EVENT } from '@openforge/shared/data-access-model';
 import { Scene } from 'phaser';
 import * as Phaser from 'phaser';
 
@@ -11,7 +11,7 @@ import { CONFIG } from '../config';
  *
  * @private
  */
-export async function createButtons(scene: Scene): Promise<void> {
+export async function createButtons(scene: Scene, spaceBarKey: Phaser.Input.Keyboard.Key, character: Character): Promise<void> {
     const pauseButton = scene.add
         .image(CONFIG.DEFAULT_WIDTH * 0.95, CONFIG.DEFAULT_HEIGHT * 0.05, PAUSE_BUTTON)
         .setScale(0.1)
@@ -36,6 +36,8 @@ export async function createButtons(scene: Scene): Promise<void> {
 
     musicButton.setDepth(3);
     musicButton.on(POINTER_DOWN_EVENT, () => toggleMusic(scene, musicButton), scene);
+    spaceBarKey.on(DOWN_EVENT, () => doJumpMovement(scene, character), scene);
+    spaceBarKey.on(UP_EVENT, () => (character.isJumping = false), scene);
 }
 
 export async function doJumpMovement(scene: Scene, character: Character): Promise<void> {
