@@ -61,7 +61,7 @@
     "nx-cloud": "16.4.0",
     "nx-stylelint": "^13.0.1",
     "prettier": "2.8.4",
-    "prettier-eslint": "^8.8.2",
+    "prettier-eslint": "^15.0.1",
     "sass": "^1.55.0",
     "stylelint": "^14.16.1",
     "stylelint-config-prettier": "^8.0.0",
