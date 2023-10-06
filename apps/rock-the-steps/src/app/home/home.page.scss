@@ -15,9 +15,12 @@ ion-toolbar {
   --border-width: 0 !important;
 }
 
-ion-toolbar.transparent-toolbar {
+div.transparent-toolbar {
   --background: --transparent;
   position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 ion-content {
@@ -62,9 +65,4 @@ ion-item {
 
 ion-footer {
   --background: transparent;
-}
-.button-settings {
-  position: absolute;
-  right: 20vw;
-  top: 0.5vh;
 }

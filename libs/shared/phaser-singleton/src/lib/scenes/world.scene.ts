@@ -71,7 +71,7 @@ export class WorldScene extends Phaser.Scene {
     private obstaclePoopGroup: Poop[] = []; // * Array of sprites for the pigeon obstacles
     private pointsText: Phaser.GameObjects.Text; // * Text to display the points
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // * Cursor keys to move the player in pc
-
+    private spaceBarKey: Phaser.Input.Keyboard.Key; // Spacebar key to move the player in pc
     private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
 
     private isMuseumDisplayed: boolean = false; // Boolean to distinguish if the end has been reached
@@ -133,7 +133,7 @@ export class WorldScene extends Phaser.Scene {
         this.scale.orientation = Phaser.Scale.Orientation.LANDSCAPE; // * We need to set the orientation to landscape for the scene
         this.scale.lockOrientation('landscape');
         this.initializeBasicWorld();
-        void createButtons(this);
+        void createButtons(this, this.spaceBarKey, this.character);
         void createTouchZones(this);
         createAnimationsCharacter(this.character.sprite);
 
@@ -181,6 +181,7 @@ export class WorldScene extends Phaser.Scene {
         this.character = new Character(this, this.firstFloor.sprite);
         this.physics.add.existing(this.firstFloor.sprite, true);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
+        this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.time.addEvent({ delay: GameEngineSingleton.world.secondsToShowNextFloor, callback: () => this.createNewFloorIfApplies(), callbackScope: this, loop: true });
         this.time.addEvent({
             delay: MILLISECONDS_100,

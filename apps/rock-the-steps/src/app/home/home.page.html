@@ -34,7 +34,7 @@
 </ion-menu>
 
 <ion-content [scrollEvents]="false" id="main-content">
-    <ion-toolbar mode="ios" class="transparent-toolbar">
+    <div mode="ios" class="transparent-toolbar">
         <ion-button (click)="openSettings()" id="settings-icon" class="rts-button button-settings" fill="outline" mode="md">
             <ion-icon name="settings" class="" size="small"></ion-icon>
         </ion-button>
@@ -43,7 +43,7 @@
                 <ion-icon name="menu-outline" class="menu-button-icon"></ion-icon>
             </ion-button>
         </ion-menu-toggle>
-    </ion-toolbar>
+    </div>
     <div class="background-room">
         <div class="background-room-buttons">
             <ion-row>
