@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow/prefer-arrow-functions */
 import {
     CHARACTER_SPRITE_KEY,
     DAMAGE_PREFIX,

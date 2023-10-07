@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DifficultyEnum, LevelsEnum } from '@openforge/shared/data-access-model';
+import { DifficultyEnum, LevelsEnum, Stage } from '@openforge/shared/data-access-model';
 
 import { World } from '../../../../../../libs/shared/data-access-model/src/lib/classes/World.class';
 import { ModalService } from '../../services/modal.service';
@@ -11,6 +11,7 @@ import { ModalService } from '../../services/modal.service';
 })
 export class DifficultSelectModalComponent implements OnInit {
     public difficultEnum = DifficultyEnum; // * Difficult enum used to select the difficulty from template
+    public difficulties: Stage[] = []; // * Difficulties progress so we can enable the correct ones based on finished
     public level: LevelsEnum; //* Level selected used to calculate max points per level
     public levelDifficulties: {
         easyWorld: World;
@@ -27,6 +28,11 @@ export class DifficultSelectModalComponent implements OnInit {
         };
     }
 
+    /**
+     * Method used to close the modal of difficulties
+     *
+     * @param difficult
+     */
     public async dismissModal(difficult?: DifficultyEnum): Promise<void> {
         await this.modalService.dismiss({ difficult });
     }

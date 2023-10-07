@@ -1,0 +1,74 @@
+<div class="modal-container">
+    <ion-button class="rts-button button-close" (click)="dismissModal()">
+        <ion-icon name="close" color="red"></ion-icon>
+    </ion-button>
+    <div class="title-container">
+        <h1>Tutorial</h1>
+    </div>
+
+    <!-- SLIDE: 1. Show difficulties instructions -->
+    <ng-template [ngIf]="activeIndex === 1" class="swiper-slide"  id="slideOne">
+        <div class="container">
+            <div class="row">
+                <p class="intro-text">
+                    Play and finish every single difficulty to unlock a new challenging ones!
+                </p>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <img src="/assets/tutorial/intro1.png">
+                </div>
+                <div class="col">
+                    <img src="/assets/tutorial/intro2.png">
+                </div>
+                <div class="col">
+                    <img src="/assets/tutorial/intro3.png">
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <!-- SLIDE: 2. Show obstacles and power ups -->
+    <ng-template [ngIf]="activeIndex === 2" class="swiper-slide"  id="slideTwo">
+        <div class="container-obstacles">
+            <div class="row">
+                <p class="intro-text">
+                    Avoid these obstacles to dont lose health
+                </p>
+            </div>
+            <div class="row">
+                <div class="">
+                    <img src="/assets/tutorial/obstacle1.png">
+                </div>
+                <div class="">
+                    <img src="/assets/tutorial/obstacle2.png">
+                </div>
+                <div class="">
+                    <img src="/assets/tutorial/obstacle3.png">
+                </div>
+                <div class="">
+                    <img src="/assets/tutorial/obstacle4.png">
+                </div>
+            </div>
+            <div class="row">
+                <p class="intro-text">
+                    These items will give you special gifts! Discover them on your own!
+                </p>
+            </div>
+            <div class="row">
+                <div class="">
+                    <img src="/assets/tutorial/power1.png">
+                </div>
+                <div class="">
+                    <img src="/assets/tutorial/power3.png">
+                </div>
+                <div class="">
+                    <img src="/assets/tutorial/power2.png">
+                </div>
+
+            </div>
+        </div>
+    </ng-template>
+    <div class="buttons-container-intro">
+        <ion-button *ngIf="activeIndex === 1" class="rts-button" (click)="nextSlide()">Next</ion-button>
+    </div>
+    </div>

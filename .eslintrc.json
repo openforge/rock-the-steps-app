@@ -24,15 +24,12 @@
                 "eslint:recommended",
                 "plugin:@angular-eslint/recommended",
                 "plugin:@angular-eslint/template/process-inline-templates",
-                "plugin:@angular-eslint/ng-cli-compat",
-                "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
                 "plugin:@typescript-eslint/recommended",
                 "plugin:@typescript-eslint/recommended-requiring-type-checking",
                 "plugin:import/recommended",
                 "plugin:import/typescript",
                 "plugin:prettier/recommended",
-                "prettier",
-                "plugin:@angular-eslint/recommended--extra"
+                "prettier"
             ],
             "rules": {
                 "cypress/no-unnecessary-waiting": "off",
@@ -152,7 +149,7 @@
         },
         {
             "files": ["*.html"],
-            "extends": ["plugin:@angular-eslint/template/recommended", "plugin:@nrwl/nx/angular-template"]
+            "extends": ["plugin:@angular-eslint/template/recommended", "plugin:@nx/angular-template"]
         },
         {
             "files": ["*.tsx"],

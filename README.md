@@ -1,7 +1,7 @@
 # Rock The Steps!
 
-```npm install```
-```npx nx run rock-the-steps:serve``` 
+`npm install`
+`npx nx run rock-the-steps:serve`
 
 # Debug Mode
 
@@ -9,13 +9,15 @@ To turn on/off debug mode (the boxes) go to phaser-singleton.module.ts and toggl
 
 # Architecture
 
-This project uses Ionic Framework for the majority of screens and overlays; and uses Phaser for the gameplay itself.  Please see corresponding documentation on their respective websites.
+This project uses Ionic Framework for the majority of screens and overlays; and uses Phaser for the gameplay itself. Please see corresponding documentation on their respective websites.
 
 Some caveats:
-1. We're not yet using tilemaps.  This game is a port from .lua originally, so we're still in the process of updating it to Phaser Best Practices
+
+1. We're not yet using tilemaps. This game is a port from .lua originally, so we're still in the process of updating it to Phaser Best Practices
 
 # Roadmap / TODO (High Level)
-1. Update to use Phaser Tilemap 
+
+1. Update to use Phaser Tilemap
 2. Update all classes to properly map the Phaser sprite and the class itself
 3. Update the BELL and PIGEON POOP to fall from sky (for an extra dynamic)
 
@@ -30,7 +32,7 @@ To run the license checker, use
 
 # Important - Utilizing this Repo
 
-Most of the commands to generate projects/capabilities/apps are default to NX, Ionic, or Angular (in that order), so we will NOT include their specific instructions since as the packages update so will the documentation.  
+Most of the commands to generate projects/capabilities/apps are default to NX, Ionic, or Angular (in that order), so we will NOT include their specific instructions since as the packages update so will the documentation.
 
 With that said, there are some special things to keep in mind...
 
@@ -42,7 +44,7 @@ nx g nx-stylelint:configuration --project <projectName>
 
 ## Generate an application
 
-The normal NX command to generate an app is `nx g @nrwl/react:app my-app` ; however, there are some special steps to generate an Ionic App.  These are defined well in [Eric Jeker's post here](https://medium.com/@eric.jeker/how-to-integrate-ionic-in-nrwl-nx-3493fcb7e85e)
+The normal NX command to generate an app is `nx g @nx/react:app my-app` ; however, there are some special steps to generate an Ionic App. These are defined well in [Eric Jeker's post here](https://medium.com/@eric.jeker/how-to-integrate-ionic-in-nrwl-nx-3493fcb7e85e)
 
 When using Nx, you can create multiple applications and libraries in the same workspace.
 
@@ -75,7 +77,7 @@ Visit the [Nx Documentation](https://nx.dev) to learn more.
 
 ## Generate a library
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+Run `nx g @nx/react:lib my-lib` to generate a library.
 
 > You can also use any of the plugins above to generate libraries as well.
 
@@ -83,7 +85,7 @@ Libraries are shareable across libraries and applications. They can be imported 
 
 ## Code scaffolding
 
-Run `nx g @nrwl/angular:component my-component --project=my-app` to generate a new component.
+Run `nx g @nx/angular:component my-component --project=my-app` to generate a new component.
 
 ## Running unit tests
 
