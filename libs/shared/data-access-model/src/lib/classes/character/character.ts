@@ -61,7 +61,7 @@ export class Character {
             this.aura.setOrigin(0.5, 0.7);
             this.aura.setScale(2);
             this.aura.setDepth(0);
-            this.aura.play(AURA_MOON_KEY);
+            this.aura.play(AURA_MOON_KEY, true);
         } else if (this.hasMoonShoes && this.aura.active) {
             this.aura.x = this.sprite.x;
             this.aura.y = this.sprite.y;
@@ -79,7 +79,7 @@ export class Character {
             this.aura.setOrigin(0.5, 0.7);
             this.aura.setScale(2);
             this.aura.setDepth(0);
-            this.aura.play(AURA_MOON_KEY);
+            this.aura.play(AURA_MOON_KEY, true);
         } else if (this.isInvulnerable && this.aura.active) {
             this.aura.x = this.sprite.x;
             this.aura.y = this.sprite.y;
