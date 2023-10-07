@@ -40,6 +40,10 @@ ion-modal.difficult-modal {
   --height: 90vh;
   --width: 85vw;
 }
+ion-modal.tutorial-modal {
+  --height: 70vh;
+  --width: 90vw;
+}
 
 ion-button.rts-button-clear {
   --color-activated: var(--gray-base);

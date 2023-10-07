@@ -12,11 +12,11 @@
         </div>
         <div class="container-points">
             <h6>Goal Points: {{levelDifficulties.midWorld.maxPointsAchievable}}</h6>
-            <ion-button id="difficulty-medium" class="rts-button" fill="outline" mode="md" (click)="dismissModal(difficultEnum.MEDIUM)">MEDIUM</ion-button>
+            <ion-button [disabled]="!difficulties[0].hasCompletedOnce" id="difficulty-medium" class="rts-button" fill="outline" mode="md" (click)="dismissModal(difficultEnum.MEDIUM)">MEDIUM</ion-button>
         </div>
         <div class="container-points">
             <h6>Goal Points: {{levelDifficulties.hardWorld.maxPointsAchievable}}</h6>
-            <ion-button id="difficulty-hard" class="rts-button" fill="outline" mode="md" (click)="dismissModal(difficultEnum.HARD)">HARD</ion-button>
+            <ion-button [disabled]="!difficulties[1].hasCompletedOnce" id="difficulty-hard" class="rts-button" fill="outline" mode="md" (click)="dismissModal(difficultEnum.HARD)">HARD</ion-button>
         </div>
     </div>
     <div class="endless-container">
