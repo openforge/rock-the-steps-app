@@ -27,8 +27,23 @@
             </div>
         </div>
     </ng-template>
-    <!-- SLIDE: 2. Show obstacles and power ups -->
+    <!-- SLIDE: 2. Show difficulties instructions -->
     <ng-template [ngIf]="activeIndex === 2" class="swiper-slide"  id="slideTwo">
+        <div class="container">
+            <div class="row">
+                <p class="intro-text">
+                    Tap on the direction zones for move and jump!
+                </p>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <img src="/assets/tutorial/touch-zones.png">
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <!-- SLIDE: 3. Show obstacles and power ups -->
+    <ng-template [ngIf]="activeIndex === 3" class="swiper-slide"  id="slideThree">
         <div class="container-obstacles">
             <div class="row">
                 <p class="intro-text">
@@ -51,7 +66,8 @@
             </div>
             <div class="row">
                 <p class="intro-text">
-                    These items will give you special gifts! Discover them on your own!
+                    These items will give you special gifts! <br>
+                    Discover them on your own!
                 </p>
             </div>
             <div class="row">
@@ -69,6 +85,7 @@
         </div>
     </ng-template>
     <div class="buttons-container-intro">
-        <ion-button *ngIf="activeIndex === 1" class="rts-button" (click)="nextSlide()">Next</ion-button>
+        <ion-button *ngIf="activeIndex !== 1" class="rts-button" (click)="moveSlide(-1)">Previous</ion-button>
+        <ion-button *ngIf="activeIndex !== 3" class="rts-button" (click)="moveSlide(1)">Next</ion-button>
     </div>
     </div>

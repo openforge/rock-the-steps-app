@@ -3,6 +3,7 @@
 import { Preferences } from '@capacitor/preferences';
 import { NativeAudio } from '@capacitor-community/native-audio';
 import {
+    AURA_SPRITE_KEY,
     BACKGROUND_AUDIO_KEY,
     Bushes,
     BUSHES_KEY,
@@ -73,7 +74,6 @@ export class WorldScene extends Phaser.Scene {
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys; // * Cursor keys to move the player in pc
     private spaceBarKey: Phaser.Input.Keyboard.Key; // Spacebar key to move the player in pc
     private isEnd: boolean = false; // Boolean to distinguish if the end has been shown
-
     private isMuseumDisplayed: boolean = false; // Boolean to distinguish if the end has been reached
 
     constructor(private gameConnectService: GameConnectService) {
@@ -100,6 +100,7 @@ export class WorldScene extends Phaser.Scene {
             this.load.image(END_KEY, 'assets/objects/end.png');
             this.load.image(MOON_KEY, 'assets/objects/moon.png');
             this.load.atlas(CHARACTER_SPRITE_KEY, `assets/character/character-sprite.png`, `assets/character/character-sprite.json`);
+            this.load.atlas(AURA_SPRITE_KEY, `assets/powers/auras.png`, `assets/powers/auras.json`);
             this.load.atlas(HEALTHBAR_KEY, `assets/objects/healthbar.png`, `assets/objects/healthbar.json`);
             this.load.image(PAUSE_BUTTON, 'assets/buttons/pause-button.png');
             this.load.image(MUSIC_BUTTON, 'assets/buttons/music.png');
@@ -135,8 +136,7 @@ export class WorldScene extends Phaser.Scene {
         this.initializeBasicWorld();
         void createButtons(this, this.spaceBarKey, this.character);
         void createTouchZones(this);
-        createAnimationsCharacter(this.character.sprite);
-
+        createAnimationsCharacter(this.character.sprite, this);
         const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
         if (audioPreference === 'true' || audioPreference === undefined) {
             void GameEngineSingleton.audioService.playBackground(this);
@@ -154,6 +154,8 @@ export class WorldScene extends Phaser.Scene {
         this.character.evaluateMovement(this.cursors);
         this.character.moveCharacterAutomatically(this.cursors);
         this.character.avoidOutOfBounds();
+        this.character.showMoonPowerUpAnimation(this);
+        this.character.showGlovesPowerUpAnimation(this);
         ObstacleHelper.cleanUpObjects(this.obstacleGroup, this.obstaclePigeonGroup);
         StepsHelper.stepsDetection(this.stepsGroup, this.character);
         StepsHelper.floorRotation(this.stepsGroup, this.secondFloor, this.thirdFloor);
@@ -180,6 +182,26 @@ export class WorldScene extends Phaser.Scene {
         this.stepsGroup = this.physics.add.group();
         this.character = new Character(this, this.firstFloor.sprite);
         this.physics.add.existing(this.firstFloor.sprite, true);
+
+        // Crea un gráfico para la aura
+        const aura = this.add.graphics();
+        aura.lineStyle(11, 0xffffff); // Color blanco y grosor de línea
+
+        // Crea una animación para la aura (parpadeo)
+        this.tweens.add({
+            targets: aura,
+            alpha: 0,
+            duration: 1000, // Duración del parpadeo en milisegundos
+            yoyo: true,
+            repeat: -1, // Repetir la animación infinitamente
+        });
+
+        // Escala la aura para que sea más grande que el jugador
+        aura.setScale(1.5);
+
+        // Coloca la aura detrás del jugador
+        this.character.sprite.setDepth(1);
+
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.time.addEvent({ delay: GameEngineSingleton.world.secondsToShowNextFloor, callback: () => this.createNewFloorIfApplies(), callbackScope: this, loop: true });
