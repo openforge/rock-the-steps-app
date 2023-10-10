@@ -136,6 +136,7 @@ export class WorldScene extends Phaser.Scene {
         void createButtons(this, this.spaceBarKey, this.character);
         void createTouchZones(this);
         createAnimationsCharacter(this.character.sprite);
+        this.scale.setGameSize(CONFIG.DEFAULT_WIDTH, CONFIG.DEFAULT_HEIGHT);
 
         const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
         if (audioPreference === 'true' || audioPreference === undefined) {
