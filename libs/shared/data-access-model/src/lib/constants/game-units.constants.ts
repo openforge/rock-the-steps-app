@@ -64,3 +64,6 @@ export const TEXT_CHARACTER_OFFSET = 60;
 export const ORIGIN_CHARACTER_TEXT = 0.5;
 export const TIMEOUT_TEXT_CHARACTER = 800;
 export const POINTS_PER_TICK = 20;
+export const BG_RATIO_CITY = 0.1;
+export const BG_RATIO_BUSHES = 0.4;
+export const BG_RATIO_FLOOR = 1;

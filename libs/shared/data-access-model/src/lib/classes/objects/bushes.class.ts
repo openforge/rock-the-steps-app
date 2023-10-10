@@ -15,7 +15,7 @@ export class Bushes {
         this.sprite = scene.add.tileSprite(0, 0, 0, 0, BUSHES_KEY);
         this.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.sprite.width);
         this.sprite.setOrigin(0, 0);
-        this.sprite.setPosition(0, gameHeight * 0.8); // * Set the position of the image to the bottom to simulate that is on the floor
+        this.sprite.setPosition(0, gameHeight * 0.68); // * Set the position of the image to the bottom to simulate that is on the floor
         scene.physics.add.existing(this.sprite, true);
     }
 }
