@@ -445,7 +445,7 @@ export class WorldScene extends Phaser.Scene {
         // Update each bg tile position
         for (let i = 0; i < this.backgrounds.length; ++i) {
             // While the museum is not displayed
-            if (!this.isMuseumDisplayed) {
+            if (!this.isEnd) {
                 const bg = this.backgrounds[i];
                 // Update it using the world movement speed since we are not using the cameras
                 bg.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor * bg.ratioX;
