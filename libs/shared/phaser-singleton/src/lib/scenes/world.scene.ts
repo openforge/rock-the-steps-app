@@ -4,6 +4,9 @@ import { Preferences } from '@capacitor/preferences';
 import { NativeAudio } from '@capacitor-community/native-audio';
 import {
     BACKGROUND_AUDIO_KEY,
+    BG_RATIO_BUSHES,
+    BG_RATIO_CITY,
+    BG_RATIO_FLOOR,
     Bushes,
     BUSHES_KEY,
     Character,
@@ -55,6 +58,7 @@ import { createTileSprite } from '../utilities/steps-helper';
 import { createTouchZones } from '../utilities/touch-zones-helper';
 
 export class WorldScene extends Phaser.Scene {
+    public backgrounds: { ratioX: number; sprite: Phaser.GameObjects.TileSprite }[] = [];
     public character: Character; // this is the class associated with the player
     public cityBackground: CityBackground; // * Used to set the image sprite and then using it into the infinite movement function
     public bushes: Bushes; // * Used to set the image sprite and then using it into the infinite movement function
@@ -136,7 +140,6 @@ export class WorldScene extends Phaser.Scene {
         void createButtons(this, this.spaceBarKey, this.character);
         void createTouchZones(this);
         createAnimationsCharacter(this.character.sprite);
-
         const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
         if (audioPreference === 'true' || audioPreference === undefined) {
             void GameEngineSingleton.audioService.playBackground(this);
@@ -165,7 +168,7 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private initializeBasicWorld(): void {
-        const skyBackground = this.add.image(0, 0, SKY_KEY); // * Setup the Sky Background Image
+        const skyBackground = this.add.image(0, 0, SKY_KEY).setOrigin(0, 0).setScrollFactor(0); // * Setup the Sky Background Image
         skyBackground.setOrigin(0, 0);
         skyBackground.setDisplaySize(CONFIG.DEFAULT_WIDTH, CONFIG.DEFAULT_HEIGHT);
         skyBackground.setSize(CONFIG.DEFAULT_WIDTH, CONFIG.DEFAULT_HEIGHT);
@@ -182,6 +185,18 @@ export class WorldScene extends Phaser.Scene {
         this.physics.add.existing(this.firstFloor.sprite, true);
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.backgrounds.push({
+            ratioX: BG_RATIO_FLOOR,
+            sprite: this.firstFloor.sprite as Phaser.GameObjects.TileSprite,
+        });
+        this.backgrounds.push({
+            ratioX: BG_RATIO_BUSHES,
+            sprite: this.bushes.sprite,
+        });
+        this.backgrounds.push({
+            ratioX: BG_RATIO_CITY,
+            sprite: this.cityBackground.sprite,
+        });
         this.time.addEvent({ delay: GameEngineSingleton.world.secondsToShowNextFloor, callback: () => this.createNewFloorIfApplies(), callbackScope: this, loop: true });
         this.time.addEvent({
             delay: MILLISECONDS_100,
@@ -417,16 +432,27 @@ export class WorldScene extends Phaser.Scene {
         // WE CANNOT USE TILESPRITES AS PLATFORMS BECAUSE THEY WILL FALL
         if (this.secondFloor && this.secondFloor.sprite.x <= -window.innerWidth && !this.secondFloorTile) {
             this.secondFloorTile = createTileSprite(this, 2);
+            this.backgrounds.push({
+                ratioX: 1,
+                sprite: this.secondFloorTile,
+            });
         }
         if (this.thirdFloor && this.thirdFloor.sprite.x <= -window.innerWidth && !this.thirdFloorTile) {
             this.thirdFloorTile = createTileSprite(this, 3);
+            this.backgrounds.push({
+                ratioX: 1,
+                sprite: this.thirdFloorTile,
+            });
         }
         // While the end has not reached do the scrolling of level
-        if (!this.isEnd) {
-            // Move the ground to the left of the screen and once it is off of screen adds it next the current one
-            if (this.firstFloor.sprite instanceof Phaser.GameObjects.TileSprite) this.firstFloor.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
-            if (this.secondFloorTile) this.secondFloorTile.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
-            if (this.thirdFloorTile) this.thirdFloorTile.tilePositionX += GameEngineSingleton.world.moveSpeedFloor;
+        // Update each bg tile position
+        for (let i = 0; i < this.backgrounds.length; ++i) {
+            // While the museum is not displayed
+            if (!this.isEnd) {
+                const bg = this.backgrounds[i];
+                // Update it using the world movement speed since we are not using the cameras
+                bg.sprite.tilePositionX += GameEngineSingleton.world.moveSpeedFloor * bg.ratioX;
+            }
         }
     }
 }
