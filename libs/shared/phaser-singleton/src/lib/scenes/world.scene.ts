@@ -306,7 +306,10 @@ export class WorldScene extends Phaser.Scene {
                 const pigeonSprite = ObstacleHelper.createPigeonObjectSprite(this, worldObject, x + worldObject.spritePositionX, y, this.floorLevel, this.firstFloorHeight);
                 worldObject.sprite = pigeonSprite;
                 worldObject.fly();
-                worldObject.dropPoop(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+                // Avoid pigeons poop when on the floor
+                if (worldObject.isFlying) {
+                    worldObject.dropPoop(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+                }
                 this.obstaclePigeonGroup.push(worldObject);
                 this.physics.add.collider(this.firstFloor.sprite, pigeonSprite);
                 this.physics.add.collider(this.character.sprite, pigeonSprite, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
