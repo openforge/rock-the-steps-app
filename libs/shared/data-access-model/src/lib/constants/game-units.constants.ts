@@ -2,6 +2,7 @@ export const DIFFICULT_EASY = 1.2;
 export const DIFFICULT_MEDIUM = 1.8;
 export const DIFFICULT_HARD = 2.4;
 export const DIFFICULT_ENDLESS = 2.6;
+export const DIFFICULT_SANDBOX = 1;
 export const INITIAL_X_REGULAR_ASSET_START = 70;
 export const TIMEOUT_REDIRECTION_TO_HOME_SCREEN = 3000;
 export const VELOCITY_PLAYER = 200;

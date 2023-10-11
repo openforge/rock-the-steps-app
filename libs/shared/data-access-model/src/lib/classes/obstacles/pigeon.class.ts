@@ -29,7 +29,7 @@ export class Pigeon extends WorldObject {
     /**
      * Method used to make fly grounded pigeon
      */
-    public flyFromTheGround(scene: Scene, obstaclePigeonPoopGroup: Poop[], character: Character, handlerCallback: ArcadePhysicsCallback): void {
+    public flyFromTheGround(scene: Scene, obstaclePigeonPoopGroup: Poop[], character: Character, handlerCallback: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback): void {
         if (!this.isFlying) {
             this.sprite.anims.play(STANDING_FRAME, true);
             this.sprite.setVelocityY(-WORLD_OBJECTS_VELOCITY_Y);
@@ -56,7 +56,7 @@ export class Pigeon extends WorldObject {
     /**
      * Method used to make drop poop from pigeon
      */
-    public dropPoop(scene: Scene, obstaclePigeonPoopGroup: Poop[], character: Character, handlerCallback: ArcadePhysicsCallback): void {
+    public dropPoop(scene: Scene, obstaclePigeonPoopGroup: Poop[], character: Character, handlerCallback: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback): void {
         const randomPoopTime = (Math.floor(Math.random() * 3) + 6) * ONE_SECOND_IN_MILLISECONDS;
         // If the sprite is active dont drop the poop
         // because it means that the pigeon has been destroyed

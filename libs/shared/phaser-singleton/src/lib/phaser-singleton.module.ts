@@ -4,6 +4,7 @@ import * as Phaser from 'phaser';
 
 import { CONFIG } from './config';
 import { PauseScene } from './scenes/pause.scene';
+import { SandboxScene } from './scenes/sandbox.scene';
 import { WorldScene } from './scenes/world.scene';
 
 /**
@@ -84,7 +85,7 @@ export class PhaserSingletonService {
                         width: CONFIG.DEFAULT_WIDTH,
                         height: CONFIG.DEFAULT_HEIGHT,
                     },
-                    scene: [WorldScene, PauseScene],
+                    scene: [WorldScene, PauseScene, SandboxScene],
                     plugins: {
                         global: [],
                         scene: [],

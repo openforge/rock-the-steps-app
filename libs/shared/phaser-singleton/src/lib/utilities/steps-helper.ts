@@ -37,7 +37,7 @@ export function createSteps(scene: Phaser.Scene, initialX: number, initialY: num
  */
 export function stepsDetection(stepsGroup: Phaser.Physics.Arcade.Group, character: Character): void {
     if (stepsGroup.getChildren().length > 0) {
-        stepsGroup.children.iterate((step: Phaser.GameObjects.Image) => {
+        stepsGroup.children.entries.map((step: Phaser.GameObjects.Image) => {
             if (step) {
                 const playerYBelow = character.sprite.y + character.sprite.height / HALF_DIVIDER;
                 const stepXEnd = step.x + step.displayWidth / HALF_DIVIDER;
@@ -72,7 +72,7 @@ export function floorRotation(stepsGroup: Phaser.Physics.Arcade.Group, secondFlo
     if (thirdFloor && thirdFloor.sprite.x >= -window.innerWidth) {
         thirdFloor.sprite.x -= 5;
     }
-    stepsGroup.children.iterate((el: Phaser.GameObjects.Image) => {
+    stepsGroup.children.entries.map((el: Phaser.GameObjects.Image) => {
         if (el.x >= -window.innerWidth) {
             el.x -= 5;
         }

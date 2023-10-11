@@ -35,6 +35,7 @@ import {
     Pigeon,
     POINTS_PER_TICK,
     Poop,
+    SETTINGS_BUTTON,
     SKY_KEY,
     STEPS_KEY,
     TIMEOUT_OBSTACLES,
@@ -104,6 +105,7 @@ export class WorldScene extends Phaser.Scene {
             this.load.image(PAUSE_BUTTON, 'assets/buttons/pause-button.png');
             this.load.image(MUSIC_BUTTON, 'assets/buttons/music.png');
             this.load.image(MUTE_BUTTON, 'assets/buttons/mute.png');
+            this.load.image(SETTINGS_BUTTON, 'assets/buttons/settings.png');
 
             // * Loading audio files
             this.load.audio(BACKGROUND_AUDIO_KEY, 'assets/phaser-audios/background/background-music-for-mobile-casual-video-game-short-8-bit-music-164703.mp3');
@@ -199,7 +201,7 @@ export class WorldScene extends Phaser.Scene {
             callbackScope: this,
             loop: true,
         });
-        if (GameEngineSingleton.difficult !== DifficultyEnum.ENDLESS) {
+        if (GameEngineSingleton.difficult !== DifficultyEnum.ENDLESS && GameEngineSingleton.difficult !== DifficultyEnum.SANDBOX) {
             this.time.delayedCall(GameEngineSingleton.world.secondsToShowNextFloor * GameEngineSingleton.world.difficultyNumber, () => this.drawEndMuseum(), [], this);
         }
     }
@@ -275,7 +277,7 @@ export class WorldScene extends Phaser.Scene {
     private flyGroundedPigeons(): void {
         this.obstaclePigeonGroup.forEach(pigeon => {
             if (pigeon.sprite.x < window.innerWidth * FLY_GROUNDED_PIGEONS_OFFSET) {
-                pigeon.flyFromTheGround(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+                pigeon.flyFromTheGround(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback);
             }
         });
     }
@@ -306,15 +308,15 @@ export class WorldScene extends Phaser.Scene {
                 const pigeonSprite = ObstacleHelper.createPigeonObjectSprite(this, worldObject, x + worldObject.spritePositionX, y, this.floorLevel, this.firstFloorHeight);
                 worldObject.sprite = pigeonSprite;
                 worldObject.fly();
-                worldObject.dropPoop(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+                worldObject.dropPoop(this, this.obstaclePoopGroup, this.character, this.obstacleHandler.bind(this) as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback);
                 this.obstaclePigeonGroup.push(worldObject);
                 this.physics.add.collider(this.firstFloor.sprite, pigeonSprite);
-                this.physics.add.collider(this.character.sprite, pigeonSprite, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+                this.physics.add.collider(this.character.sprite, pigeonSprite, this.obstacleHandler.bind(this) as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback);
             } else {
                 ObstacleHelper.createObjects(worldObject, this, x, y, this.obstacleGroup, this.floorLevel, this.firstFloorHeight);
             }
             this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
-            this.physics.add.collider(this.character.sprite, this.obstacleGroup, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
+            this.physics.add.collider(this.character.sprite, this.obstacleGroup, this.obstacleHandler.bind(this) as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback);
         }
         if (!this.isEnd) {
             this.obstacleGroup.setVelocityX(-WORLD_OBJECTS_VELOCITY * GameEngineSingleton.difficult);
@@ -330,7 +332,7 @@ export class WorldScene extends Phaser.Scene {
             return;
         } else if (GameEngineSingleton.difficult === DifficultyEnum.MEDIUM) {
             this.setFloorObject(2);
-        } else if ([DifficultyEnum.HARD, DifficultyEnum.ENDLESS].includes(GameEngineSingleton.difficult)) {
+        } else if ([DifficultyEnum.HARD, DifficultyEnum.ENDLESS, DifficultyEnum.SANDBOX].includes(GameEngineSingleton.difficult)) {
             this.setFloorObject(3);
         }
     }
@@ -371,7 +373,7 @@ export class WorldScene extends Phaser.Scene {
      */
     private endDetection(): void {
         if (this.obstacleGroup.getChildren().length > 0) {
-            this.obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
+            this.obstacleGroup.children.entries.map((worldObject: Phaser.GameObjects.Image) => {
                 if (worldObject) {
                     const worldObjectXEnd = worldObject.x + worldObject.width / HALF_DIVIDER;
                     if (worldObject.name === END_KEY && worldObjectXEnd <= window.innerWidth) {

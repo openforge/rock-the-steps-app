@@ -1,4 +1,4 @@
-import { DIFFICULT_EASY, DIFFICULT_ENDLESS, DIFFICULT_HARD, DIFFICULT_MEDIUM } from '../constants/game-units.constants';
+import { DIFFICULT_EASY, DIFFICULT_ENDLESS, DIFFICULT_HARD, DIFFICULT_MEDIUM, DIFFICULT_SANDBOX } from '../constants/game-units.constants';
 
 export enum LevelsEnum {
     DAYTIME = 'DAYTIME',
@@ -13,4 +13,5 @@ export enum DifficultyEnum {
     MEDIUM = DIFFICULT_MEDIUM,
     HARD = DIFFICULT_HARD,
     ENDLESS = DIFFICULT_ENDLESS,
+    SANDBOX = DIFFICULT_SANDBOX,
 }

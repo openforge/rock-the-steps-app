@@ -131,7 +131,7 @@ export function createObjects(worldObject: WorldObject, scene: Phaser.Scene, ini
  * @return void
  */
 export function cleanUpObjects(obstacleGroup: Phaser.Physics.Arcade.Group, obstaclePigeonGroup: Pigeon[]): void {
-    obstacleGroup.children.iterate((worldObject: Phaser.GameObjects.Image) => {
+    obstacleGroup.children.entries.map((worldObject: Phaser.GameObjects.Image) => {
         if (worldObject && worldObject.x + worldObject.width < 0 - worldObject.width) {
             worldObject.destroy();
             obstacleGroup.remove(worldObject);

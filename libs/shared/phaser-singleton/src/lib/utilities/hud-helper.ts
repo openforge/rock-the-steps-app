@@ -1,6 +1,18 @@
 /* eslint-disable no-magic-numbers */
 import { Preferences } from '@capacitor/preferences';
-import { Character, DOWN_EVENT, GameEngineSingleton, MUSIC_BUTTON, MUTE_BUTTON, PAUSE_BUTTON, PAUSE_SCENE, POINTER_DOWN_EVENT, UP_EVENT } from '@openforge/shared/data-access-model';
+import {
+    Character,
+    DOWN_EVENT,
+    GameEngineSingleton,
+    MUSIC_BUTTON,
+    MUTE_BUTTON,
+    PAUSE_BUTTON,
+    PAUSE_SCENE,
+    POINTER_DOWN_EVENT,
+    SANDBOX_SCENE,
+    SETTINGS_BUTTON,
+    UP_EVENT,
+} from '@openforge/shared/data-access-model';
 import { Scene } from 'phaser';
 import * as Phaser from 'phaser';
 
@@ -38,6 +50,15 @@ export async function createButtons(scene: Scene, spaceBarKey: Phaser.Input.Keyb
     musicButton.on(POINTER_DOWN_EVENT, () => toggleMusic(scene, musicButton), scene);
     spaceBarKey.on(DOWN_EVENT, () => doJumpMovement(scene, character), scene);
     spaceBarKey.on(UP_EVENT, () => (character.isJumping = false), scene);
+
+    const settingsButton = scene.add
+        .image(CONFIG.DEFAULT_WIDTH * 0.75, CONFIG.DEFAULT_HEIGHT * 0.05, SETTINGS_BUTTON)
+        .setScale(0.1)
+        .setOrigin(1, 0)
+        .setInteractive();
+
+    settingsButton.setDepth(3);
+    settingsButton.on(POINTER_DOWN_EVENT, () => showSandboxModal(scene), scene);
 }
 
 export async function doJumpMovement(scene: Scene, character: Character): Promise<void> {
@@ -60,6 +81,16 @@ export async function showPauseModal(_scene: Scene): Promise<void> {
     if (_scene) {
         _scene.scene.pause();
         _scene.scene.run(PAUSE_SCENE);
+        if (audioPreference === 'true') {
+            void GameEngineSingleton.audioService.pauseBackground();
+        }
+    }
+}
+export async function showSandboxModal(_scene: Scene): Promise<void> {
+    const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+    if (_scene) {
+        _scene.scene.pause();
+        _scene.scene.run(SANDBOX_SCENE);
         if (audioPreference === 'true') {
             void GameEngineSingleton.audioService.pauseBackground();
         }
