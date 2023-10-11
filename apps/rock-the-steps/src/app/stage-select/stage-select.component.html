@@ -10,59 +10,59 @@
 </ion-header>
 
 <ion-content [scrollEvents]="false">
-    <div class="list-of-stages" *ngIf="progression">
+    <div class="list-of-stages" *ngIf="userProgression">
         <div class="stage" (click)="selectLevel(levelsEnum.DAYTIME)">
             <ion-badge mode="ios">
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[0].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[1].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[2].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[0].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[1].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[2].hasCompletedOnce }"></ion-icon>
             </ion-badge>
             <img [src]="'/assets/stages/stage1.png'" alt="image_stage_1" />
         </div>
-        <div class="stage" (click)="allPointsEarned > 1000 ? selectLevel(levelsEnum.SUNSET) : null">
+        <div class="stage" (click)="selectLevel(levelsEnum.SUNSET)">
             <ion-badge mode="ios">
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[3].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[4].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[5].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[3].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[4].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[5].hasCompletedOnce }"></ion-icon>
             </ion-badge>
-            <img [src]="allPointsEarned > 1000 ? '/assets/stages/stage2.png' : '/assets/stages/stage2locked.png'" alt="image_stage_2" />
-            <h6 *ngIf="allPointsEarned < 1000">Unlock at 1,000 Points</h6>
+            <img [src]="worldProgression[1].unlocked ? '/assets/stages/stage2.png' : '/assets/stages/stage2locked.png'" alt="image_stage_2" />
+            <h6 *ngIf="!worldProgression[1].unlocked">Unlock with 1,000 Points</h6>
         </div>
-        <div class="stage" (click)="allPointsEarned > 2000 ? selectLevel(levelsEnum.NIGHT) : null">
+        <div class="stage" (click)="selectLevel(levelsEnum.NIGHT)">
             <ion-badge mode="ios">
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[6].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[7].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[8].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[6].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[7].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[8].hasCompletedOnce }"></ion-icon>
             </ion-badge>
-            <img [src]="allPointsEarned > 2000 ? '/assets/stages/stage3.png' : '/assets/stages/stage3locked.png'" alt="image_stage_3" />
-            <h6 *ngIf="allPointsEarned < 2000">Unlock at 2,000 Points</h6>
+            <img [src]="worldProgression[2].unlocked ? '/assets/stages/stage3.png' : '/assets/stages/stage3locked.png'" alt="image_stage_3" />
+            <h6 *ngIf="!worldProgression[2].unlocked">Unlock with 2,000 Points</h6>
         </div>
-        <div class="stage" (click)="allPointsEarned > 3000 ? selectLevel(levelsEnum.KELLY_DRIVE) : null">
+        <div class="stage" (click)="selectLevel(levelsEnum.KELLY_DRIVE)">
             <ion-badge mode="ios">
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[9].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[10].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[11].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[9].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[10].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[11].hasCompletedOnce }"></ion-icon>
             </ion-badge>
-            <img [src]="allPointsEarned > 3000 ? '/assets/stages/stage4.png' : '/assets/stages/stage4locked.png'" alt="image_stage_4" />
-            <h6 *ngIf="allPointsEarned < 3000">Unlock at 3,000 Points</h6>
+            <img [src]="worldProgression[3].unlocked ? '/assets/stages/stage4.png' : '/assets/stages/stage4locked.png'" alt="image_stage_4" />
+            <h6 *ngIf="!worldProgression[3].unlocked">Unlock with 3,000 Points</h6>
         </div>
-        <div class="stage" (click)="allPointsEarned > 4000 ? selectLevel(levelsEnum.RITTEN_HOUSE) : null">
+        <div class="stage" (click)="selectLevel(levelsEnum.RITTEN_HOUSE)">
             <ion-badge mode="ios">
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[12].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[13].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[14].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[12].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[13].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[14].hasCompletedOnce }"></ion-icon>
             </ion-badge>
-            <img [src]="allPointsEarned > 4000 ? '/assets/stages/stage5.png' : '/assets/stages/stage5locked.png'" alt="image_stage_5" />
-            <h6 *ngIf="allPointsEarned < 4000">Unlock at 4,000 Points</h6>
+            <img [src]="worldProgression[4].unlocked ? '/assets/stages/stage5.png' : '/assets/stages/stage5locked.png'" alt="image_stage_5" />
+            <h6 *ngIf="!worldProgression[4].unlocked">Unlock with 4,000 Points</h6>
         </div>
-        <div class="stage" (click)="allPointsEarned > 10000 ? selectLevel(levelsEnum.CHINA_TOWN) : null">
+        <div class="stage" (click)="selectLevel(levelsEnum.CHINA_TOWN)">
             <ion-badge mode="ios">
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[15].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[16].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[17].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[15].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[16].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': userProgression[17].hasCompletedOnce }"></ion-icon>
             </ion-badge>
-            <img [src]="allPointsEarned > 10000 ? '/assets/stages/stage6.png' : '/assets/stages/stage6locked.png'" alt="image_stage_6" />
-            <h6 *ngIf="allPointsEarned < 10000">Unlock at 10,000 Points</h6>
+            <img [src]="worldProgression[5].unlocked ? '/assets/stages/stage6.png' : '/assets/stages/stage6locked.png'" alt="image_stage_6" />
+            <h6 *ngIf="!worldProgression[5].unlocked">Unlock with 10,000 Points</h6>
         </div>
     </div>
     <div class="footer">
@@ -72,4 +72,28 @@
             </h2>
         </div>
     </div>
+
+    <ion-modal class="sm-modal" [isOpen]="isModalOpen">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>Unlock Stage</ion-title>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+              <ion-label>Would you like to unlock this stage?</ion-label>
+              <ion-label>It looks like you do not have enough points yet.</ion-label>
+
+              <ion-toolbar>
+                <ion-buttons slot="start">
+                    <ion-button (click)="isModalOpen = false">Cancel</ion-button>
+                  </ion-buttons>
+                  <ion-buttons slot="end">
+                    <ion-button [strong]="true" [disabled]="allPointsEarned < stageUnlocked.pointsNeeded" (click)="unlockStage()">Confirm</ion-button>
+                  </ion-buttons>
+              </ion-toolbar>
+          </ion-content>
+        </ng-template>
+    </ion-modal>
 </ion-content>
+

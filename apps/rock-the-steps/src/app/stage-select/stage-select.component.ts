@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
-import { DifficultyEnum, LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
+import { DifficultyEnum, LevelsEnum, ScreensEnum, WorldProgress } from '@openforge/shared/data-access-model';
 import { Stage } from 'libs/shared/data-access-model/src/lib/models/stage.interface';
 import { AudioService } from 'libs/shared/data-access-model/src/lib/services/audio.service';
 import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
@@ -23,8 +23,44 @@ export class StageSelectComponent implements OnInit {
     public screensEnums = ScreensEnum; // * Enum used to navigate across the screens
     public allPointsEarned = 0; // * Number of points the user has earened playing
 
+    public isModalOpen = false;
+    public stageSelected: WorldProgress;
+
+    public worldProgression: WorldProgress[] = [
+        {
+            levelEnum: LevelsEnum.DAYTIME,
+            unlocked: true,
+            pointsNeeded: 0,
+        },
+        {
+            levelEnum: LevelsEnum.SUNSET,
+            unlocked: false,
+            pointsNeeded: 1000,
+        },
+        {
+            levelEnum: LevelsEnum.NIGHT,
+            unlocked: false,
+            pointsNeeded: 2000,
+        },
+        {
+            levelEnum: LevelsEnum.KELLY_DRIVE,
+            unlocked: false,
+            pointsNeeded: 3000,
+        },
+        {
+            levelEnum: LevelsEnum.RITTEN_HOUSE,
+            unlocked: false,
+            pointsNeeded: 4000,
+        },
+        {
+            levelEnum: LevelsEnum.CHINA_TOWN,
+            unlocked: false,
+            pointsNeeded: 10000,
+        },
+    ];
+
     // * TODO update this solution to generate in a class
-    public progression: Stage[] = [
+    public userProgression: Stage[] = [
         {
             id: `${LevelsEnum.DAYTIME}.${DifficultyEnum.EASY}`,
             levelName: LevelsEnum.DAYTIME,
@@ -163,10 +199,13 @@ export class StageSelectComponent implements OnInit {
             await Preferences.set({ key: 'TUTORIAL', value: 'true' });
         }
         const userProgression = await Preferences.get({ key: 'PROGRESSION' });
+        const worldState = await Preferences.get({ key: 'WORLD_PROGRESS' });
         if (!userProgression.value) {
-            await Preferences.set({ key: 'PROGRESSION', value: JSON.stringify(this.progression) });
+            await Preferences.set({ key: 'PROGRESSION', value: JSON.stringify(this.userProgression) });
+            await Preferences.set({ key: 'WORLD_PROGRESS', value: JSON.stringify(this.worldProgression) });
         } else {
-            this.progression = JSON.parse(userProgression.value) as Stage[];
+            this.userProgression = JSON.parse(userProgression.value) as Stage[];
+            this.worldProgression = JSON.parse(worldState.value) as WorldProgress[];
         }
     }
 
@@ -191,29 +230,32 @@ export class StageSelectComponent implements OnInit {
      * @param level selected level
      */
     public async selectLevel(level: LevelsEnum): Promise<void> {
-        console.log(`Selected ${level}`);
+        this.stageSelected = this.worldProgression.filter(stage => stage.levelEnum === level)[0];
+        if (this.stageSelected.unlocked === false) {
+            this.isModalOpen = true;
+        } else {
+            await this.modalService
+                .showModal({
+                    component: DifficultSelectModalComponent,
+                    cssClass: 'difficult-modal',
+                    backdropDismiss: false,
+                    componentProps: {
+                        level,
+                        difficulties: this.userProgression.filter(stg => stg.levelName === level),
+                    },
+                })
+                .then(() => this.modalService.modalElement);
 
-        await this.modalService
-            .showModal({
-                component: DifficultSelectModalComponent,
-                cssClass: 'difficult-modal',
-                backdropDismiss: false,
-                componentProps: {
-                    level,
-                    difficulties: this.progression.filter(stg => stg.levelName === level),
-                },
-            })
-            .then(() => this.modalService.modalElement);
+            void this.modalService.modalElement.onWillDismiss().then(async (action: { role: string; data: { difficult: number } }) => {
+                if (action.role !== 'backdrop' && action.data.difficult) {
+                    GameEngineSingleton.difficult = action.data.difficult;
 
-        void this.modalService.modalElement.onWillDismiss().then(async (action: { role: string; data: { difficult: number } }) => {
-            if (action.role !== 'backdrop' && action.data.difficult) {
-                GameEngineSingleton.difficult = action.data.difficult;
-
-                // * Here load the level
-                void GameEngineSingleton.buildWorld(level, action.data.difficult);
-                await this.goTo(ScreensEnum.PLAY_STAGE);
-            }
-        });
+                    // * Here load the level
+                    void GameEngineSingleton.buildWorld(level, action.data.difficult);
+                    await this.goTo(ScreensEnum.PLAY_STAGE);
+                }
+            });
+        }
     }
 
     /**
@@ -225,5 +267,16 @@ export class StageSelectComponent implements OnInit {
         } else {
             await this.router.navigate([screen], { replaceUrl: true });
         }
+    }
+
+    public async unlockStage() {
+        const item = this.worldProgression.filter(stage => stage.levelEnum === this.stageSelected.levelEnum)[0];
+        const index = this.worldProgression.indexOf(item);
+        this.worldProgression[index].unlocked = true;
+        await Preferences.set({ key: 'WORLD_PROGRESS', value: JSON.stringify(this.worldProgression) });
+
+        this.allPointsEarned = this.allPointsEarned - this.worldProgression.filter(stage => stage.levelEnum === this.stageSelected.levelEnum)[0].pointsNeeded;
+        await Preferences.set({ key: 'TOTAL_POINTS', value: this.allPointsEarned.toString() });
+        this.isModalOpen = false;
     }
 }

@@ -34,6 +34,7 @@ export * from './lib/enums/index';
 export * from './lib/models/leaderboards.interface';
 export * from './lib/models/user.interface';
 export * from './lib/models/stage.interface';
+export * from './lib/models/world-progress';
 
 // * Constants
 export * from './lib/constants/game-keys.constants';
