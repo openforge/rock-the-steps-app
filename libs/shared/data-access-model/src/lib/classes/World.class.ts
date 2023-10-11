@@ -92,16 +92,16 @@ export class World {
     public static createDayLevel(world: World): void {
         // * It has apple, gloves, bell, bottle, trashcan, cheese steak, cone, tourist, pigeon, pigeon poop
         world.objects.push(new Gloves(world.worldType));
-        // world.objects.push(new CheeseSteak(world.worldType));
-        //
-        // world.objects.push(new Apple(world.worldType));
-        // world.objects.push(new LibertyBell(world.worldType));
-        // world.objects.push(new Bottle(world.worldType));
-        // world.objects.push(new Trashcan(world.worldType));
-        // world.objects.push(new Cone(world.worldType));
-        // world.objects.push(new Tourist(world.worldType));
-        // world.objects.push(new Pigeon(world.worldType));
-        // world.objects.push(new Moon(world.worldType));
+        world.objects.push(new CheeseSteak(world.worldType));
+
+        world.objects.push(new Apple(world.worldType));
+        world.objects.push(new LibertyBell(world.worldType));
+        world.objects.push(new Bottle(world.worldType));
+        world.objects.push(new Trashcan(world.worldType));
+        world.objects.push(new Cone(world.worldType));
+        world.objects.push(new Tourist(world.worldType));
+        world.objects.push(new Pigeon(world.worldType));
+        world.objects.push(new Moon(world.worldType));
         world.secondsToShowNextFloor = 12000;
     }
 

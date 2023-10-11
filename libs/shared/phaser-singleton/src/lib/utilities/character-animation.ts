@@ -1,7 +1,9 @@
 import {
     AURA_GLOVES_KEY,
     AURA_MOON_KEY,
+    AURA_RED_SPRITE,
     AURA_SPRITE_KEY,
+    AURA_WHITE_SPRITE,
     CHARACTER_SPRITE_KEY,
     DAMAGE_PREFIX,
     DAMAGED_ANIMATION,
@@ -26,7 +28,7 @@ export function createAnimationsCharacter(player: Phaser.Types.Physics.Arcade.Sp
     scene.anims.create({
         key: AURA_MOON_KEY,
         frames: scene.anims.generateFrameNames(AURA_SPRITE_KEY, {
-            prefix: 'aurawhite',
+            prefix: AURA_WHITE_SPRITE,
             end: 1,
             zeroPad: 3,
         }),
@@ -36,7 +38,7 @@ export function createAnimationsCharacter(player: Phaser.Types.Physics.Arcade.Sp
     scene.anims.create({
         key: AURA_GLOVES_KEY,
         frames: scene.anims.generateFrameNames(AURA_SPRITE_KEY, {
-            prefix: 'aura',
+            prefix: AURA_RED_SPRITE,
             end: 1,
             zeroPad: 3,
         }),

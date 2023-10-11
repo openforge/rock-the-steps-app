@@ -182,26 +182,6 @@ export class WorldScene extends Phaser.Scene {
         this.stepsGroup = this.physics.add.group();
         this.character = new Character(this, this.firstFloor.sprite);
         this.physics.add.existing(this.firstFloor.sprite, true);
-
-        // Crea un gráfico para la aura
-        const aura = this.add.graphics();
-        aura.lineStyle(11, 0xffffff); // Color blanco y grosor de línea
-
-        // Crea una animación para la aura (parpadeo)
-        this.tweens.add({
-            targets: aura,
-            alpha: 0,
-            duration: 1000, // Duración del parpadeo en milisegundos
-            yoyo: true,
-            repeat: -1, // Repetir la animación infinitamente
-        });
-
-        // Escala la aura para que sea más grande que el jugador
-        aura.setScale(1.5);
-
-        // Coloca la aura detrás del jugador
-        this.character.sprite.setDepth(1);
-
         this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.time.addEvent({ delay: GameEngineSingleton.world.secondsToShowNextFloor, callback: () => this.createNewFloorIfApplies(), callbackScope: this, loop: true });
@@ -247,13 +227,15 @@ export class WorldScene extends Phaser.Scene {
         } else if (obstacle.name === Objects.GLOVES) {
             //* If gloves is picked up destroy the asset
             obstacle.destroy();
-            this.character.showTextAbove(this, '#FFFFFF', `SUPERPOWERS!!!`);
+            this.character.showTextAbove(this, '#FFFFFF', `INVINCIBLE!!!`);
             this.obstacleGroup.remove(obstacle);
             this.character.makeInvulnerable(this);
+            this.character.showGlovesPowerUpAnimation(this);
         } else if (this.character.isInvulnerable) {
             this.obstacleGroup.remove(obstacle);
             obstacle.destroy();
         } else if (obstacle.name === Objects.MOON) {
+            this.character.showTextAbove(this, '#FFFFFF', `BIG JUMPS!!!`);
             this.character.addMoonShoes(this);
             this.obstacleGroup.remove(obstacle);
             obstacle.destroy();
@@ -263,7 +245,11 @@ export class WorldScene extends Phaser.Scene {
             this.character.showTextAbove(this, '#FF0000', `-${GameEngineSingleton.world.damageDecreaseValue}`);
             //if no more damage is allowed send out the player!
             if (this.character.damageValue >= DAMAGE_MAX_VALUE) {
-                void this.endGame(GameEnum.LOSE);
+                if (GameEngineSingleton.difficult === DifficultyEnum.ENDLESS) {
+                    void this.endGame(GameEnum.ENDLESS);
+                } else {
+                    void this.endGame(GameEnum.LOSE);
+                }
             }
             GameEngineSingleton.points -= GameEngineSingleton.points >= GameEngineSingleton.world.damageDecreaseValue ? GameEngineSingleton.world.damageDecreaseValue : GameEngineSingleton.points;
         }
