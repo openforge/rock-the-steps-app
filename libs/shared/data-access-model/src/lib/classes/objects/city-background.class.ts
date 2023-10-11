@@ -13,7 +13,7 @@ export class CityBackground {
         this.sprite = scene.add.tileSprite(0, 0, 0, 0, CITY_KEY);
         this.sprite.setScale(CONFIG.DEFAULT_WIDTH / this.sprite.width);
         this.sprite.setOrigin(0, 0);
-        this.sprite.setPosition(0, CONFIG.DEFAULT_HEIGHT * 0.45); // * Set the position of the image to the bottom to simulate that is on the floor
+        this.sprite.setPosition(0, CONFIG.DEFAULT_HEIGHT * 0.38); // * Set the position of the image to the bottom to simulate that is on the floor
         scene.physics.add.existing(this.sprite, true);
     }
 }

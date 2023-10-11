@@ -14,7 +14,7 @@ export function createTouchZones(scene: WorldScene): void {
     console.log('world.scene.ts', 'createZones');
     const zoneLeftX = 100;
     const zoneWidth = (CONFIG.DEFAULT_WIDTH * 20) / 100;
-    const zoneRightX = 300;
+    const zoneRightX = 200;
     const zoneHeight = 200;
     const zoneJumpX = CONFIG.DEFAULT_WIDTH - zoneWidth * 0.5;
     const zoneY = CONFIG.DEFAULT_HEIGHT - zoneHeight * 0.3;
