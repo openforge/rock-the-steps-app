@@ -22,7 +22,7 @@ export class TutorialModalComponent {
     /**
      * Method used to see the next tutorial
      */
-    public nextSlide(): void {
-        this.activeIndex++;
+    public moveSlide(slide: number): void {
+        this.activeIndex += slide;
     }
 }

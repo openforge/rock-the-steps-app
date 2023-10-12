@@ -1,8 +1,8 @@
-<div [ngClass]="displayWinBackground ? 'win-container' : 'lose-container'">
+<div [ngClass]="displayBackground">
     <div class="point-alignment">
-        <p *ngIf="displayWinBackground" class="win-points">{{ gameSingleton.points }}</p>
+        <p *ngIf="displayState === gameEnum.ENDLESS || displayState === gameEnum.WIN" class="win-points">{{ gameSingleton.points }}</p>
     </div>
-    <div *ngIf="!displayWinBackground" class="navigation-options">
+    <div *ngIf="displayState === gameEnum.LOSE" class="navigation-options">
         <ion-button class="rts-button" fill="outline" mode="md" (click)="replayLevel()">
             <ion-icon name="refresh-outline"></ion-icon>
             Replay</ion-button

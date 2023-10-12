@@ -13,7 +13,7 @@
 .title-container h1 {
   color: var(--gray-base);
   font-weight: bold;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
 }
 
 .modal-container {
@@ -21,7 +21,6 @@
   border: 0.5rem solid var(--gray-base);
   border-radius: 1rem;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   background-color: rgb(237, 242, 246, 1.5);
@@ -37,22 +36,25 @@
   text-align: center;
   justify-content: center;
 }
+.container-obstacles {
+  display: flex;
+}
 .col {
   flex: 1;
   padding: 1vw;
 }
 .container-obstacles img {
-  height: 5vh;
+  height: 10vh;
   width: auto;
 }
 .container .col img {
-  height: 20vh;
+  height: 25vh;
   width: auto;
 }
 
 .intro-text {
-  font-size: 2rem;
+  font-size: 1rem;
   color: var(--gray-base);
-  padding: 0 15vw;
+  padding: 0 5vw;
   text-align: center;
 }
