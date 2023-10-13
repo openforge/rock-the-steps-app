@@ -148,6 +148,8 @@ export class WorldScene extends Phaser.Scene {
         void createButtons(this, this.spaceBarKey, this.character);
         void createMovementButtons(this, this.character, this.spaceBarKey, this.input.keyboard);
         createAnimationsCharacter(this.character.sprite, this);
+        this.scale.setGameSize(CONFIG.DEFAULT_WIDTH, CONFIG.DEFAULT_HEIGHT);
+
         const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
         if (audioPreference === 'true' || audioPreference === undefined) {
             void GameEngineSingleton.audioService.playBackground(this);
