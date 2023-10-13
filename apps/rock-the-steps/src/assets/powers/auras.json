@@ -1,0 +1,224 @@
+{
+  "frames": [
+    {
+      "filename": "aura000",
+      "frame": {
+        "x": 411,
+        "y": 27,
+        "w": 70,
+        "h": 66
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 70,
+        "h": 66
+      },
+      "sourceSize": {
+        "w": 70,
+        "h": 66
+      }
+    },
+    {
+      "filename": "aura001",
+      "frame": {
+        "x": 483,
+        "y": 27,
+        "w": 76,
+        "h": 66
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 76,
+        "h": 66
+      },
+      "sourceSize": {
+        "w": 76,
+        "h": 66
+      }
+    },
+    {
+      "filename": "aurawhite000",
+      "frame": {
+        "x": 60,
+        "y": 36,
+        "w": 49,
+        "h": 58
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 49,
+        "h": 58
+      },
+      "sourceSize": {
+        "w": 49,
+        "h": 58
+      }
+    },
+    {
+      "filename": "aurawhite001",
+      "frame": {
+        "x": 4,
+        "y": 38,
+        "w": 49,
+        "h": 56
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 49,
+        "h": 56
+      },
+      "sourceSize": {
+        "w": 49,
+        "h": 56
+      }
+    },
+    {
+      "filename": "aurablack000",
+      "frame": {
+        "x": 77,
+        "y": 133,
+        "w": 76,
+        "h": 67
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 76,
+        "h": 67
+      },
+      "sourceSize": {
+        "w": 76,
+        "h": 67
+      }
+    },
+    {
+      "filename": "aurablack001",
+      "frame": {
+        "x": 3,
+        "y": 134,
+        "w": 67,
+        "h": 66
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 67,
+        "h": 66
+      },
+      "sourceSize": {
+        "w": 67,
+        "h": 66
+      }
+    },
+    {
+      "filename": "aurablue000",
+      "frame": {
+        "x": 62,
+        "y": 256,
+        "w": 57,
+        "h": 59
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 57,
+        "h": 59
+      },
+      "sourceSize": {
+        "w": 57,
+        "h": 59
+      }
+    },
+    {
+      "filename": "aurablue001",
+      "frame": {
+        "x": 3,
+        "y": 258,
+        "w": 56,
+        "h": 58
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 56,
+        "h": 58
+      },
+      "sourceSize": {
+        "w": 56,
+        "h": 58
+      }
+    },
+    {
+      "filename": "auracomb000",
+      "frame": {
+        "x": 3,
+        "y": 343,
+        "w": 37,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 37,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 37,
+        "h": 48
+      }
+    },
+    {
+      "filename": "auracomb001",
+      "frame": {
+        "x": 54,
+        "y": 343,
+        "w": 38,
+        "h": 47
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 38,
+        "h": 47
+      },
+      "sourceSize": {
+        "w": 38,
+        "h": 47
+      }
+    }
+  ],
+  "meta": {
+    "app": "https://www.leshylabs.com/apps/sstool/",
+    "version": "Leshy SpriteSheet Tool v0.8.4",
+    "image": "auras.png",
+    "size": {
+      "w": 567,
+      "h": 440
+    },
+    "scale": 1
+  }
+}

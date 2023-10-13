@@ -117,6 +117,7 @@ export function createObjects(worldObject: WorldObject, scene: Phaser.Scene, ini
         tmpSprite.anims.play(STANDING_FRAME, true);
     }
     const positionY = floorHeight * floorNumber;
+    tmpSprite.setDepth(2);
     tmpSprite.setOrigin(0);
     tmpSprite.body.setImmovable(true);
     tmpSprite.setImmovable(true);
