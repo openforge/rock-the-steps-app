@@ -1,4 +1,4 @@
-.win-container {
+.win-state {
   align-items: center;
   background: url('/assets/background/win-background.png');
   background-repeat: no-repeat;
@@ -9,8 +9,18 @@
   height: 100%;
   width: 100%;
 }
-
-.lose-container {
+.endless-state {
+  align-items: center;
+  background: url('/assets/background/win-background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+.lose-state {
   background: url('/assets/background/lose-background.jpg');
   background-size: cover;
   height: 100%;

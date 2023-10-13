@@ -1,7 +1,17 @@
 import { Scene } from 'phaser';
 import * as Phaser from 'phaser';
 
-import { CHARACTER_SPRITE_KEY, DAMAGED_ANIMATION, HEALTHBAR_KEY, HEALTHBAR_TEXTURE_PREFIX, JUMPING_ANIMATION, WALKING_ANIMATION } from '../../constants/game-keys.constants';
+import {
+    AURA_GLOVES_KEY,
+    AURA_MOON_KEY,
+    AURA_SPRITE_KEY,
+    CHARACTER_SPRITE_KEY,
+    DAMAGED_ANIMATION,
+    HEALTHBAR_KEY,
+    HEALTHBAR_TEXTURE_PREFIX,
+    JUMPING_ANIMATION,
+    WALKING_ANIMATION,
+} from '../../constants/game-keys.constants';
 import {
     DAMAGE_TIMER,
     DURATION_INVULNERABLE_REP,
@@ -35,6 +45,8 @@ export class Character {
     public damageValue = 0; // * Amount of damaged received by obstacles
     public damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
     public healthbar: Phaser.GameObjects.Sprite; // * Healthbar used to show the remaining life of the player
+    public auraGloves: Phaser.GameObjects.Sprite; //* Sprite used as animation to show that power ups are active
+    public auraMoonShoes: Phaser.GameObjects.Sprite; //* Sprite used as animation to show that power ups are active
     constructor(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite | Phaser.Physics.Arcade.Sprite) {
         this.sprite = scene.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
         this.sprite.setGravityY(NORMAL_GRAVITY);
@@ -44,6 +56,49 @@ export class Character {
         this.addFloorCollision(scene, floorTileSprite);
     }
 
+    /**
+     * Method used to display the aura for moon shoes!
+     *
+     * @param scene
+     */
+    public showMoonPowerUpAnimation(scene: Phaser.Scene): void {
+        if (this.hasMoonShoes && !this.auraMoonShoes) {
+            this.auraMoonShoes = scene.add.sprite(this.sprite.x, this.sprite.y, AURA_SPRITE_KEY, AURA_MOON_KEY);
+            // eslint-disable-next-line no-magic-numbers
+            this.auraMoonShoes.setOrigin(0.5, 0.7);
+            this.auraMoonShoes.setScale(2);
+            this.auraMoonShoes.setDepth(0);
+            this.auraMoonShoes.play(AURA_MOON_KEY, true);
+        } else if (this.hasMoonShoes && this.auraMoonShoes.active) {
+            this.auraMoonShoes.x = this.sprite.x;
+            this.auraMoonShoes.y = this.sprite.y;
+        } else if (!this.hasMoonShoes && this.auraMoonShoes && this.auraMoonShoes.active) {
+            this.auraMoonShoes.destroy();
+            this.auraMoonShoes = undefined;
+        }
+    }
+    /**
+     * Method used to display the aura for Gloves power up!
+     *
+     * @param scene
+     */
+    public showGlovesPowerUpAnimation(scene: Phaser.Scene): void {
+        console.log(this.isInvulnerable, this.auraGloves);
+        if (this.isInvulnerable && !this.auraGloves) {
+            this.auraGloves = scene.add.sprite(this.sprite.x, this.sprite.y, AURA_SPRITE_KEY, AURA_GLOVES_KEY);
+            // eslint-disable-next-line no-magic-numbers
+            this.auraGloves.setOrigin(0.5, 0.7);
+            this.auraGloves.setScale(2);
+            this.auraGloves.setDepth(0);
+            this.auraGloves.play(AURA_GLOVES_KEY, true);
+        } else if (this.isInvulnerable && this.auraGloves.active) {
+            this.auraGloves.x = this.sprite.x;
+            this.auraGloves.y = this.sprite.y;
+        } else if (!this.isInvulnerable && this.auraGloves && this.auraGloves.active) {
+            this.auraGloves.destroy();
+            this.auraGloves = undefined;
+        }
+    }
     /**
      * * Adds collider with floor tile on the first setup, as well as dynamic floors after that.
      *
@@ -186,8 +241,6 @@ export class Character {
         // If is not invulnerable then affect with damage
         this.damageValue += difficultyFactor;
         this.sprite.setVelocityY(-VELOCITY_PLAYER_WHEN_MOVING);
-        // Make invulnerable for some seconds to avoid multi coalition
-        this.isInvulnerable = true;
         this.healthbar.setTexture(HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}${this.damageValue}`);
         // Set damaged flag so no other animations break damaged animation
         // Play damage animation

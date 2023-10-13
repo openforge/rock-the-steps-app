@@ -12,15 +12,18 @@ import { TIMEOUT_REDIRECTION_TO_HOME_SCREEN } from '../../../../../libs/shared/d
     styleUrls: ['./result-screen.component.scss'],
 })
 export class ResultScreenComponent implements OnInit {
-    public displayWinBackground = false; // * Flag used to show conditionally the background for the user
+    public displayBackground = 'lose-state'; // * Flag used to show conditionally the background for the user
+    public displayState = GameEnum.LOSE; // * Flag used to show conditionally the background for the user
+    public gameEnum = GameEnum; // * Enum prop used in the template
     public gameSingleton = GameEngineSingleton; // * GameSingleton property used in the template
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
     async ngOnInit(): Promise<void> {
         this.activatedRoute.queryParams.subscribe(params => {
-            if (params.r === GameEnum.WIN) {
-                this.displayWinBackground = true;
+            this.displayState = params.r as GameEnum;
+            this.displayBackground = `${params.r}-state`.toLowerCase();
+            if (params.r === GameEnum.WIN || params.r === GameEnum.ENDLESS) {
                 void this.setWinFunctionality();
             } else if (params.r === GameEnum.LOSE) {
                 void this.setLoseFunctionality();
