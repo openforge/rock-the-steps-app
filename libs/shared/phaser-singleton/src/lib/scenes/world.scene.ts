@@ -14,6 +14,9 @@ import {
     CHARACTER_SPRITE_KEY,
     CITY_KEY,
     CityBackground,
+    CONTROLS_KEY,
+    CONTROLS_LEFT_KEY,
+    CONTROLS_RIGHT_KEY,
     DAMAGE_MAX_VALUE,
     DAMAGE_MIN_VALUE,
     DifficultyEnum,
@@ -29,6 +32,7 @@ import {
     INITIAL_POINTS_X,
     INITIAL_POINTS_Y,
     JUMP_AUDIO_KEY,
+    JUMP_KEY,
     LevelsEnum,
     MILLISECONDS_100,
     MOON_KEY,
@@ -52,11 +56,10 @@ import * as Phaser from 'phaser';
 import { GameEngineSingleton } from '../../../../data-access-model/src/lib/classes/singletons/game-engine.singleton';
 import { Objects } from '../../../../data-access-model/src/lib/enums/objects.enum';
 import { createAnimationsCharacter } from '../utilities/character-animation';
-import { createButtons } from '../utilities/hud-helper';
+import { createButtons, createMovementButtons } from '../utilities/hud-helper';
 import * as ObstacleHelper from '../utilities/object-creation-helper';
 import * as StepsHelper from '../utilities/steps-helper';
 import { createTileSprite } from '../utilities/steps-helper';
-import { createTouchZones } from '../utilities/touch-zones-helper';
 
 export class WorldScene extends Phaser.Scene {
     public backgrounds: { ratioX: number; sprite: Phaser.GameObjects.TileSprite }[] = [];
@@ -99,6 +102,10 @@ export class WorldScene extends Phaser.Scene {
             this.load.image(FLOOR_KEY, `assets/city-scene/flat-sidewalk-${GameEngineSingleton.world.worldType}.png`); // * load the floor image
             this.load.image(BUSHES_KEY, `assets/city-scene/bushes-DAYTIME.png`); // *  load the bushes image
             this.load.image(STEPS_KEY, `assets/steps/steps-${GameEngineSingleton.world.worldType}.png`);
+            this.load.image(JUMP_KEY, `assets/buttons/jump.png`);
+            this.load.atlas(CONTROLS_KEY, `assets/buttons/controls.png`, `assets/buttons/controls.json`);
+            this.load.atlas(CONTROLS_LEFT_KEY, `assets/buttons/controls-left.png`, `assets/buttons/controls.json`);
+            this.load.atlas(CONTROLS_RIGHT_KEY, `assets/buttons/controls-right.png`, `assets/buttons/controls.json`);
             // * Load the objects and the player
             this.load.atlas(OBJECTS_SPRITE_KEY, `assets/objects/${GameEngineSingleton.world.worldType}.png`, `assets/objects/${GameEngineSingleton.world.worldType}.json`);
             this.load.image(END_KEY, 'assets/objects/end.png');
@@ -139,7 +146,7 @@ export class WorldScene extends Phaser.Scene {
         this.scale.lockOrientation('landscape');
         this.initializeBasicWorld();
         void createButtons(this, this.spaceBarKey, this.character);
-        void createTouchZones(this);
+        void createMovementButtons(this, this.character, this.spaceBarKey, this.input.keyboard);
         createAnimationsCharacter(this.character.sprite, this);
         this.scale.setGameSize(CONFIG.DEFAULT_WIDTH, CONFIG.DEFAULT_HEIGHT);
 
@@ -183,7 +190,6 @@ export class WorldScene extends Phaser.Scene {
         this.firstFloor = new Floor(this, 0, 0, 1, this.obstacleGroup, this.character);
         this.firstFloorHeight = this.firstFloor.sprite.displayHeight;
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.input.keyboard.on('keydown_RIGHT', () => alert('red'));
         this.obstacleGroup = this.physics.add.group();
         this.stepsGroup = this.physics.add.group();
         this.character = new Character(this, this.firstFloor.sprite);
