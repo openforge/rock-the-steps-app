@@ -2,7 +2,7 @@ import { Scene } from 'phaser';
 
 import { createDropObject } from '../../../../../phaser-singleton/src/lib/utilities/object-creation-helper';
 import { STANDING_FRAME } from '../../constants/game-keys.constants';
-import { ONE_SECOND_IN_MILLISECONDS, WORLD_OBJECTS_VELOCITY, WORLD_OBJECTS_VELOCITY_Y } from '../../constants/game-units.constants';
+import { ONE_SECOND_IN_MILLISECONDS, WORLD_OBJECTS_VELOCITY, WORLD_OBJECTS_VELOCITY_Y, WORLD_PIGEON_VELOCITY_AFTER_POOP } from '../../constants/game-units.constants';
 import { LevelsEnum } from '../../enums/levels.enum';
 import { Objects } from '../../enums/objects.enum';
 import { Character } from '../character/character';
@@ -63,6 +63,7 @@ export class Pigeon extends WorldObject {
         setTimeout(() => {
             if (this.sprite.active) {
                 const poopSprite = createDropObject(scene, this.sprite.x, this.sprite.y + this.sprite.displayHeight, this.poop.name);
+                this.sprite.setVelocityX(-WORLD_PIGEON_VELOCITY_AFTER_POOP);
                 obstaclePigeonPoopGroup.push(this.poop);
                 scene.physics.add.collider(character.sprite, poopSprite, handlerCallback);
             }

@@ -18,6 +18,9 @@ export class DifficultSelectModalComponent implements OnInit {
         midWorld: World;
         hardWorld: World;
     }; //* Level difficulties objects to be displayed in the modal
+    public isPrevFinishedInEasy: boolean; // Prop used to verify if at least the prev easy level has been finished
+    public isPrevFinishedInMid: boolean; // Prop used to verify if at least the prev mid level has been finished
+    public isPrevFinishedInHard: boolean; // Prop used to verify if at least the prev hard level has been finished
     constructor(private modalService: ModalService) {}
 
     ngOnInit() {
