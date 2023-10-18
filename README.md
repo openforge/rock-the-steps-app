@@ -1,7 +1,13 @@
 # Rock The Steps!
 
-`npm install`
-`npx nx run rock-the-steps:serve`
+For install the dependencies `npm install`.  
+Note: In case you are running issues becase the Macs M1/Intel chip variations try deleting package.lock and install again.  
+For run on web browser `npm run start`
+
+In order to run on  Emulator you need to run:
+`npm run build:app`  
+Then for ios: `npm run ios:app`
+Or for android `npm run android:app` 
 
 # Debug Mode
 
@@ -10,16 +16,6 @@ To turn on/off debug mode (the boxes) go to phaser-singleton.module.ts and toggl
 # Architecture
 
 This project uses Ionic Framework for the majority of screens and overlays; and uses Phaser for the gameplay itself. Please see corresponding documentation on their respective websites.
-
-Some caveats:
-
-1. We're not yet using tilemaps. This game is a port from .lua originally, so we're still in the process of updating it to Phaser Best Practices
-
-# Roadmap / TODO (High Level)
-
-1. Update to use Phaser Tilemap
-2. Update all classes to properly map the Phaser sprite and the class itself
-3. Update the BELL and PIGEON POOP to fall from sky (for an extra dynamic)
 
 # LICENSE
 
