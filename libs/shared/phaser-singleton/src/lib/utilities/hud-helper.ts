@@ -1,7 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import { Preferences } from '@capacitor/preferences';
 import {
-    BUTTON_JUMP_X,
     BUTTON_LEFT_X,
     BUTTON_RIGHT_X,
     BUTTONS_MOVE_Y,
@@ -11,7 +10,6 @@ import {
     CONTROLS_RIGHT_KEY,
     DOWN_EVENT,
     GameEngineSingleton,
-    JUMP_KEY,
     KEYDOWN_EVENT,
     KEYUP_EVENT,
     LEFT_KEY,
@@ -25,6 +23,7 @@ import {
     RIGHT_KEY,
     RIGHT_KEYBOARD,
     UP_EVENT,
+    ZoneType,
 } from '@openforge/shared/data-access-model';
 import { Scene } from 'phaser';
 import * as Phaser from 'phaser';
@@ -75,6 +74,10 @@ export async function createButtons(scene: Scene, spaceBarKey: Phaser.Input.Keyb
  */
 export function createMovementButtons(scene: WorldScene, character: Character, spaceBarKey: Phaser.Input.Keyboard.Key, keyboard: Phaser.Input.Keyboard.KeyboardPlugin): void {
     console.log('world.scene.ts', 'buttons');
+    const zoneWidth = (CONFIG.DEFAULT_WIDTH * 20) / 100;
+    const zoneHeight = 200;
+    const zoneJumpX = CONFIG.DEFAULT_WIDTH - zoneWidth * 0.5;
+    const zoneY = CONFIG.DEFAULT_HEIGHT - zoneHeight * 0.3;
     const buttonLeft = scene.add.sprite(BUTTON_LEFT_X, CONFIG.DEFAULT_HEIGHT - BUTTONS_MOVE_Y, CONTROLS_KEY, LEFT_KEY);
     buttonLeft.setScale(CONFIG.DEFAULT_CONTROL_SCALE);
     buttonLeft.setInteractive();
@@ -141,14 +144,34 @@ export function createMovementButtons(scene: WorldScene, character: Character, s
         },
         scene
     );
-    const buttonJump = scene.add.sprite(CONFIG.DEFAULT_WIDTH - BUTTON_JUMP_X, CONFIG.DEFAULT_HEIGHT - BUTTONS_MOVE_Y, JUMP_KEY);
-    buttonJump.setScale(CONFIG.DEFAULT_CONTROL_SCALE);
-    buttonJump.setInteractive();
-    buttonJump.setDepth(3);
-    buttonJump.on(POINTER_DOWN_EVENT, () => doJumpMovement(scene, character), scene);
-    buttonJump.on(POINTER_UP_EVENT, () => (character.isJumping = false), scene);
+    const zoneJump = scene.add.zone(zoneJumpX, zoneY, zoneWidth, zoneHeight);
+    zoneJump.setInteractive();
+    zoneJump.on('pointerdown', () => zoneClicked(ZoneType.JUMP, true, scene));
+    zoneJump.on('pointerup', () => zoneClicked(ZoneType.JUMP, false, scene));
     spaceBarKey.on(DOWN_EVENT, () => (character.isJumping = true), scene);
     spaceBarKey.on(UP_EVENT, () => (character.isJumping = false), scene);
+}
+/**
+ * * Function that handle touch zone actions
+ *
+ * @param zoneType as ZoneType
+ * @param action as the action to set
+ * @param scene as WorldScene
+ */
+async function zoneClicked(zoneType: ZoneType, action: boolean, scene: WorldScene): Promise<void> {
+    const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+    switch (zoneType) {
+        case ZoneType.JUMP:
+            scene.character.isJumping = action;
+            // * We set a timeout to prevent the character to keep jumping when user slides the controls
+            setTimeout(() => {
+                scene.character.isJumping = false;
+            }, 500);
+            if (audioPreference === 'true' && action) {
+                GameEngineSingleton.audioService.playJump(scene);
+            }
+            break;
+    }
 }
 export async function doJumpMovement(scene: Scene, character: Character): Promise<void> {
     const audioPreference = (await Preferences.get({ key: 'EFFECTS_ON' })).value;

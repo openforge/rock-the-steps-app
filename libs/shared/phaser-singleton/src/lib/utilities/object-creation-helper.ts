@@ -58,7 +58,7 @@ export function createPigeonObjectSprite(
     floorHeight: number
 ): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
     let positionY = initialY;
-    const isFlying = Math.floor(2 * Math.random()) === 0;
+    const isFlying = false;
     pigeon.isFlying = isFlying;
     // If is a pigeon it can be already flying or start flying from floor
     // Pigeon variant 0 will fly from floor

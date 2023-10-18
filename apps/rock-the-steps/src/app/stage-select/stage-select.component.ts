@@ -190,30 +190,35 @@ export class StageSelectComponent implements OnInit {
      *
      * @param level selected level
      */
-    public async selectLevel(level: LevelsEnum): Promise<void> {
+    public async selectLevel(level: LevelsEnum, isPrevFinishedInEasy: boolean, isPrevFinishedInMid: boolean, isPrevFinishedInHard: boolean): Promise<void> {
         console.log(`Selected ${level}`);
 
-        await this.modalService
-            .showModal({
-                component: DifficultSelectModalComponent,
-                cssClass: 'difficult-modal',
-                backdropDismiss: false,
-                componentProps: {
-                    level,
-                    difficulties: this.progression.filter(stg => stg.levelName === level),
-                },
-            })
-            .then(() => this.modalService.modalElement);
+        if (isPrevFinishedInEasy || isPrevFinishedInMid || isPrevFinishedInHard) {
+            await this.modalService
+                .showModal({
+                    component: DifficultSelectModalComponent,
+                    cssClass: 'difficult-modal',
+                    backdropDismiss: false,
+                    componentProps: {
+                        level,
+                        difficulties: this.progression.filter(stg => stg.levelName === level),
+                        isPrevFinishedInEasy,
+                        isPrevFinishedInMid,
+                        isPrevFinishedInHard,
+                    },
+                })
+                .then(() => this.modalService.modalElement);
 
-        void this.modalService.modalElement.onWillDismiss().then(async (action: { role: string; data: { difficult: number } }) => {
-            if (action.role !== 'backdrop' && action.data.difficult) {
-                GameEngineSingleton.difficult = action.data.difficult;
+            void this.modalService.modalElement.onWillDismiss().then(async (action: { role: string; data: { difficult: number } }) => {
+                if (action.role !== 'backdrop' && action.data.difficult) {
+                    GameEngineSingleton.difficult = action.data.difficult;
 
-                // * Here load the level
-                void GameEngineSingleton.buildWorld(level, action.data.difficult);
-                await this.goTo(ScreensEnum.PLAY_STAGE);
-            }
-        });
+                    // * Here load the level
+                    void GameEngineSingleton.buildWorld(level, action.data.difficult);
+                    await this.goTo(ScreensEnum.PLAY_STAGE);
+                }
+            });
+        }
     }
 
     /**
