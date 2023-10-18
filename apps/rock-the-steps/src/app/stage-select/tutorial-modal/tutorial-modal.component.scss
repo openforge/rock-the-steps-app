@@ -1,7 +1,7 @@
 .buttons-container-intro {
   display: flex;
   align-items: center;
-  margin: 1rem 0 0 0;
+  margin: 0 0 0 0;
   width: 100%;
   justify-content: center;
   padding: 0 2rem;
@@ -11,7 +11,7 @@
   justify-content: center;
 }
 .title-container h1 {
-  color: var(--gray-base);
+  color: white;
   font-weight: bold;
   font-size: 1.5rem;
 }
@@ -23,7 +23,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: rgb(237, 242, 246, 1.5);
+  background-color: #930916;
   position: relative;
 }
 .button-close {
@@ -48,7 +48,7 @@
   width: auto;
 }
 .container .col img {
-  height: 25vh;
+  height: 50vh;
   width: auto;
 }
 

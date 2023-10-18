@@ -2,7 +2,9 @@
     <ion-toolbar mode="ios">
         <ion-back-button slot="start" color="rts-white" (click)="goTo(screensEnums.MAIN_MENU)">Back</ion-back-button>
         <ion-title>Stage Select</ion-title>
-        <ion-button mode="md" fill="clear" slot="end" class="rts-button-clear" (click)="goTo(screensEnums.LEADERBOARDS)">Leaderboard</ion-button>
+        <ion-button mode="md" fill="clear" slot="end" class="rts-button-clear intro-button" (click)="goTo(screensEnums.LEADERBOARDS)">
+            <ion-icon name="trophy-outline" color="white"></ion-icon>
+        </ion-button>
         <ion-button mode="md" fill="clear" slot="end" class="rts-button-clear intro-button" (click)="showTutorial()">
             <ion-icon name="help" color="white"></ion-icon>
         </ion-button>
