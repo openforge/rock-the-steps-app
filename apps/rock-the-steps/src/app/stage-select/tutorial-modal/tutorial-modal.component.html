@@ -10,19 +10,8 @@
     <ng-template [ngIf]="activeIndex === 1" class="swiper-slide"  id="slideOne">
         <div class="container">
             <div class="row">
-                <p class="intro-text">
-                    Play and finish every single difficulty to unlock a new challenging ones!
-                </p>
-            </div>
-            <div class="row">
                 <div class="col">
-                    <img src="/assets/tutorial/intro1.png">
-                </div>
-                <div class="col">
-                    <img src="/assets/tutorial/intro2.png">
-                </div>
-                <div class="col">
-                    <img src="/assets/tutorial/intro3.png">
+                    <img src="/assets/tutorial/tutorial1.png">
                 </div>
             </div>
         </div>
@@ -31,66 +20,40 @@
     <ng-template [ngIf]="activeIndex === 2" class="swiper-slide"  id="slideTwo">
         <div class="container">
             <div class="row">
-                <p class="intro-text">
-                    Tap on the buttons for move and jump!
-                </p>
-            </div>
-            <div class="row">
                 <div class="col">
-                    <img src="/assets/tutorial/buttons.png">
+                    <img src="/assets/tutorial/tutorial2.png">
                 </div>
             </div>
         </div>
     </ng-template>
-    <!-- SLIDE: 3. Show obstacles and power ups -->
+    <!-- SLIDE: 3. Show obstacles -->
     <ng-template [ngIf]="activeIndex === 3" class="swiper-slide"  id="slideThree">
-        <div class="container-obstacles">
+        <div class="container">
             <div class="col">
                 <div class="row">
-                    <p class="intro-text">
-                        Avoid these obstacles to dont lose health
-                    </p>
-                </div>
-                <div class="row">
                     <div class="">
-                        <img src="/assets/tutorial/obstacle1.png">
-                    </div>
-                    <div class="">
-                        <img src="/assets/tutorial/obstacle2.png">
-                    </div>
-                    <div class="">
-                        <img src="/assets/tutorial/obstacle3.png">
-                    </div>
-                    <div class="">
-                        <img src="/assets/tutorial/obstacle4.png">
+                        <img src="/assets/tutorial/tutorial3.png">
                     </div>
                 </div>
 
             </div>
+        </div>
+    </ng-template>
+    <!-- SLIDE: 4. Show power ups -->
+    <ng-template [ngIf]="activeIndex === 4" class="swiper-slide"  id="slideFour">
+        <div class="container">
             <div class="col">
                 <div class="row">
-                    <p class="intro-text">
-                        These items will give you special gifts! <br>
-                        Discover them on your own!
-                    </p>
+                    <div class="">
+                        <img src="/assets/tutorial/tutorial4.png">
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="">
-                        <img src="/assets/tutorial/power1.png">
-                    </div>
-                    <div class="">
-                        <img src="/assets/tutorial/power3.png">
-                    </div>
-                    <div class="">
-                        <img src="/assets/tutorial/power2.png">
-                    </div>
 
-                </div>
             </div>
         </div>
     </ng-template>
     <div class="buttons-container-intro">
         <ion-button *ngIf="activeIndex !== 1" class="rts-button" (click)="moveSlide(-1)">Previous</ion-button>
-        <ion-button *ngIf="activeIndex !== 3" class="rts-button" (click)="moveSlide(1)">Next</ion-button>
+        <ion-button *ngIf="activeIndex !== 4" class="rts-button" (click)="moveSlide(1)">Next</ion-button>
     </div>
     </div>

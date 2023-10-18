@@ -159,7 +159,7 @@ export function createMovementButtons(scene: WorldScene, character: Character, s
  * @param scene as WorldScene
  */
 async function zoneClicked(zoneType: ZoneType, action: boolean, scene: WorldScene): Promise<void> {
-    const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+    const audioPreference = (await Preferences.get({ key: 'EFFECTS_ON' })).value;
     switch (zoneType) {
         case ZoneType.JUMP:
             scene.character.isJumping = action;
@@ -203,15 +203,15 @@ export async function showPauseModal(_scene: Scene): Promise<void> {
  *
  * @private
  */
-export async function toggleMusic(_scene: Scene, musicButton: Phaser.GameObjects.Image): Promise<void> {
+export async function toggleMusic(scene: Scene, musicButton: Phaser.GameObjects.Image): Promise<void> {
     const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
-    if (_scene && audioPreference === 'true') {
+    if (scene && audioPreference === 'true') {
         await Preferences.set({ key: 'AUDIO_ON', value: 'false' });
         void GameEngineSingleton.audioService.pauseBackground();
         musicButton.setTexture(MUTE_BUTTON);
     } else {
         await Preferences.set({ key: 'AUDIO_ON', value: 'true' });
-        void GameEngineSingleton.audioService.resumeBackground();
+        void GameEngineSingleton.audioService.playBackground(scene);
         musicButton.setTexture(MUSIC_BUTTON);
     }
 }
