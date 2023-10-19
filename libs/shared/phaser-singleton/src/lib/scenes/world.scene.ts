@@ -346,7 +346,8 @@ export class WorldScene extends Phaser.Scene {
                 this.physics.add.collider(this.firstFloor.sprite, pigeonSprite);
                 this.physics.add.collider(this.character.sprite, pigeonSprite, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);
             } else {
-                ObstacleHelper.createObjects(worldObject, this, x, y, this.obstacleGroup, this.floorLevel, this.firstFloorHeight);
+                const obstacle = ObstacleHelper.createObjects(worldObject, this, x, y, this.obstacleGroup, this.floorLevel, this.firstFloorHeight);
+                if (worldObject.name === Objects.BELL) this.physics.add.collider(this.character.sprite, obstacle, this.obstacleHandler.bind(this));
             }
             this.physics.add.collider(this.firstFloor.sprite, this.obstacleGroup);
             this.physics.add.collider(this.character.sprite, this.obstacleGroup, this.obstacleHandler.bind(this) as ArcadePhysicsCallback);

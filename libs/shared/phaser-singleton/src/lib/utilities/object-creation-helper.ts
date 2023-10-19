@@ -1,4 +1,6 @@
 import {
+    BELL_GRAVITY,
+    BELL_MINIMUM_OFFSET,
     FLYER_PIGEONS_Y_OFFSET,
     OBJECTS_SPRITE_KEY,
     Pigeon,
@@ -91,8 +93,8 @@ export function createPigeonObjectSprite(
 export function createObjects(worldObject: WorldObject, scene: Phaser.Scene, initialX: number, initialY: number, obstacleGroup: Phaser.Physics.Arcade.Group, floorNumber: number, floorHeight: number) {
     // * If it's a BELL, Modify how it displays
     if (worldObject.name === Objects.BELL) {
-        // TODO - Have bell fall from mid screen instead
-        // initialX = scene.sys.canvas.width + scene.sys.canvas.width / HALF_DIVIDER;
+        initialX = scene.sys.canvas.width * (Math.random() + BELL_MINIMUM_OFFSET);
+        initialY = 0;
     }
     let tmpSprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody | Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
     if (worldObject.name === Objects.MOON) {
@@ -119,11 +121,17 @@ export function createObjects(worldObject: WorldObject, scene: Phaser.Scene, ini
     const positionY = floorHeight * floorNumber;
     tmpSprite.setDepth(2);
     tmpSprite.setOrigin(0);
-    tmpSprite.body.setImmovable(true);
-    tmpSprite.setImmovable(true);
-    tmpSprite.setPosition(initialX, CONFIG.DEFAULT_HEIGHT - positionY - tmpSprite.displayHeight);
-    tmpSprite.setName(worldObject.name);
-    obstacleGroup.add(tmpSprite);
+    if (worldObject.name !== Objects.BELL) {
+        tmpSprite.body.setImmovable(true);
+        tmpSprite.setImmovable(true);
+        tmpSprite.setPosition(initialX, CONFIG.DEFAULT_HEIGHT - positionY - tmpSprite.displayHeight);
+        tmpSprite.setName(worldObject.name);
+        obstacleGroup.add(tmpSprite);
+    } else {
+        tmpSprite.body.setAllowGravity(true);
+        tmpSprite.setGravityY(BELL_GRAVITY);
+    }
+    return tmpSprite;
 }
 
 /**
