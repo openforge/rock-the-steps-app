@@ -14,13 +14,12 @@ import {
 } from '../../constants/game-keys.constants';
 import {
     DAMAGE_TIMER,
-    DURATION_INVULNERABLE_REP,
+    DURATION_INVULNERABLE_TIME,
     HALF_DIVIDER,
     HEIGHT_OF_JUMP,
     HEIGHT_OF_MOON_JUMP,
     INITIAL_HEALTHBAR_X,
     INITIAL_HEALTHBAR_Y,
-    INVULNERABLE_REPS,
     MOON_GRAVITY,
     MOONSHOES_TIMER,
     NORMAL_GRAVITY,
@@ -44,14 +43,20 @@ export class Character {
     public sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody; // * Player to be used
     public damageValue = 0; // * Amount of damaged received by obstacles
     public damageTimer: Phaser.Time.TimerEvent; // * Timer used to play damage animation for a small time
+    public glovesTimer: Phaser.Time.TimerEvent; // * Timer used to play gloves animation for a small time
+    public moonShoesTimer: Phaser.Time.TimerEvent; // * Timer used to play gloves animation for a small time
     public healthbar: Phaser.GameObjects.Sprite; // * Healthbar used to show the remaining life of the player
     public auraGloves: Phaser.GameObjects.Sprite; //* Sprite used as animation to show that power ups are active
     public auraMoonShoes: Phaser.GameObjects.Sprite; //* Sprite used as animation to show that power ups are active
+    public glovesRemainingTime = 0; // Prop used to measure gloves remaining time
+    public moonShoesRemainingTime = 0; // Prop used to measure moon shoes remaining time
     constructor(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite | Phaser.Physics.Arcade.Sprite) {
         this.sprite = scene.physics.add.sprite(PLAYER_POS_X, PLAYER_POS_Y, CHARACTER_SPRITE_KEY);
         this.sprite.setGravityY(NORMAL_GRAVITY);
         this.sprite.anims.play(WALKING_ANIMATION, true);
         this.sprite.setDepth(2);
+        this.sprite.body.bounce.y = 0;
+        this.sprite.setCollideWorldBounds(true, 0, 0);
         this.healthbar = scene.add.sprite(INITIAL_HEALTHBAR_X, INITIAL_HEALTHBAR_Y, HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}0`);
         this.addFloorCollision(scene, floorTileSprite);
     }
@@ -83,7 +88,6 @@ export class Character {
      * @param scene
      */
     public showGlovesPowerUpAnimation(scene: Phaser.Scene): void {
-        console.log(this.isInvulnerable, this.auraGloves);
         if (this.isInvulnerable && !this.auraGloves) {
             this.auraGloves = scene.add.sprite(this.sprite.x, this.sprite.y, AURA_SPRITE_KEY, AURA_GLOVES_KEY);
             // eslint-disable-next-line no-magic-numbers
@@ -108,13 +112,26 @@ export class Character {
     public addFloorCollision(scene: Scene, floorTileSprite: Phaser.GameObjects.TileSprite | Phaser.Physics.Arcade.Sprite) {
         scene.physics.add.collider(this.sprite, floorTileSprite);
     }
-
     /**
      * Method used to add moon shoes to the player so he can jump higher and smoother
      *
      * @param scene
      */
-    public addMoonShoes(scene: Phaser.Scene): void {
+    public addMoonShoes(scene: Scene): void {
+        if (this.moonShoesTimer) {
+            this.moonShoesRemainingTime += DURATION_INVULNERABLE_TIME;
+            this.moonShoesTimer.destroy();
+        } else {
+            this.moonShoesRemainingTime = DURATION_INVULNERABLE_TIME;
+        }
+        this.startTimerMoonShoes(scene);
+    }
+    /**
+     * Method used to run timer for moonshoes so the player will jump higher and smoother for X time
+     *
+     * @param scene
+     */
+    public startTimerMoonShoes(scene: Phaser.Scene): void {
         this.hasMoonShoes = true;
         this.sprite.setGravityY(MOON_GRAVITY);
         this.damageTimer = scene.time.addEvent({
@@ -127,7 +144,35 @@ export class Character {
             loop: false,
         });
     }
+    /**
+     * Method used to enable gloves
+     *
+     * @param worldObject gloves to be destroyed after used
+     */
+    public makeInvulnerable(scene: Scene): void {
+        if (this.glovesTimer) {
+            this.glovesRemainingTime += DURATION_INVULNERABLE_TIME;
+            this.glovesTimer.destroy();
+        } else {
+            this.glovesRemainingTime = DURATION_INVULNERABLE_TIME;
+        }
+        this.startTimerInvulnerable(scene);
+    }
 
+    /**
+     * Method used to run timer for gloves so the player will jump higher and smoother for X time
+     *
+     * @param scene
+     */
+    public startTimerInvulnerable(scene: Scene): void {
+        this.isInvulnerable = true;
+        this.glovesTimer = scene.time.addEvent({
+            delay: this.glovesRemainingTime, // Duration of each blinking
+            callback: () => {
+                this.isInvulnerable = false;
+            },
+        });
+    }
     /**
      * * Method that performs behaviors of char_sprite depending on flags
      *
@@ -168,28 +213,6 @@ export class Character {
         scene.time.delayedCall(TIMEOUT_TEXT_CHARACTER, () => {
             textoDanio.destroy();
         });
-    }
-    /**
-     * Method used to enable gloves
-     *
-     * @param worldObject gloves to be destroyed after used
-     */
-    public makeInvulnerable(scene: Scene): void {
-        // * If the character it's alreadt with the vulnerable mode then don't assign it again
-        if (!this.isInvulnerable) {
-            this.isInvulnerable = true;
-            scene.tweens.add({
-                targets: this.sprite,
-                alpha: 0,
-                duration: DURATION_INVULNERABLE_REP, // Duration of each blinking
-                repeat: INVULNERABLE_REPS, // Number of repetitions 200 x 10 = 2000millisec
-                yoyo: true, // Type of animation
-                onComplete: () => {
-                    this.sprite.setAlpha(1); // Restore normal opacity
-                    this.isInvulnerable = false;
-                },
-            });
-        }
     }
 
     /**

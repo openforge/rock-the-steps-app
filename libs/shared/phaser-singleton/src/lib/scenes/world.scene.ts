@@ -169,6 +169,9 @@ export class WorldScene extends Phaser.Scene {
         this.character.avoidOutOfBounds();
         this.character.showMoonPowerUpAnimation(this);
         this.character.showGlovesPowerUpAnimation(this);
+        // Decrease the moon shoes and gloves remaining time in case of any
+        if (this.character.glovesRemainingTime > 0) this.character.glovesRemainingTime -= this.game.loop.delta;
+        if (this.character.moonShoesRemainingTime > 0) this.character.moonShoesRemainingTime -= this.game.loop.delta;
         ObstacleHelper.cleanUpObjects(this.obstacleGroup, this.obstaclePigeonGroup);
         StepsHelper.stepsDetection(this.stepsGroup, this.character);
         StepsHelper.floorRotation(this.stepsGroup, this.secondFloor, this.thirdFloor);
