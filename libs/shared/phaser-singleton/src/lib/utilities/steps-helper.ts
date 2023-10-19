@@ -39,12 +39,11 @@ export function stepsDetection(stepsGroup: Phaser.Physics.Arcade.Group, characte
     if (stepsGroup.getChildren().length > 0) {
         stepsGroup.children.iterate((step: Phaser.GameObjects.Image) => {
             if (step) {
-                const playerYBelow = character.sprite.y + character.sprite.height / HALF_DIVIDER;
+                const playerXStart = character.sprite.x - character.sprite.width / HALF_DIVIDER;
                 const stepXEnd = step.x + step.displayWidth / HALF_DIVIDER;
-                const stepYAbove = step.y - step.displayHeight / HALF_DIVIDER;
                 // If player x is at least at the x of stairs AND
                 // Y bottom of player is same or more than stairs (it means he is below) then go UP!
-                if (step && playerYBelow >= stepYAbove && character.sprite.x > step.x) {
+                if (step && character.sprite.x > step.x && playerXStart <= stepXEnd) {
                     character.sprite.setVelocityY(character.isMovingRight ? -UPPER_FLOORS_VELOCITY_WHEN_MOVING : -UPPER_FLOORS_VELOCITY);
                 }
                 if (step.name === STEPS_KEY && stepXEnd <= 0) {
