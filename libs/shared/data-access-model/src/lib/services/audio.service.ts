@@ -11,6 +11,8 @@ import { GameEnum } from '../enums';
 export class AudioService {
     private backgroundAudio: Phaser.Sound.BaseSound; // * Property to store background audio actions
     private jumpAudio: Phaser.Sound.BaseSound; // * Property to store jump audio actions
+    private damageAudio: Phaser.Sound.BaseSound; // * Property to store damage audio actions
+    private powerUpAudio: Phaser.Sound.BaseSound; // * Property to store power up audio actions
 
     /**
      * * Function to start playing the background audio file
@@ -67,6 +69,20 @@ export class AudioService {
             console.error('Error playing jump audio', e);
         }
     }
+    /**
+     * * Function to play damage audio this is similar as playFail but inside a phaser scene
+     *
+     * @param scene as Scene
+     */
+    public async playDamage(scene: Scene): Promise<void> {
+        const effectsEnabled = (await Preferences.get({ key: 'EFFECTS_ON' })).value === 'true';
+        this.damageAudio = scene.sound.add(GameEnum.LOSE, { loop: false });
+        try {
+            if (!this.damageAudio.isPlaying && effectsEnabled) this.damageAudio.play();
+        } catch (e) {
+            console.error('Error playing damageAudio audio', e);
+        }
+    }
 
     /**
      * * Function to play fail audio
@@ -79,7 +95,20 @@ export class AudioService {
             time: 0,
         });
     }
-
+    /**
+     * * Function to play damage audio this is similar as playSuccess but inside a phaser scene
+     *
+     * @param scene as Scene
+     */
+    public async playPowerUp(scene: Scene): Promise<void> {
+        const effectsEnabled = (await Preferences.get({ key: 'EFFECTS_ON' })).value === 'true';
+        this.powerUpAudio = scene.sound.add(GameEnum.WIN, { loop: false });
+        try {
+            if (!this.powerUpAudio.isPlaying && effectsEnabled) this.powerUpAudio.play();
+        } catch (e) {
+            console.error('Error playing powerUpAudio audio', e);
+        }
+    }
     /**
      * * Function to play success audio
      * * Since this is not an audio on the Phaser scene we don't use scene.add.sound, instead we use AudioElement from Angular

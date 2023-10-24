@@ -32,19 +32,36 @@ import { CONFIG } from '../config';
 import { WorldScene } from '../scenes/world.scene';
 
 /**
- * * Method used to create the buttons of movement and jump
+ * Method used to create the buttons of movement and jump
  *
- * @private
+ * @param scene
+ * @param spaceBarKey
+ * @param character
  */
-export async function createButtons(scene: Scene, spaceBarKey: Phaser.Input.Keyboard.Key, character: Character): Promise<void> {
+export async function createButtons(scene: Scene, spaceBarKey: Phaser.Input.Keyboard.Key, character: Character): Promise<Phaser.GameObjects.Text> {
+    const containerWidth = window.innerWidth * 0.5;
+    const container = scene.add.container(window.innerWidth * 0.7, window.innerHeight * 0.12);
+    const containerBackground = scene.add.rectangle(0, 0, containerWidth, 50, 0xffffff, 0.7);
+    containerBackground.setAlpha(0.7);
+    container.add(containerBackground);
+
+    const borderGraphics = scene.add.graphics();
+    borderGraphics.lineStyle(4, 0x000000);
+    borderGraphics.setPosition(0);
+    borderGraphics.strokeRoundedRect(-(containerWidth / 2), -25, containerWidth, 50, 10);
+    container.add(borderGraphics);
+
+    const pointsText = scene.add.text(-(containerWidth / 2) + 10, -15, 'SCORE:0', { fontSize: '32px', color: 'black' });
+    container.add(pointsText);
+
     const pauseButton = scene.add
-        .image(CONFIG.DEFAULT_WIDTH * 0.95, CONFIG.DEFAULT_HEIGHT * 0.05, PAUSE_BUTTON)
+        .image(containerWidth * 0.25, 0, PAUSE_BUTTON)
         .setScale(0.1)
-        .setOrigin(1, 0)
         .setInteractive();
 
     pauseButton.setDepth(3);
     pauseButton.on(POINTER_DOWN_EVENT, () => showPauseModal(scene), scene);
+    container.add(pauseButton);
 
     const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
 
@@ -54,15 +71,15 @@ export async function createButtons(scene: Scene, spaceBarKey: Phaser.Input.Keyb
     }
 
     const musicButton = scene.add
-        .image(CONFIG.DEFAULT_WIDTH * 0.85, CONFIG.DEFAULT_HEIGHT * 0.05, audioButton)
-        .setScale(0.1)
-        .setOrigin(1, 0)
+        .image(containerWidth * 0.4, 0, audioButton)
+        .setScale(0.08)
         .setInteractive();
-
+    container.add(musicButton);
     musicButton.setDepth(3);
     musicButton.on(POINTER_DOWN_EVENT, () => toggleMusic(scene, musicButton), scene);
     spaceBarKey.on(DOWN_EVENT, () => doJumpMovement(scene, character), scene);
     spaceBarKey.on(UP_EVENT, () => (character.isJumping = false), scene);
+    return pointsText;
 }
 /**
  * * Function to create the touch zones in the screen
