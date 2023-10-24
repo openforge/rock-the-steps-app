@@ -29,8 +29,6 @@ import {
     GameEnum,
     HALF_DIVIDER,
     HEALTHBAR_KEY,
-    INITIAL_POINTS_X,
-    INITIAL_POINTS_Y,
     JUMP_AUDIO_KEY,
     JUMP_KEY,
     LevelsEnum,
@@ -120,6 +118,8 @@ export class WorldScene extends Phaser.Scene {
             // * Loading audio files
             this.load.audio(BACKGROUND_AUDIO_KEY, 'assets/phaser-audios/background/background-music-for-mobile-casual-video-game-short-8-bit-music-164703.mp3');
             this.load.audio(JUMP_AUDIO_KEY, 'assets/phaser-audios/jump/cartoon-jump-6462.mp3');
+            this.load.audio(GameEnum.WIN, 'assets/capacitor-sounds/success-1-6297.mp3');
+            this.load.audio(GameEnum.LOSE, 'assets/capacitor-sounds/failure-drum-sound-effect-2-7184.mp3');
             void NativeAudio.preload({
                 assetId: GameEnum.LOSE,
                 assetPath: 'public/assets/capacitor-sounds/failure-drum-sound-effect-2-7184.mp3',
@@ -145,7 +145,7 @@ export class WorldScene extends Phaser.Scene {
         this.scale.orientation = Phaser.Scale.Orientation.LANDSCAPE; // * We need to set the orientation to landscape for the scene
         this.scale.lockOrientation('landscape');
         this.initializeBasicWorld();
-        void createButtons(this, this.spaceBarKey, this.character);
+        this.pointsText = await createButtons(this, this.spaceBarKey, this.character);
         void createMovementButtons(this, this.character, this.spaceBarKey, this.input.keyboard);
         createAnimationsCharacter(this.character.sprite, this);
         this.scale.setGameSize(CONFIG.DEFAULT_WIDTH, CONFIG.DEFAULT_HEIGHT);
@@ -197,7 +197,6 @@ export class WorldScene extends Phaser.Scene {
         this.stepsGroup = this.physics.add.group();
         this.character = new Character(this, this.firstFloor.sprite);
         this.physics.add.existing(this.firstFloor.sprite, true);
-        this.pointsText = this.add.text(INITIAL_POINTS_X, INITIAL_POINTS_Y, '0', { fontSize: '3vh', color: 'black' });
         this.spaceBarKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.backgrounds.push({
             ratioX: BG_RATIO_FLOOR,
@@ -244,6 +243,7 @@ export class WorldScene extends Phaser.Scene {
         if (obstacle.name === Objects.CHEESESTEAK && this.character.damageValue > DAMAGE_MIN_VALUE && this.character.damageValue) {
             this.character.healUp(obstacle, this.obstacleGroup);
             this.character.showTextAbove(this, '#066506', `HEALTH UP!!!`);
+            void GameEngineSingleton.audioService.playPowerUp(this);
         } else if (obstacle.name === Objects.CHEESESTEAK && this.character.damageValue === DAMAGE_MIN_VALUE) {
             // * If object is a cheesesteak and the player is at full heath, do nothing
             this.obstacleGroup.remove(obstacle);
@@ -252,6 +252,7 @@ export class WorldScene extends Phaser.Scene {
             // * If the end is touched send to winning screen
             void this.endGame(GameEnum.WIN);
         } else if (obstacle.name === Objects.GLOVES) {
+            void GameEngineSingleton.audioService.playPowerUp(this);
             //* If gloves is picked up destroy the asset
             obstacle.destroy();
             this.character.showTextAbove(this, '#FFFFFF', `INVINCIBLE!!!`);
@@ -262,12 +263,14 @@ export class WorldScene extends Phaser.Scene {
             this.obstacleGroup.remove(obstacle);
             obstacle.destroy();
         } else if (obstacle.name === Objects.MOON) {
+            void GameEngineSingleton.audioService.playPowerUp(this);
             this.character.showTextAbove(this, '#FFFFFF', `BIG JUMPS!!!`);
             this.character.addMoonShoes(this);
             this.obstacleGroup.remove(obstacle);
             obstacle.destroy();
         } else if (obstacle.name !== Objects.CHEESESTEAK && !this.character.isDamaged && !this.character.isInvulnerable) {
             obstacle.destroy();
+            void GameEngineSingleton.audioService.playDamage(this);
             this.character.receiveDamage(this, GameEngineSingleton.world.difficultyNumber);
             this.character.showTextAbove(this, '#FF0000', `-${GameEngineSingleton.world.damageDecreaseValue}`);
             //if no more damage is allowed send out the player!
@@ -321,7 +324,7 @@ export class WorldScene extends Phaser.Scene {
      * @return void
      */
     private updatePointsText(): void {
-        this.pointsText.setText(`${GameEngineSingleton.points}`);
+        if (this.pointsText) this.pointsText.setText(`SCORE:${GameEngineSingleton.points}`);
     }
 
     /**
