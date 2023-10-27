@@ -35,6 +35,11 @@ ion-modal {
     overflow-y: auto;
   }
 }
+ion-button {
+  --background: var(--rts-red);
+  --background-activated: transparent;
+  --background-focused: transparent;
+}
 
 ion-modal.difficult-modal {
   --height: 90vh;
