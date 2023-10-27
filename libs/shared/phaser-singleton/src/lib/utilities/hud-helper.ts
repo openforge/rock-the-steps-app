@@ -44,11 +44,13 @@ export async function createButtons(scene: Scene, spaceBarKey: Phaser.Input.Keyb
     const container = scene.add.container(window.innerWidth * 0.7, window.innerHeight * 0.12);
     const containerBackground = scene.add.rectangle(0, 0, containerWidth, 50, 0xffffff, 0.7);
     containerBackground.setAlpha(0.7);
+    container.setDepth(3);
     container.add(containerBackground);
 
     const borderGraphics = scene.add.graphics();
     borderGraphics.lineStyle(4, 0x000000);
     borderGraphics.setPosition(0);
+    borderGraphics.setDepth(3);
     borderGraphics.strokeRoundedRect(-(containerWidth / 2), -25, containerWidth, 50, 10);
     container.add(borderGraphics);
 

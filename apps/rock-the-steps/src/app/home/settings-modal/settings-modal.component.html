@@ -1,5 +1,5 @@
 <div class="modal-container">
-    <ion-button class="rts-button button-close" (click)="dismissModal()">
+    <ion-button class="rts-button button-close" fill="outline" (click)="dismissModal()">
         <ion-icon name="close" color="red"></ion-icon>
     </ion-button>
     <div class="title-container">
@@ -12,7 +12,7 @@
             </h6>
         </div>
         <div class="col-4">
-            <ion-button class="rts-button" (click)="toggleMusic()">
+            <ion-button fill="outline" class="rts-button" (click)="toggleMusic()">
                 {{ musicEnabled ? 'ON' : 'OFF'}}
             </ion-button>
         </div>
@@ -22,7 +22,7 @@
             <h6>Effects Sounds</h6>
         </div>
         <div class="col-4">
-            <ion-button class="rts-button" (click)="toggleEffects()">
+            <ion-button fill="outline" class="rts-button" (click)="toggleEffects()">
                 {{ effectsEnabled ? 'ON' : 'OFF'}}
             </ion-button>
         </div>

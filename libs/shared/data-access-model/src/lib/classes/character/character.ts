@@ -134,7 +134,7 @@ export class Character {
     public startTimerMoonShoes(scene: Phaser.Scene): void {
         this.hasMoonShoes = true;
         this.sprite.setGravityY(MOON_GRAVITY);
-        this.damageTimer = scene.time.addEvent({
+        this.moonShoesTimer = scene.time.addEvent({
             delay: MOONSHOES_TIMER,
             callback: () => {
                 this.hasMoonShoes = false;

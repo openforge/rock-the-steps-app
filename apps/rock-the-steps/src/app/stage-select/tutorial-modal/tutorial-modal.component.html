@@ -1,5 +1,5 @@
 <div class="modal-container">
-    <ion-button class="rts-button button-close" (click)="dismissModal()">
+    <ion-button class="rts-button button-close" fill="outline" (click)="dismissModal()">
         <ion-icon name="close" color="red"></ion-icon>
     </ion-button>
     <div class="title-container">
@@ -53,7 +53,7 @@
         </div>
     </ng-template>
     <div class="buttons-container-intro">
-        <ion-button *ngIf="activeIndex !== 1" class="rts-button" (click)="moveSlide(-1)">Previous</ion-button>
-        <ion-button *ngIf="activeIndex !== 4" class="rts-button" (click)="moveSlide(1)">Next</ion-button>
+        <ion-button *ngIf="activeIndex !== 1" class="rts-button" fill="outline" (click)="moveSlide(-1)">Previous</ion-button>
+        <ion-button *ngIf="activeIndex !== 4" class="rts-button" fill="outline" (click)="moveSlide(1)">Next</ion-button>
     </div>
     </div>

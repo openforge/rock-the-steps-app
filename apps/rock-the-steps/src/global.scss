@@ -35,6 +35,11 @@ ion-modal {
     overflow-y: auto;
   }
 }
+ion-button {
+  --background: var(--rts-red);
+  --background-activated: transparent;
+  --background-focused: transparent;
+}
 
 ion-modal.difficult-modal {
   --height: 90vh;
@@ -58,6 +63,9 @@ ion-button.rts-button {
   --background: var(--rts-red);
   --border-color: var(--rts-basic-white);
   --color: var(--rts-basic-white);
+}
+ion-button.ion-activated {
+  --background: var(--rts-red);
 }
 
 ion-button.rts-button > ion-icon {
