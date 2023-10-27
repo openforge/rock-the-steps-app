@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
-import { GameEnum, Stage } from '@openforge/shared/data-access-model';
+import { GameEnum, PreferencesEnum, Stage } from '@openforge/shared/data-access-model';
 
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/game-engine.singleton';
 import { TIMEOUT_REDIRECTION_TO_HOME_SCREEN } from '../../../../../libs/shared/data-access-model/src/lib/constants/game-units.constants';
@@ -66,7 +66,7 @@ export class ResultScreenComponent implements OnInit {
     }
 
     public async updateUserProgression(): Promise<void> {
-        const userProgression = JSON.parse((await Preferences.get({ key: 'PROGRESSION' })).value) as Stage[];
+        const userProgression = JSON.parse((await Preferences.get({ key: PreferencesEnum.PROGRESSION })).value) as Stage[];
         const progressionItem = userProgression.find(
             progression => progression.levelDifficulty === GameEngineSingleton.world.difficultyLevel && progression.levelName === GameEngineSingleton.world.worldType
         );
@@ -78,9 +78,9 @@ export class ResultScreenComponent implements OnInit {
             userProgression[progressionItemIndex].bestScore = GameEngineSingleton.points;
         }
 
-        await Preferences.set({ key: 'PROGRESSION', value: JSON.stringify(userProgression) });
+        await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(userProgression) });
 
-        GameEngineSingleton.totalPoints = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value) + GameEngineSingleton.points;
-        await Preferences.set({ key: 'TOTAL_POINTS', value: GameEngineSingleton.totalPoints.toString() });
+        GameEngineSingleton.totalPoints = Number((await Preferences.get({ key: PreferencesEnum.TOTAL_POINTS })).value) + GameEngineSingleton.points;
+        await Preferences.set({ key: PreferencesEnum.TOTAL_POINTS, value: GameEngineSingleton.totalPoints.toString() });
     }
 }

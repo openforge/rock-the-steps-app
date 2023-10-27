@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
-import { DifficultyEnum, LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
+import { DifficultyEnum, LevelsEnum, PreferencesEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 import { Stage } from 'libs/shared/data-access-model/src/lib/models/stage.interface';
 import { AudioService } from 'libs/shared/data-access-model/src/lib/services/audio.service';
 import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
@@ -200,19 +200,19 @@ export class StageSelectComponent implements OnInit {
 
     async ngOnInit() {
         this.allPointsEarned = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
-        const alreadySawTutorial = await Preferences.get({ key: 'TUTORIAL' });
+        const alreadySawTutorial = await Preferences.get({ key: PreferencesEnum.TUTORIAL });
 
         if (!alreadySawTutorial.value) {
             await this.showTutorial();
-            await Preferences.set({ key: 'TUTORIAL', value: 'true' });
+            await Preferences.set({ key: PreferencesEnum.TUTORIAL, value: 'true' });
         }
 
         // * Check if user has endless mode enable in permissions
         await this.checkIfHasEndlessMode();
-        const userProgression = await Preferences.get({ key: 'PROGRESSION' });
+        const userProgression = await Preferences.get({ key: PreferencesEnum.PROGRESSION });
 
         if (!userProgression.value) {
-            await Preferences.set({ key: 'PROGRESSION', value: JSON.stringify(this.progression) });
+            await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(this.progression) });
         } else {
             this.progression = JSON.parse(userProgression.value) as Stage[];
         }
@@ -223,13 +223,13 @@ export class StageSelectComponent implements OnInit {
      *
      */
     public async checkIfHasEndlessMode(): Promise<void> {
-        const userProgression = await Preferences.get({ key: 'PROGRESSION' });
+        const userProgression = await Preferences.get({ key: PreferencesEnum.PROGRESSION });
         const userProgressionData = JSON.parse(userProgression.value) as Stage[];
         const hasEndlessMode = userProgressionData.filter(snap => snap.levelDifficulty === this.difficultyEnum.ENDLESS);
 
         if (hasEndlessMode.length === 0) {
-            await Preferences.remove({ key: 'PROGRESSION' });
-            await Preferences.set({ key: 'PROGRESSION', value: JSON.stringify(this.progression) });
+            await Preferences.remove({ key: PreferencesEnum.PROGRESSION });
+            await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(this.progression) });
         }
     }
 

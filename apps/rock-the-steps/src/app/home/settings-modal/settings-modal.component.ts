@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
+import { PreferencesEnum } from '@openforge/shared/data-access-model';
 
 import { ModalService } from '../../services/modal.service';
 
@@ -11,14 +12,17 @@ import { ModalService } from '../../services/modal.service';
 export class SettingsModalComponent implements OnInit {
     public musicEnabled = false; //* prop used in the html use to track if music is enabled
     public effectsEnabled = false; //* prop used in the html use to track if effects  is enabled
+    public currentScorePoints = '';
+
     constructor(private modalService: ModalService) {}
 
     /**
      * Implementation of OnInit to setup the sound flag according user selection
      */
     async ngOnInit() {
-        this.musicEnabled = (await Preferences.get({ key: 'AUDIO_ON' })).value === 'true';
-        this.effectsEnabled = (await Preferences.get({ key: 'EFFECTS_ON' })).value === 'true';
+        this.musicEnabled = (await Preferences.get({ key: PreferencesEnum.AUDIO_ON })).value === 'true';
+        this.effectsEnabled = (await Preferences.get({ key: PreferencesEnum.EFFECTS_ON })).value === 'true';
+        this.currentScorePoints = (await Preferences.get({ key: PreferencesEnum.TOTAL_POINTS })).value;
     }
 
     /**
@@ -32,24 +36,32 @@ export class SettingsModalComponent implements OnInit {
      * Method used to toggle either music or effects of the game
      */
     public async toggleMusic(): Promise<void> {
-        const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+        const audioPreference = (await Preferences.get({ key: PreferencesEnum.AUDIO_ON })).value;
         if (audioPreference === 'true') {
-            await Preferences.set({ key: 'AUDIO_ON', value: 'false' });
+            await Preferences.set({ key: PreferencesEnum.AUDIO_ON, value: 'false' });
             this.musicEnabled = false;
         } else {
-            await Preferences.set({ key: 'AUDIO_ON', value: 'true' });
+            await Preferences.set({ key: PreferencesEnum.AUDIO_ON, value: 'true' });
             this.musicEnabled = true;
         }
     }
 
     public async toggleEffects(): Promise<void> {
-        const audioPreference = (await Preferences.get({ key: 'EFFECTS_ON' })).value;
+        const audioPreference = (await Preferences.get({ key: PreferencesEnum.EFFECTS_ON })).value;
         if (audioPreference === 'true') {
-            await Preferences.set({ key: 'EFFECTS_ON', value: 'false' });
+            await Preferences.set({ key: PreferencesEnum.EFFECTS_ON, value: 'false' });
             this.effectsEnabled = false;
         } else {
-            await Preferences.set({ key: 'EFFECTS_ON', value: 'true' });
+            await Preferences.set({ key: PreferencesEnum.EFFECTS_ON, value: 'true' });
             this.effectsEnabled = true;
         }
+    }
+
+    /**
+     * * Function to clear total points
+     */
+    public async clearScorePoints(): Promise<void> {
+        await Preferences.set({ key: PreferencesEnum.TOTAL_POINTS, value: '0' });
+        this.currentScorePoints = (await Preferences.get({ key: PreferencesEnum.TOTAL_POINTS })).value;
     }
 }

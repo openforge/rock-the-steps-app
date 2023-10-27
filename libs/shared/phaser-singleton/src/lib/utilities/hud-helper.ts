@@ -22,6 +22,7 @@ import {
     PAUSE_SCENE,
     POINTER_DOWN_EVENT,
     POINTER_UP_EVENT,
+    PreferencesEnum,
     RIGHT_KEY,
     RIGHT_KEYBOARD,
     UP_EVENT,
@@ -66,7 +67,7 @@ export async function createButtons(scene: Scene, spaceBarKey: Phaser.Input.Keyb
     pauseButton.on(POINTER_DOWN_EVENT, () => showPauseModal(scene), scene);
     container.add(pauseButton);
 
-    const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+    const audioPreference = (await Preferences.get({ key: PreferencesEnum.AUDIO_ON })).value;
 
     let audioButton: string = MUTE_BUTTON;
     if (audioPreference === 'true' || audioPreference === undefined) {
@@ -186,7 +187,7 @@ export async function doJumpMovement(scene: Scene, character: Character): Promis
  * @private
  */
 export async function showPauseModal(_scene: Scene): Promise<void> {
-    const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+    const audioPreference = (await Preferences.get({ key: PreferencesEnum.AUDIO_ON })).value;
     if (_scene) {
         _scene.scene.pause();
         _scene.scene.run(PAUSE_SCENE);
@@ -201,13 +202,13 @@ export async function showPauseModal(_scene: Scene): Promise<void> {
  * @private
  */
 export async function toggleMusic(scene: Scene, musicButton: Phaser.GameObjects.Image): Promise<void> {
-    const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+    const audioPreference = (await Preferences.get({ key: PreferencesEnum.AUDIO_ON })).value;
     if (scene && audioPreference === 'true') {
-        await Preferences.set({ key: 'AUDIO_ON', value: 'false' });
+        await Preferences.set({ key: PreferencesEnum.AUDIO_ON, value: 'false' });
         void GameEngineSingleton.audioService.pauseBackground();
         musicButton.setTexture(MUTE_BUTTON);
     } else {
-        await Preferences.set({ key: 'AUDIO_ON', value: 'true' });
+        await Preferences.set({ key: PreferencesEnum.AUDIO_ON, value: 'true' });
         void GameEngineSingleton.audioService.playBackground(scene);
         musicButton.setTexture(MUSIC_BUTTON);
     }
