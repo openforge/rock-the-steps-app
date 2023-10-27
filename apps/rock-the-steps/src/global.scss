@@ -59,6 +59,9 @@ ion-button.rts-button {
   --border-color: var(--rts-basic-white);
   --color: var(--rts-basic-white);
 }
+ion-button.ion-activated {
+  --background: var(--rts-red);
+}
 
 ion-button.rts-button > ion-icon {
   margin-right: 0.25rem;
