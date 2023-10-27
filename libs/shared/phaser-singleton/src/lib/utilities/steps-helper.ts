@@ -6,7 +6,6 @@ import {
     HALF_DIVIDER,
     STEPS_KEY,
     STEPS_OFFSET_X_FOR_CREATION,
-    UPPER_FLOORS_VELOCITY,
     UPPER_FLOORS_VELOCITY_WHEN_MOVING,
 } from '@openforge/shared/data-access-model';
 import { CONFIG } from '@openforge/shared-phaser-singleton';
@@ -41,10 +40,13 @@ export function stepsDetection(stepsGroup: Phaser.Physics.Arcade.Group, characte
             if (step) {
                 const playerXStart = character.sprite.x - character.sprite.width / HALF_DIVIDER;
                 const stepXEnd = step.x + step.displayWidth / HALF_DIVIDER;
+                const playerY = character.sprite.y;
+                const playerBottomY = playerY + character.sprite.height;
+                const stepY = step.y + step.displayHeight;
                 // If player x is at least at the x of stairs AND
                 // Y bottom of player is same or more than stairs (it means he is below) then go UP!
-                if (step && character.sprite.x > step.x && playerXStart <= stepXEnd) {
-                    character.sprite.setVelocityY(character.isMovingRight ? -UPPER_FLOORS_VELOCITY_WHEN_MOVING : -UPPER_FLOORS_VELOCITY);
+                if (step && character.sprite.x > step.x && playerXStart <= stepXEnd && playerBottomY >= stepY) {
+                    character.sprite.setVelocityY(-UPPER_FLOORS_VELOCITY_WHEN_MOVING);
                 }
                 if (step.name === STEPS_KEY && stepXEnd <= 0) {
                     stepsGroup.setVelocityX(0);
