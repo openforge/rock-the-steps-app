@@ -68,13 +68,13 @@ export class ResultScreenComponent implements OnInit {
     public async updateUserProgression(): Promise<void> {
         const userProgression = JSON.parse((await Preferences.get({ key: 'PROGRESSION' })).value) as Stage[];
         const progressionItem = userProgression.find(
-            progression => progression.levelDifficulity === GameEngineSingleton.world.difficultyLevel && progression.levelName === GameEngineSingleton.world.worldType
+            progression => progression.levelDifficulty === GameEngineSingleton.world.difficultyLevel && progression.levelName === GameEngineSingleton.world.worldType
         );
 
         const progressionItemIndex = userProgression.indexOf(progressionItem);
 
         userProgression[progressionItemIndex].hasCompletedOnce = true;
-        if (progressionItem.bestScore > GameEngineSingleton.points) {
+        if (progressionItem.bestScore > GameEngineSingleton.points || progressionItem.bestScore === 0) {
             userProgression[progressionItemIndex].bestScore = GameEngineSingleton.points;
         }
 
