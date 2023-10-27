@@ -73,14 +73,15 @@ export class ResultScreenComponent implements OnInit {
 
         const progressionItemIndex = userProgression.indexOf(progressionItem);
 
-        userProgression[progressionItemIndex].hasCompletedOnce = true;
         if (progressionItem.bestScore > GameEngineSingleton.points || progressionItem.bestScore === 0) {
             userProgression[progressionItemIndex].bestScore = GameEngineSingleton.points;
         }
 
+        if (!progressionItem.hasCompletedOnce) {
+            GameEngineSingleton.totalPoints = Number((await Preferences.get({ key: PreferencesEnum.TOTAL_POINTS })).value) + GameEngineSingleton.points;
+            await Preferences.set({ key: PreferencesEnum.TOTAL_POINTS, value: GameEngineSingleton.totalPoints.toString() });
+        }
+        userProgression[progressionItemIndex].hasCompletedOnce = true;
         await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(userProgression) });
-
-        GameEngineSingleton.totalPoints = Number((await Preferences.get({ key: PreferencesEnum.TOTAL_POINTS })).value) + GameEngineSingleton.points;
-        await Preferences.set({ key: PreferencesEnum.TOTAL_POINTS, value: GameEngineSingleton.totalPoints.toString() });
     }
 }
