@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
-import { DifficultyEnum, LevelsEnum, ScreensEnum } from '@openforge/shared/data-access-model';
+import { DifficultyEnum, LevelsEnum, PreferencesEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 import { Stage } from 'libs/shared/data-access-model/src/lib/models/stage.interface';
 import { AudioService } from 'libs/shared/data-access-model/src/lib/services/audio.service';
 import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
@@ -28,126 +29,168 @@ export class StageSelectComponent implements OnInit {
         {
             id: `${LevelsEnum.DAYTIME}.${DifficultyEnum.EASY}`,
             levelName: LevelsEnum.DAYTIME,
-            levelDifficulity: DifficultyEnum.EASY,
+            levelDifficulty: DifficultyEnum.EASY,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.DAYTIME}.${DifficultyEnum.MEDIUM}`,
             levelName: LevelsEnum.DAYTIME,
-            levelDifficulity: DifficultyEnum.MEDIUM,
+            levelDifficulty: DifficultyEnum.MEDIUM,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.DAYTIME}.${DifficultyEnum.HARD}`,
             levelName: LevelsEnum.DAYTIME,
-            levelDifficulity: DifficultyEnum.HARD,
+            levelDifficulty: DifficultyEnum.HARD,
+            hasCompletedOnce: false,
+            bestScore: 0,
+        },
+        {
+            id: `${LevelsEnum.DAYTIME}.${DifficultyEnum.ENDLESS}`,
+            levelName: LevelsEnum.DAYTIME,
+            levelDifficulty: DifficultyEnum.ENDLESS,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.SUNSET}.${DifficultyEnum.EASY}`,
             levelName: LevelsEnum.SUNSET,
-            levelDifficulity: DifficultyEnum.EASY,
+            levelDifficulty: DifficultyEnum.EASY,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.SUNSET}.${DifficultyEnum.MEDIUM}`,
             levelName: LevelsEnum.SUNSET,
-            levelDifficulity: DifficultyEnum.MEDIUM,
+            levelDifficulty: DifficultyEnum.MEDIUM,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.SUNSET}.${DifficultyEnum.HARD}`,
             levelName: LevelsEnum.SUNSET,
-            levelDifficulity: DifficultyEnum.HARD,
+            levelDifficulty: DifficultyEnum.HARD,
+            hasCompletedOnce: false,
+            bestScore: 0,
+        },
+        {
+            id: `${LevelsEnum.SUNSET}.${DifficultyEnum.ENDLESS}`,
+            levelName: LevelsEnum.SUNSET,
+            levelDifficulty: DifficultyEnum.ENDLESS,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.NIGHT}.${DifficultyEnum.EASY}`,
             levelName: LevelsEnum.NIGHT,
-            levelDifficulity: DifficultyEnum.EASY,
+            levelDifficulty: DifficultyEnum.EASY,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.NIGHT}.${DifficultyEnum.MEDIUM}`,
             levelName: LevelsEnum.NIGHT,
-            levelDifficulity: DifficultyEnum.MEDIUM,
+            levelDifficulty: DifficultyEnum.MEDIUM,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.NIGHT}.${DifficultyEnum.HARD}`,
             levelName: LevelsEnum.NIGHT,
-            levelDifficulity: DifficultyEnum.HARD,
+            levelDifficulty: DifficultyEnum.HARD,
+            hasCompletedOnce: false,
+            bestScore: 0,
+        },
+        {
+            id: `${LevelsEnum.NIGHT}.${DifficultyEnum.ENDLESS}`,
+            levelName: LevelsEnum.NIGHT,
+            levelDifficulty: DifficultyEnum.ENDLESS,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.KELLY_DRIVE}.${DifficultyEnum.EASY}`,
             levelName: LevelsEnum.KELLY_DRIVE,
-            levelDifficulity: DifficultyEnum.EASY,
+            levelDifficulty: DifficultyEnum.EASY,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.KELLY_DRIVE}.${DifficultyEnum.MEDIUM}`,
             levelName: LevelsEnum.KELLY_DRIVE,
-            levelDifficulity: DifficultyEnum.MEDIUM,
+            levelDifficulty: DifficultyEnum.MEDIUM,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.KELLY_DRIVE}.${DifficultyEnum.HARD}`,
             levelName: LevelsEnum.KELLY_DRIVE,
-            levelDifficulity: DifficultyEnum.HARD,
+            levelDifficulty: DifficultyEnum.HARD,
+            hasCompletedOnce: false,
+            bestScore: 0,
+        },
+        {
+            id: `${LevelsEnum.KELLY_DRIVE}.${DifficultyEnum.ENDLESS}`,
+            levelName: LevelsEnum.KELLY_DRIVE,
+            levelDifficulty: DifficultyEnum.ENDLESS,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.RITTEN_HOUSE}.${DifficultyEnum.EASY}`,
             levelName: LevelsEnum.RITTEN_HOUSE,
-            levelDifficulity: DifficultyEnum.EASY,
+            levelDifficulty: DifficultyEnum.EASY,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.RITTEN_HOUSE}.${DifficultyEnum.MEDIUM}`,
             levelName: LevelsEnum.RITTEN_HOUSE,
-            levelDifficulity: DifficultyEnum.MEDIUM,
+            levelDifficulty: DifficultyEnum.MEDIUM,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.RITTEN_HOUSE}.${DifficultyEnum.HARD}`,
             levelName: LevelsEnum.RITTEN_HOUSE,
-            levelDifficulity: DifficultyEnum.HARD,
+            levelDifficulty: DifficultyEnum.HARD,
+            hasCompletedOnce: false,
+            bestScore: 0,
+        },
+        {
+            id: `${LevelsEnum.RITTEN_HOUSE}.${DifficultyEnum.ENDLESS}`,
+            levelName: LevelsEnum.RITTEN_HOUSE,
+            levelDifficulty: DifficultyEnum.ENDLESS,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.CHINA_TOWN}.${DifficultyEnum.EASY}`,
             levelName: LevelsEnum.CHINA_TOWN,
-            levelDifficulity: DifficultyEnum.EASY,
+            levelDifficulty: DifficultyEnum.EASY,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.CHINA_TOWN}.${DifficultyEnum.MEDIUM}`,
             levelName: LevelsEnum.CHINA_TOWN,
-            levelDifficulity: DifficultyEnum.MEDIUM,
+            levelDifficulty: DifficultyEnum.MEDIUM,
             hasCompletedOnce: false,
             bestScore: 0,
         },
         {
             id: `${LevelsEnum.CHINA_TOWN}.${DifficultyEnum.HARD}`,
             levelName: LevelsEnum.CHINA_TOWN,
-            levelDifficulity: DifficultyEnum.HARD,
+            levelDifficulty: DifficultyEnum.HARD,
+            hasCompletedOnce: false,
+            bestScore: 0,
+        },
+        {
+            id: `${LevelsEnum.CHINA_TOWN}.${DifficultyEnum.ENDLESS}`,
+            levelName: LevelsEnum.CHINA_TOWN,
+            levelDifficulty: DifficultyEnum.ENDLESS,
             hasCompletedOnce: false,
             bestScore: 0,
         },
@@ -157,16 +200,36 @@ export class StageSelectComponent implements OnInit {
 
     async ngOnInit() {
         this.allPointsEarned = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
-        const alreadySawTutorial = await Preferences.get({ key: 'TUTORIAL' });
+        const alreadySawTutorial = await Preferences.get({ key: PreferencesEnum.TUTORIAL });
+
         if (!alreadySawTutorial.value) {
             await this.showTutorial();
-            await Preferences.set({ key: 'TUTORIAL', value: 'true' });
+            await Preferences.set({ key: PreferencesEnum.TUTORIAL, value: 'true' });
         }
-        const userProgression = await Preferences.get({ key: 'PROGRESSION' });
+
+        // * Check if user has endless mode enable in permissions
+        await this.checkIfHasEndlessMode();
+        const userProgression = await Preferences.get({ key: PreferencesEnum.PROGRESSION });
+
         if (!userProgression.value) {
-            await Preferences.set({ key: 'PROGRESSION', value: JSON.stringify(this.progression) });
+            await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(this.progression) });
         } else {
             this.progression = JSON.parse(userProgression.value) as Stage[];
+        }
+    }
+
+    /**
+     * * Logic to know if user has ENDLESS mode in their Preferences
+     *
+     */
+    public async checkIfHasEndlessMode(): Promise<void> {
+        const userProgression = await Preferences.get({ key: PreferencesEnum.PROGRESSION });
+        const userProgressionData = JSON.parse(userProgression.value) as Stage[];
+        const hasEndlessMode = userProgressionData.filter(snap => snap.levelDifficulty === this.difficultyEnum.ENDLESS);
+
+        if (hasEndlessMode.length === 0) {
+            await Preferences.remove({ key: PreferencesEnum.PROGRESSION });
+            await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(this.progression) });
         }
     }
 

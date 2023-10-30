@@ -7,13 +7,11 @@
     </div>
     <div class="row">
         <div class="col-8">
-            <h6>
-                Music Sound
-            </h6>
+            <h6>Music Sound</h6>
         </div>
         <div class="col-4">
             <ion-button fill="outline" class="rts-button" (click)="toggleMusic()">
-                {{ musicEnabled ? 'ON' : 'OFF'}}
+                {{ musicEnabled ? 'ON' : 'OFF' }}
             </ion-button>
         </div>
     </div>
@@ -23,8 +21,16 @@
         </div>
         <div class="col-4">
             <ion-button fill="outline" class="rts-button" (click)="toggleEffects()">
-                {{ effectsEnabled ? 'ON' : 'OFF'}}
+                {{ effectsEnabled ? 'ON' : 'OFF' }}
             </ion-button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <h6>Clear Current Score Points: {{ currentScorePoints }}</h6>
+        </div>
+        <div class="col-4">
+            <ion-button class="rts-button" (click)="clearScorePoints()">Clear Score Points</ion-button>
         </div>
     </div>
 </div>

@@ -1,0 +1,7 @@
+export enum PreferencesEnum {
+    AUDIO_ON = 'AUDIO_ON',
+    EFFECTS_ON = 'EFFECTS_ON',
+    TOTAL_POINTS = 'TOTAL_POINTS',
+    TUTORIAL = 'TUTORIAL',
+    PROGRESSION = 'PROGRESSION',
+}

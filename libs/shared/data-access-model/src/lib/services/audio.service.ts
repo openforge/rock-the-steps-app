@@ -4,7 +4,7 @@ import { NativeAudio } from '@capacitor-community/native-audio';
 import { Scene } from 'phaser';
 
 import { BACKGROUND_AUDIO_KEY, JUMP_AUDIO_KEY } from '../constants/game-keys.constants';
-import { GameEnum } from '../enums';
+import { GameEnum, PreferencesEnum } from '../enums';
 @Injectable({
     providedIn: 'root',
 })
@@ -24,7 +24,7 @@ export class AudioService {
         this.backgroundAudio = scene.sound.add(BACKGROUND_AUDIO_KEY, { loop: true });
         try {
             this.backgroundAudio.play();
-            await Preferences.set({ key: 'AUDIO_ON', value: 'true' });
+            await Preferences.set({ key: PreferencesEnum.AUDIO_ON, value: 'true' });
         } catch (e) {
             console.error('Error playing background audio', e);
         }
@@ -47,10 +47,10 @@ export class AudioService {
      *
      */
     public async resumeBackground(): Promise<void> {
-        const audioPreference = (await Preferences.get({ key: 'AUDIO_ON' })).value;
+        const audioPreference = (await Preferences.get({ key: PreferencesEnum.AUDIO_ON })).value;
         if (this.backgroundAudio && audioPreference === 'true') {
             this.backgroundAudio.resume();
-            await Preferences.set({ key: 'AUDIO_ON', value: 'true' });
+            await Preferences.set({ key: PreferencesEnum.AUDIO_ON, value: 'true' });
         } else {
             console.error('No backgroundAudio key was found');
         }
