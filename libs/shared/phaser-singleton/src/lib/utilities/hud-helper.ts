@@ -21,6 +21,7 @@ import {
     PAUSE_BUTTON,
     PAUSE_SCENE,
     POINTER_DOWN_EVENT,
+    POINTER_MOVE,
     POINTER_UP_EVENT,
     PreferencesEnum,
     RIGHT_KEY,
@@ -98,6 +99,7 @@ export function createMovementButtons(scene: WorldScene, character: Character, s
     const buttonLeft = scene.add.sprite(BUTTON_LEFT_X, CONFIG.DEFAULT_HEIGHT - BUTTONS_MOVE_Y, CONTROLS_KEY, LEFT_KEY);
     buttonLeft.setScale(CONFIG.DEFAULT_CONTROL_SCALE);
     buttonLeft.setInteractive();
+    buttonLeft.input.draggable = false;
     buttonLeft.setDepth(3);
     buttonLeft.on(
         POINTER_DOWN_EVENT,
@@ -109,6 +111,14 @@ export function createMovementButtons(scene: WorldScene, character: Character, s
     );
     buttonLeft.on(
         POINTER_UP_EVENT,
+        () => {
+            buttonLeft.setTexture(CONTROLS_KEY, LEFT_KEY);
+            character.isMovingLeft = false;
+        },
+        scene
+    );
+    buttonLeft.on(
+        POINTER_MOVE,
         () => {
             buttonLeft.setTexture(CONTROLS_KEY, LEFT_KEY);
             character.isMovingLeft = false;
@@ -129,6 +139,14 @@ export function createMovementButtons(scene: WorldScene, character: Character, s
     );
     buttonRight.on(
         POINTER_UP_EVENT,
+        () => {
+            buttonRight.setTexture(CONTROLS_KEY, RIGHT_KEY);
+            character.isMovingRight = false;
+        },
+        scene
+    );
+    buttonRight.on(
+        POINTER_MOVE,
         () => {
             buttonRight.setTexture(CONTROLS_KEY, RIGHT_KEY);
             character.isMovingRight = false;
@@ -167,6 +185,7 @@ export function createMovementButtons(scene: WorldScene, character: Character, s
     buttonJump.setDepth(3);
     buttonJump.on(POINTER_DOWN_EVENT, () => doJumpMovement(scene, character), scene);
     buttonJump.on(POINTER_UP_EVENT, () => (character.isJumping = false), scene);
+    buttonJump.on(POINTER_MOVE, () => (character.isJumping = false), scene);
     spaceBarKey.on(DOWN_EVENT, () => (character.isJumping = true), scene);
     spaceBarKey.on(UP_EVENT, () => (character.isJumping = false), scene);
 }
