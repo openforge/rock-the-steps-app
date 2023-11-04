@@ -77,6 +77,7 @@ export class PhaserSingletonService {
                     type: Phaser.CANVAS, // better for mobile rendering
                     parent: 'stage-main',
                     scale: {
+                        mode: Phaser.Scale.FIT,
                         // mode: Phaser.Scale.ENVELOP <-- works well; but would have to manage aspect ratio manually.
                         // mode: Phaser.Scale.RESIZE,on resize its not scaling (it's resizing) so performance consequences
                         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
