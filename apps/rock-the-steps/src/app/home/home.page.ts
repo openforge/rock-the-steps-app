@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ScreensEnum, User } from '@openforge/shared/data-access-model';
+import { Preferences } from '@capacitor/preferences';
+import { PreferencesEnum, ScreensEnum, User } from '@openforge/shared/data-access-model';
 import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
 
 import { ModalService } from '../services/modal.service';
@@ -14,6 +15,7 @@ import { SettingsModalComponent } from './settings-modal/settings-modal.componen
 export class HomePageComponent implements OnInit {
     public user: User;
     public screensEnum = ScreensEnum; // * Enum used for the navigation screen type safe
+    public showHome = true; // * Flag used to show the welcome screen by the fist time
 
     /**
      * * On Init, initilize the Phaser Singleton instance
@@ -27,6 +29,11 @@ export class HomePageComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         await this.gameCenterLogin();
+        // If is a user in their first time show repo main screen
+        const isKnownUser = (await Preferences.get({ key: PreferencesEnum.KNOWN_USER })).value === 'true';
+        if (!isKnownUser) {
+            this.showHome = false;
+        }
     }
 
     /**
@@ -35,7 +42,12 @@ export class HomePageComponent implements OnInit {
      * @param screen Where the player is going to be navigated
      */
     public async goTo(screen: ScreensEnum): Promise<void> {
-        await this.router.navigate([screen]);
+        if (screen !== ScreensEnum.MAIN_MENU) {
+            await this.router.navigate([screen]);
+        } else {
+            this.showHome = true;
+            await Preferences.set({ key: PreferencesEnum.KNOWN_USER, value: 'true' });
+        }
     }
 
     /**
