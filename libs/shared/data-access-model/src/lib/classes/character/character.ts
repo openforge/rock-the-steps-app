@@ -26,6 +26,7 @@ import {
     ORIGIN_CHARACTER_TEXT,
     PLAYER_POS_X,
     PLAYER_POS_Y,
+    SMALL_JUMP_ON_DAMAGE,
     TEXT_CHARACTER_OFFSET,
     TIMEOUT_TEXT_CHARACTER,
     VELOCITY_PLAYER_WHEN_AUTOMATICALLY,
@@ -263,7 +264,7 @@ export class Character {
     public receiveDamage(scene: Phaser.Scene, difficultyFactor: number): void {
         // If is not invulnerable then affect with damage
         this.damageValue += difficultyFactor;
-        this.sprite.setVelocityY(-VELOCITY_PLAYER_WHEN_MOVING);
+        this.sprite.setVelocityY(-SMALL_JUMP_ON_DAMAGE);
         this.healthbar.setTexture(HEALTHBAR_KEY, `${HEALTHBAR_TEXTURE_PREFIX}${this.damageValue}`);
         // Set damaged flag so no other animations break damaged animation
         // Play damage animation

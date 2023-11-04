@@ -4,4 +4,5 @@ export enum PreferencesEnum {
     TOTAL_POINTS = 'TOTAL_POINTS',
     TUTORIAL = 'TUTORIAL',
     PROGRESSION = 'PROGRESSION',
+    KNOWN_USER = 'KNOWN_USER',
 }
