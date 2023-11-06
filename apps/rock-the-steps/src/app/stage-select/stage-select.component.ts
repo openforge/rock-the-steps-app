@@ -22,10 +22,10 @@ export class StageSelectComponent implements OnInit {
     public levelsEnum = LevelsEnum; // * Enum used to distinguish level selection from user
     public difficultyEnum = DifficultyEnum; // * Enum used to distingush difficulity
     public screensEnums = ScreensEnum; // * Enum used to navigate across the screens
-    public allPointsEarned = 0; // * Number of points the user has earened playing
-
+    public allPointsEarned = 0; // * Number of points the user has earned playing
+    public progression?: Stage[]; // * Prop used to manage the user progression
     // * TODO update this solution to generate in a class
-    public progression: Stage[] = [
+    public originalProgressionObj: Stage[] = [
         {
             id: `${LevelsEnum.DAYTIME}.${DifficultyEnum.EASY}`,
             levelName: LevelsEnum.DAYTIME,
@@ -208,14 +208,13 @@ export class StageSelectComponent implements OnInit {
         }
 
         // * Check if user has endless mode enable in permissions
-        await this.checkIfHasEndlessMode();
         const userProgression = await Preferences.get({ key: PreferencesEnum.PROGRESSION });
-
         if (!userProgression.value) {
-            await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(this.progression) });
+            await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(this.originalProgressionObj) });
         } else {
             this.progression = JSON.parse(userProgression.value) as Stage[];
         }
+        await this.checkIfHasEndlessMode();
     }
 
     /**
@@ -229,7 +228,7 @@ export class StageSelectComponent implements OnInit {
 
         if (hasEndlessMode.length === 0) {
             await Preferences.remove({ key: PreferencesEnum.PROGRESSION });
-            await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(this.progression) });
+            await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(this.originalProgressionObj) });
         }
     }
 
