@@ -3,10 +3,8 @@
 </p>
 <p align="center">
   <a href="http://www.openforge.io/">Official Website</a> |
-  <a href="http://www.openforge.io/opportunities">Opportunities</a> |
-  <a href="https://openforge.io/mobile-academy/">Mobile Academy</a>
+  <a href="https://www.youtube.com/@OpenForge/videos">Subscribe to Youtube Channel</a> |
 </p>
-
 <h3 align="center">
   Leading By Example.
 </h3>
