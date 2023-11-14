@@ -15,7 +15,7 @@ import { SettingsModalComponent } from './settings-modal/settings-modal.componen
 export class HomePageComponent implements OnInit {
     public user: User;
     public screensEnum = ScreensEnum; // * Enum used for the navigation screen type safe
-    public showHome = true; // * Flag used to show the welcome screen by the fist time
+    public showHome = false; // * Flag used to show the welcome screen by the fist time
 
     /**
      * * On Init, initilize the Phaser Singleton instance
@@ -31,8 +31,8 @@ export class HomePageComponent implements OnInit {
         await this.gameCenterLogin();
         // If is a user in their first time show repo main screen
         const isKnownUser = (await Preferences.get({ key: PreferencesEnum.KNOWN_USER })).value === 'true';
-        if (!isKnownUser) {
-            this.showHome = false;
+        if (isKnownUser) {
+            this.showHome = true;
         }
     }
 
