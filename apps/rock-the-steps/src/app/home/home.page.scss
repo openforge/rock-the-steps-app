@@ -84,22 +84,10 @@ ion-footer {
   padding: 0;
   margin: 0;
   text-align: center;
+  width: 100%;
 }
 .welcome-container {
   position: absolute;
   top: 33vh;
   padding: 0 10vw;
-}
-#btn-repo {
-  border-radius: 0.5vw;
-  border: 0.7vh solid #fff;
-  background: #a5ccc7;
-  padding: 0 2vw;
-  text-align: center;
-  height: 9vh;
-  display: flex;
-  color: white;
-  text-decoration: none;
-  justify-content: center;
-  flex-direction: column;
 }

@@ -210,6 +210,7 @@ export class StageSelectComponent implements OnInit {
         // * Check if user has endless mode enable in permissions
         const userProgression = await Preferences.get({ key: PreferencesEnum.PROGRESSION });
         if (!userProgression.value) {
+            this.progression = this.originalProgressionObj;
             await Preferences.set({ key: PreferencesEnum.PROGRESSION, value: JSON.stringify(this.originalProgressionObj) });
         } else {
             this.progression = JSON.parse(userProgression.value) as Stage[];
