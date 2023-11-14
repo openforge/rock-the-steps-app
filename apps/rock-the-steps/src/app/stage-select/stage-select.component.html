@@ -23,48 +23,48 @@
         </div>
         <div class="stage" (click)="selectLevel(levelsEnum.SUNSET, progression[0].hasCompletedOnce, progression[1].hasCompletedOnce, progression[2].hasCompletedOnce)">
             <ion-badge mode="ios">
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[3].hasCompletedOnce }"></ion-icon>
                 <ion-icon name="star" [ngClass]="{ 'is-completed': progression[4].hasCompletedOnce }"></ion-icon>
                 <ion-icon name="star" [ngClass]="{ 'is-completed': progression[5].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[6].hasCompletedOnce }"></ion-icon>
             </ion-badge>
             <img [src]="progression[0].hasCompletedOnce || progression[1].hasCompletedOnce || progression[2].hasCompletedOnce ? '/assets/stages/stage2.png' : '/assets/stages/stage2locked.png'" alt="image_stage_2" />
             <h6 *ngIf="!progression[0].hasCompletedOnce && !progression[1].hasCompletedOnce && !progression[2].hasCompletedOnce">Unlock by finishing 1st World</h6>
         </div>
-        <div class="stage" (click)="selectLevel(levelsEnum.NIGHT, progression[3].hasCompletedOnce, progression[4].hasCompletedOnce, progression[5].hasCompletedOnce)">
+        <div class="stage" (click)="selectLevel(levelsEnum.NIGHT, progression[4].hasCompletedOnce, progression[5].hasCompletedOnce, progression[6].hasCompletedOnce)">
             <ion-badge mode="ios">
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[6].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[7].hasCompletedOnce }"></ion-icon>
                 <ion-icon name="star" [ngClass]="{ 'is-completed': progression[8].hasCompletedOnce }"></ion-icon>
-            </ion-badge>
-            <img [src]="progression[3].hasCompletedOnce || progression[4].hasCompletedOnce || progression[5].hasCompletedOnce ? '/assets/stages/stage3.png' : '/assets/stages/stage3locked.png'" alt="image_stage_3" />
-            <h6 *ngIf="!progression[3].hasCompletedOnce && !progression[4].hasCompletedOnce && !progression[5].hasCompletedOnce">Unlock by finishing 2nd World</h6>
-        </div>
-        <div class="stage" (click)="selectLevel(levelsEnum.KELLY_DRIVE, progression[6].hasCompletedOnce, progression[7].hasCompletedOnce, progression[8].hasCompletedOnce)">
-            <ion-badge mode="ios">
                 <ion-icon name="star" [ngClass]="{ 'is-completed': progression[9].hasCompletedOnce }"></ion-icon>
                 <ion-icon name="star" [ngClass]="{ 'is-completed': progression[10].hasCompletedOnce }"></ion-icon>
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[11].hasCompletedOnce }"></ion-icon>
             </ion-badge>
-            <img [src]="progression[6].hasCompletedOnce || progression[7].hasCompletedOnce || progression[8].hasCompletedOnce ? '/assets/stages/stage4.png' : '/assets/stages/stage4locked.png'" alt="image_stage_4" />
-            <h6 *ngIf="!progression[6].hasCompletedOnce && !progression[7].hasCompletedOnce && !progression[8].hasCompletedOnce">Unlock by finishing 3rd World</h6>
+            <img [src]="progression[4].hasCompletedOnce || progression[5].hasCompletedOnce || progression[6].hasCompletedOnce ? '/assets/stages/stage3.png' : '/assets/stages/stage3locked.png'" alt="image_stage_3" />
+            <h6 *ngIf="!progression[4].hasCompletedOnce && !progression[5].hasCompletedOnce && !progression[6].hasCompletedOnce">Unlock by finishing 2nd World</h6>
         </div>
-        <div class="stage" (click)="selectLevel(levelsEnum.RITTEN_HOUSE, progression[9].hasCompletedOnce, progression[10].hasCompletedOnce, progression[11].hasCompletedOnce)">
+        <div class="stage" (click)="selectLevel(levelsEnum.KELLY_DRIVE, progression[8].hasCompletedOnce, progression[9].hasCompletedOnce, progression[10].hasCompletedOnce)">
             <ion-badge mode="ios">
                 <ion-icon name="star" [ngClass]="{ 'is-completed': progression[12].hasCompletedOnce }"></ion-icon>
                 <ion-icon name="star" [ngClass]="{ 'is-completed': progression[13].hasCompletedOnce }"></ion-icon>
                 <ion-icon name="star" [ngClass]="{ 'is-completed': progression[14].hasCompletedOnce }"></ion-icon>
             </ion-badge>
-            <img [src]="progression[9].hasCompletedOnce || progression[10].hasCompletedOnce || progression[11].hasCompletedOnce ? '/assets/stages/stage5.png' : '/assets/stages/stage5locked.png'" alt="image_stage_5" />
-            <h6 *ngIf="!progression[9].hasCompletedOnce && !progression[10].hasCompletedOnce && !progression[11].hasCompletedOnce">Unlock by finishing 4th World</h6>
+            <img [src]="progression[8].hasCompletedOnce || progression[9].hasCompletedOnce || progression[10].hasCompletedOnce ? '/assets/stages/stage4.png' : '/assets/stages/stage4locked.png'" alt="image_stage_4" />
+            <h6 *ngIf="!progression[8].hasCompletedOnce && !progression[9].hasCompletedOnce && !progression[10].hasCompletedOnce">Unlock by finishing 3rd World</h6>
         </div>
-        <div class="stage" (click)="selectLevel(levelsEnum.CHINA_TOWN, progression[12].hasCompletedOnce, progression[13].hasCompletedOnce, progression[14].hasCompletedOnce)">
+        <div class="stage" (click)="selectLevel(levelsEnum.RITTEN_HOUSE, progression[12].hasCompletedOnce, progression[13].hasCompletedOnce, progression[14].hasCompletedOnce)">
             <ion-badge mode="ios">
-                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[15].hasCompletedOnce }"></ion-icon>
                 <ion-icon name="star" [ngClass]="{ 'is-completed': progression[16].hasCompletedOnce }"></ion-icon>
                 <ion-icon name="star" [ngClass]="{ 'is-completed': progression[17].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[18].hasCompletedOnce }"></ion-icon>
             </ion-badge>
-            <img [src]="progression[12].hasCompletedOnce || progression[13].hasCompletedOnce || progression[14].hasCompletedOnce ? '/assets/stages/stage6.png' : '/assets/stages/stage6locked.png'" alt="image_stage_6" />
-            <h6 *ngIf="!progression[12].hasCompletedOnce && !progression[13].hasCompletedOnce && !progression[14].hasCompletedOnce">Unlock by finishing 5th World</h6>
+            <img [src]="progression[12].hasCompletedOnce || progression[13].hasCompletedOnce || progression[14].hasCompletedOnce ? '/assets/stages/stage5.png' : '/assets/stages/stage5locked.png'" alt="image_stage_5" />
+            <h6 *ngIf="!progression[12].hasCompletedOnce && !progression[13].hasCompletedOnce && !progression[14].hasCompletedOnce">Unlock by finishing 4th World</h6>
+        </div>
+        <div class="stage" (click)="selectLevel(levelsEnum.CHINA_TOWN, progression[16].hasCompletedOnce, progression[17].hasCompletedOnce, progression[18].hasCompletedOnce)">
+            <ion-badge mode="ios">
+                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[20].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[21].hasCompletedOnce }"></ion-icon>
+                <ion-icon name="star" [ngClass]="{ 'is-completed': progression[22].hasCompletedOnce }"></ion-icon>
+            </ion-badge>
+            <img [src]="progression[16].hasCompletedOnce || progression[17].hasCompletedOnce || progression[18].hasCompletedOnce ? '/assets/stages/stage6.png' : '/assets/stages/stage6locked.png'" alt="image_stage_6" />
+            <h6 *ngIf="!progression[16].hasCompletedOnce && !progression[17].hasCompletedOnce && !progression[18].hasCompletedOnce">Unlock by finishing 5th World</h6>
         </div>
     </div>
     <div class="footer">

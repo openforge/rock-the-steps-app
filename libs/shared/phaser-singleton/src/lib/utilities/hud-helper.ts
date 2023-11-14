@@ -21,7 +21,7 @@ import {
     PAUSE_BUTTON,
     PAUSE_SCENE,
     POINTER_DOWN_EVENT,
-    POINTER_MOVE,
+    POINTER_OUT,
     POINTER_UP_EVENT,
     PreferencesEnum,
     RIGHT_KEY,
@@ -117,14 +117,14 @@ export function createMovementButtons(scene: WorldScene, character: Character, s
         },
         scene
     );
-    buttonLeft.on(
-        POINTER_MOVE,
-        () => {
-            buttonLeft.setTexture(CONTROLS_KEY, LEFT_KEY);
-            character.isMovingLeft = false;
-        },
-        scene
-    );
+    // buttonLeft.on(
+    //     POINTER_MOVE,
+    //     () => {
+    //         buttonLeft.setTexture(CONTROLS_KEY, LEFT_KEY);
+    //         character.isMovingLeft = false;
+    //     },
+    //     scene
+    // );
     const buttonRight = scene.add.sprite(BUTTON_RIGHT_X, CONFIG.DEFAULT_HEIGHT - BUTTONS_MOVE_Y, CONTROLS_KEY, RIGHT_KEY);
     buttonRight.setScale(CONFIG.DEFAULT_CONTROL_SCALE);
     buttonRight.setInteractive();
@@ -146,7 +146,7 @@ export function createMovementButtons(scene: WorldScene, character: Character, s
         scene
     );
     buttonRight.on(
-        POINTER_MOVE,
+        POINTER_OUT,
         () => {
             buttonRight.setTexture(CONTROLS_KEY, RIGHT_KEY);
             character.isMovingRight = false;
@@ -185,7 +185,7 @@ export function createMovementButtons(scene: WorldScene, character: Character, s
     buttonJump.setDepth(3);
     buttonJump.on(POINTER_DOWN_EVENT, () => doJumpMovement(scene, character), scene);
     buttonJump.on(POINTER_UP_EVENT, () => (character.isJumping = false), scene);
-    buttonJump.on(POINTER_MOVE, () => (character.isJumping = false), scene);
+    buttonJump.on(POINTER_OUT, () => (character.isJumping = false), scene);
     spaceBarKey.on(DOWN_EVENT, () => (character.isJumping = true), scene);
     spaceBarKey.on(UP_EVENT, () => (character.isJumping = false), scene);
 }
