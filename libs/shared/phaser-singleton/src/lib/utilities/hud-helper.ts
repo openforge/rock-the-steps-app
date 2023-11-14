@@ -117,14 +117,14 @@ export function createMovementButtons(scene: WorldScene, character: Character, s
         },
         scene
     );
-    // buttonLeft.on(
-    //     POINTER_MOVE,
-    //     () => {
-    //         buttonLeft.setTexture(CONTROLS_KEY, LEFT_KEY);
-    //         character.isMovingLeft = false;
-    //     },
-    //     scene
-    // );
+    buttonLeft.on(
+        POINTER_OUT,
+        () => {
+            buttonLeft.setTexture(CONTROLS_KEY, LEFT_KEY);
+            character.isMovingLeft = false;
+        },
+        scene
+    );
     const buttonRight = scene.add.sprite(BUTTON_RIGHT_X, CONFIG.DEFAULT_HEIGHT - BUTTONS_MOVE_Y, CONTROLS_KEY, RIGHT_KEY);
     buttonRight.setScale(CONFIG.DEFAULT_CONTROL_SCALE);
     buttonRight.setInteractive();
