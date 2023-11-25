@@ -199,7 +199,13 @@ export class StageSelectComponent implements OnInit {
     constructor(private router: Router, private modalService: ModalService, private audioService: AudioService, private gameConnectService: GameConnectService) {}
 
     async ngOnInit() {
-        this.allPointsEarned = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
+        let pointsFromLeaderboards = 0;
+        const pointsFromStorage = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
+        if (pointsFromStorage === 0) {
+            pointsFromLeaderboards = (await this.gameConnectService.getUserScore()) || 0;
+        }
+        console.log('Points from to restore', pointsFromStorage, pointsFromLeaderboards);
+        this.allPointsEarned = pointsFromStorage !== 0 ? pointsFromStorage : pointsFromLeaderboards;
         const alreadySawTutorial = await Preferences.get({ key: PreferencesEnum.TUTORIAL });
 
         if (!alreadySawTutorial.value) {
