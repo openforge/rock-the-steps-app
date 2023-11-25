@@ -204,11 +204,10 @@ export class StageSelectComponent implements OnInit {
 
         if (currentPoints === 0) {
             // If no points from storage we will check at lederboards, b/c it could be a existing user who reinstalled
-            currentPoints = await this.gameConnectService.getUserTotalScore();
-            console.log('current points2');
+            currentPoints = (await this.gameConnectService.getUserTotalScore())?.player_score || 0;
             console.log('current points3', currentPoints);
-            alert(currentPoints);
         }
+
         this.allPointsEarned = currentPoints;
         const alreadySawTutorial = await Preferences.get({ key: PreferencesEnum.TUTORIAL });
 
