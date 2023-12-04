@@ -438,9 +438,9 @@ export class WorldScene extends Phaser.Scene {
         PhaserSingletonService.activeGame = undefined;
         GameEngineSingleton.gameEventType.next(result);
         if (result === GameEnum.WIN) {
-            await this.gameConnectService.submitScore(GameEngineSingleton.points);
+            await GameEngineSingleton.gameConnectService.submitScore(GameEngineSingleton.points);
             if (GameEngineSingleton.world.worldType === LevelsEnum.DAYTIME) {
-                await this.gameConnectService.unlockAchievement(FIRST_ACHIEVEMENT_ID);
+                await GameEngineSingleton.gameConnectService.unlockAchievement(FIRST_ACHIEVEMENT_ID);
             }
         }
     }

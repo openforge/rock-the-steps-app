@@ -34,6 +34,7 @@ export class AppComponent implements OnDestroy, OnInit {
         } else {
             this.gameConnectService.leaderboardID = NOT_DEFINED;
         }
+        GameEngineSingleton.gameConnectService = this.gameConnectService;
         if (this.platform.is('capacitor')) {
             this.setScreenOrientation();
         }

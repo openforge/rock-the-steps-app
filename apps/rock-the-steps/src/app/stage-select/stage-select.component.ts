@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { DifficultyEnum, LevelsEnum, PreferencesEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 import { Stage } from 'libs/shared/data-access-model/src/lib/models/stage.interface';
-import { AudioService } from 'libs/shared/data-access-model/src/lib/services/audio.service';
 import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
 
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/game-engine.singleton';
@@ -196,7 +195,7 @@ export class StageSelectComponent implements OnInit {
         },
     ];
 
-    constructor(private router: Router, private modalService: ModalService, private audioService: AudioService, private gameConnectService: GameConnectService) {}
+    constructor(private router: Router, private modalService: ModalService, private gameConnectService: GameConnectService) {}
 
     async ngOnInit() {
         this.allPointsEarned = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
