@@ -5,6 +5,7 @@ import { DifficultyEnum, GameEnum, LevelsEnum } from '@openforge/shared/data-acc
 import { Subject } from 'rxjs';
 
 import { AudioService } from '../../services/audio.service';
+import { GameConnectService } from '../../services/game-connect.service';
 import { World } from '../World.class';
 
 /**
@@ -23,6 +24,7 @@ export class GameEngineSingleton {
     public static totalPoints = 0; // * Number of points accomplished overal
     public static gameEventType = new Subject<GameEnum>(); // * Property to get the GameEventType Enum
     public static audioService: AudioService; // * To have access to the audio service functions
+    public static gameConnectService: GameConnectService; // * To have access to the GameConnect service functions
 
     /**
      * Method used to initialize the world game and the objects

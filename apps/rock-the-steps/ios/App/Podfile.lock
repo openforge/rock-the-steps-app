@@ -12,7 +12,7 @@ PODS:
     - Capacitor
   - CordovaPlugins (5.5.1):
     - CapacitorCordova
-  - OpenforgeCapacitorGameConnect (5.0.1):
+  - OpenforgeCapacitorGameConnect (5.0.2):
     - Capacitor
 
 DEPENDENCIES:
@@ -51,7 +51,7 @@ SPEC CHECKSUMS:
   CapacitorPreferences: f03954bcb0ff09c792909e46bff88e3183c16b10
   CapacitorScreenOrientation: e5ef438489815d05340f1b51a2b1794108dc0ac3
   CordovaPlugins: 7e7553610e64fad8133022c4f4edcd2b95f5ba76
-  OpenforgeCapacitorGameConnect: ebd83137f6e7b95d387aa7f7b5cd44b08b7130e6
+  OpenforgeCapacitorGameConnect: 6c2ab17efbb1373a2a6853816cffe0619767f517
 
 PODFILE CHECKSUM: 1f779615496a3596a6ca60d338f9eb65e97fc649
 
