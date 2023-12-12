@@ -57,10 +57,10 @@ export class GameConnectService {
     }
 
     /**
+     * * Function to get total user score
      *
-     * Get the user total score from capacitor services
      */
-    public async getUserTotalScore() {
+    public async getUserScore(): Promise<{ player_score: number }> {
         return await CapacitorGameConnect.getUserTotalScore({ leaderboardID: this.leaderboardID });
     }
 }

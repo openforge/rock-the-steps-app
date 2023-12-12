@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { DifficultyEnum, LevelsEnum, PreferencesEnum, ScreensEnum } from '@openforge/shared/data-access-model';
 import { Stage } from 'libs/shared/data-access-model/src/lib/models/stage.interface';
-import { AudioService } from 'libs/shared/data-access-model/src/lib/services/audio.service';
 import { GameConnectService } from 'libs/shared/data-access-model/src/lib/services/game-connect.service';
 
 import { GameEngineSingleton } from '../../../../../libs/shared/data-access-model/src/lib/classes/singletons/game-engine.singleton';
@@ -196,7 +195,7 @@ export class StageSelectComponent implements OnInit {
         },
     ];
 
-    constructor(private router: Router, private modalService: ModalService, private audioService: AudioService, private gameConnectService: GameConnectService) {}
+    constructor(private router: Router, private modalService: ModalService, private gameConnectService: GameConnectService) {}
 
     async ngOnInit() {
         let currentPoints = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value) || 0;
@@ -204,7 +203,7 @@ export class StageSelectComponent implements OnInit {
 
         if (currentPoints === 0) {
             // If no points from storage we will check at lederboards, b/c it could be a existing user who reinstalled
-            currentPoints = (await this.gameConnectService.getUserTotalScore())?.player_score || 0;
+            currentPoints = (await this.gameConnectService.getUserScore())?.player_score || 0;
             console.log('current points3', currentPoints);
         }
 
