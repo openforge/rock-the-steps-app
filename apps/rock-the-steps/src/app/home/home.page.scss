@@ -79,12 +79,14 @@ ion-footer {
   --background: transparent;
 }
 .welcome-text {
+  // font-family: 'Mulish';
   font-size: 1rem;
   color: white;
   padding: 0;
   margin: 0;
   text-align: center;
   width: 100%;
+  font-weight: 800;
 }
 .welcome-container {
   position: absolute;

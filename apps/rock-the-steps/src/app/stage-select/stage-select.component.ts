@@ -198,7 +198,14 @@ export class StageSelectComponent implements OnInit {
     constructor(private router: Router, private modalService: ModalService, private gameConnectService: GameConnectService) {}
 
     async ngOnInit() {
-        this.allPointsEarned = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value);
+        let currentPoints = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value) || 0;
+
+        if (currentPoints === 0) {
+            // If no points from storage we will check at lederboards, b/c it could be a existing user who reinstalled
+            currentPoints = (await this.gameConnectService.getUserScore())?.player_score || 0;
+        }
+
+        this.allPointsEarned = currentPoints;
         const alreadySawTutorial = await Preferences.get({ key: PreferencesEnum.TUTORIAL });
 
         if (!alreadySawTutorial.value) {
