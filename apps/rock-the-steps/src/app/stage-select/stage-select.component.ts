@@ -199,12 +199,12 @@ export class StageSelectComponent implements OnInit {
 
     async ngOnInit() {
         let currentPoints = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value) || 0;
-        console.log('current points1', currentPoints);
+        console.log('Points retrieved from local storage: ', currentPoints);
 
         if (currentPoints === 0) {
             // If no points from storage we will check at lederboards, b/c it could be a existing user who reinstalled
             currentPoints = (await this.gameConnectService.getUserScore())?.player_score || 0;
-            console.log('current points3', currentPoints);
+            console.log('Points retrieved from game services: ', currentPoints);
         }
 
         this.allPointsEarned = currentPoints;
