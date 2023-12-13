@@ -70,12 +70,17 @@ ion-button.ion-activated {
 ion-button.repo-button {
   --background: var(--repo-blue);
   --border-color: var(--rts-basic-white);
-  --color: var(--rts-basic-white);
+  --color: black;
 }
 ion-button.rts-button > ion-icon {
   margin-right: 0.25rem;
 }
-
+.buttons-repo {
+  --border-width: 0.3rem;
+  --border-radius: 1rem;
+  font-weight: bold;
+  // font-family: 'Paytone One';
+}
 ion-back-button {
   color: var(--rts-basic-white);
   text-decoration: underline;
