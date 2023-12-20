@@ -260,8 +260,6 @@ export class StageSelectComponent implements OnInit {
      * @param level selected level
      */
     public async selectLevel(level: LevelsEnum, isPrevFinishedInEasy: boolean, isPrevFinishedInMid: boolean, isPrevFinishedInHard: boolean): Promise<void> {
-        console.log(`Selected ${level}`);
-
         if (isPrevFinishedInEasy || isPrevFinishedInMid || isPrevFinishedInHard) {
             await this.modalService
                 .showModal({
