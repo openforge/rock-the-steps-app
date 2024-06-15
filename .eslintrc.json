@@ -16,7 +16,7 @@
             }
         }
     },
-    "ignorePatterns": ["node_modules/**"],
+    "ignorePatterns": ["node_modules/**", "android/**", "ios/**"],
     "overrides": [
         {
             "files": ["*.ts"],
@@ -145,7 +145,7 @@
         },
         {
             "files": ["*.js"],
-            "parser": "babel-eslint"
+            "parser": "@babel/eslint-parser"
         },
         {
             "files": ["*.html"],

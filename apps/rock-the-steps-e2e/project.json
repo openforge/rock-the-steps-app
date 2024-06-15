@@ -3,6 +3,8 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "apps/rock-the-steps-e2e/src",
     "projectType": "application",
+    "tags": [],
+    "implicitDependencies": ["rock-the-steps"],
     "targets": {
         "e2e": {
             "executor": "@nx/cypress:cypress",
@@ -17,13 +19,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["apps/rock-the-steps-e2e/**/*.ts"]
-            }
+            "executor": "@nx/eslint:lint"
         }
-    },
-    "tags": [],
-    "implicitDependencies": ["rock-the-steps"]
+    }
 }

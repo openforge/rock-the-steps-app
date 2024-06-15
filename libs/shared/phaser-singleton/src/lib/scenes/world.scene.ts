@@ -240,18 +240,18 @@ export class WorldScene extends Phaser.Scene {
      */
     private obstacleHandler(player: Phaser.Types.Physics.Arcade.GameObjectWithBody, obstacle: Phaser.Types.Physics.Arcade.GameObjectWithBody): void {
         console.log(`Colliding ${player.name} with ${obstacle.name}`);
-        if (obstacle.name === Objects.CHEESESTEAK && this.character.damageValue > DAMAGE_MIN_VALUE && this.character.damageValue) {
+        if (obstacle.name === `${Objects.CHEESESTEAK}` && this.character.damageValue > DAMAGE_MIN_VALUE && this.character.damageValue) {
             this.character.healUp(obstacle, this.obstacleGroup);
             this.character.showTextAbove(this, '#066506', `HEALTH UP!!!`);
             void GameEngineSingleton.audioService.playPowerUp(this);
-        } else if (obstacle.name === Objects.CHEESESTEAK && this.character.damageValue === DAMAGE_MIN_VALUE) {
+        } else if (obstacle.name === `${Objects.CHEESESTEAK}` && this.character.damageValue === DAMAGE_MIN_VALUE) {
             // * If object is a cheesesteak and the player is at full heath, do nothing
             this.obstacleGroup.remove(obstacle);
             obstacle.destroy();
         } else if (obstacle.name === END_KEY) {
             // * If the end is touched send to winning screen
             void this.endGame(GameEnum.WIN);
-        } else if (obstacle.name === Objects.GLOVES) {
+        } else if (obstacle.name === `${Objects.GLOVES}`) {
             void GameEngineSingleton.audioService.playPowerUp(this);
             //* If gloves is picked up destroy the asset
             obstacle.destroy();
@@ -262,13 +262,13 @@ export class WorldScene extends Phaser.Scene {
         } else if (this.character.isInvulnerable) {
             this.obstacleGroup.remove(obstacle);
             obstacle.destroy();
-        } else if (obstacle.name === Objects.MOON) {
+        } else if (obstacle.name === `${Objects.MOON}`) {
             void GameEngineSingleton.audioService.playPowerUp(this);
             this.character.showTextAbove(this, '#FFFFFF', `BIG JUMPS!!!`);
             this.character.addMoonShoes(this);
             this.obstacleGroup.remove(obstacle);
             obstacle.destroy();
-        } else if (obstacle.name !== Objects.CHEESESTEAK && !this.character.isDamaged && !this.character.isInvulnerable) {
+        } else if (obstacle.name !== `${Objects.CHEESESTEAK}` && !this.character.isDamaged && !this.character.isInvulnerable) {
             obstacle.destroy();
             void GameEngineSingleton.audioService.playDamage(this);
             this.character.receiveDamage(this, GameEngineSingleton.world.difficultyNumber);

@@ -4,6 +4,7 @@
     "projectType": "application",
     "sourceRoot": "apps/rock-the-steps/src",
     "prefix": "openforge",
+    "tags": [],
     "targets": {
         "build": {
             "executor": "@angular-devkit/build-angular:browser",
@@ -63,32 +64,28 @@
             "executor": "@angular-devkit/build-angular:dev-server",
             "configurations": {
                 "production": {
-                    "browserTarget": "rock-the-steps:build:production"
+                    "buildTarget": "rock-the-steps:build:production"
                 },
                 "development": {
-                    "browserTarget": "rock-the-steps:build:development"
+                    "buildTarget": "rock-the-steps:build:development"
                 }
             },
-            "defaultConfiguration": "development"
+            "defaultConfiguration": "development",
         },
         "extract-i18n": {
             "executor": "@angular-devkit/build-angular:extract-i18n",
             "options": {
-                "browserTarget": "rock-the-steps:build"
+                "buildTarget": "rock-the-steps:build"
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "options": {
-                "lintFilePatterns": ["apps/rock-the-steps/src/**/*.ts", "apps/rock-the-steps/src/**/*.html"]
-            }
+            "executor": "@nx/eslint:lint"
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/apps/rock-the-steps"],
             "options": {
-                "jestConfig": "apps/rock-the-steps/jest.config.ts",
-                "passWithNoTests": true
+                "jestConfig": "apps/rock-the-steps/jest.config.ts"
             }
         },
         "stylelint": {
@@ -98,6 +95,5 @@
                 "lintFilePatterns": ["apps/rock-the-steps/**/*.css", "apps/rock-the-steps/**/*.scss"]
             }
         }
-    },
-    "tags": []
+    }
 }

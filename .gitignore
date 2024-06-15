@@ -109,3 +109,6 @@ dist
 .DS_Store
 /.idea/
 .idea
+
+.nx/cache
+.nx/workspace-data
