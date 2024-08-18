@@ -1,17 +1,4 @@
 {
-    "npmScope": "openforge",
-    "affected": {
-        "defaultBase": "develop"
-    },
-    "tasksRunnerOptions": {
-        "default": {
-            "runner": "nx-cloud",
-            "options": {
-                "cacheableOperations": ["build", "lint", "test", "e2e", "stylelint"],
-                "accessToken": "ZTc0NjI3MjctMWU5Ny00NTRlLWIxMjgtYjI1MmMzM2E2ZWIyfHJlYWQtd3JpdGU="
-            }
-        }
-    },
     "generators": {
         "@nx/angular:application": {
             "style": "scss",
@@ -47,16 +34,32 @@
     "targetDefaults": {
         "build": {
             "dependsOn": ["^build"],
-            "inputs": ["production", "^production"]
-        },
-        "lint": {
-            "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
-        },
-        "test": {
-            "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.ts"]
+            "inputs": ["production", "^production"],
+            "cache": true
         },
         "e2e": {
-            "inputs": ["default", "^production"]
+            "inputs": ["default", "^production"],
+            "cache": true
+        },
+        "stylelint": {
+            "cache": true
+        },
+        "@nx/jest:jest": {
+            "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.ts"],
+            "cache": true,
+            "options": {
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        },
+        "@nx/eslint:lint": {
+            "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+            "cache": true
         }
     },
     "namedInputs": {
@@ -70,5 +73,8 @@
             "!{projectRoot}/jest.config.[jt]s",
             "!{projectRoot}/src/test-setup.[jt]s"
         ]
-    }
+    },
+    "nxCloudAccessToken": "ZTc0NjI3MjctMWU5Ny00NTRlLWIxMjgtYjI1MmMzM2E2ZWIyfHJlYWQtd3JpdGU=",
+    "useInferencePlugins": false,
+    "defaultBase": "develop"
 }

@@ -17,7 +17,10 @@ export class ResultScreenComponent implements OnInit {
     public gameEnum = GameEnum; // * Enum prop used in the template
     public gameSingleton = GameEngineSingleton; // * GameSingleton property used in the template
 
-    constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        private router: Router
+    ) {}
 
     async ngOnInit(): Promise<void> {
         this.activatedRoute.queryParams.subscribe(params => {

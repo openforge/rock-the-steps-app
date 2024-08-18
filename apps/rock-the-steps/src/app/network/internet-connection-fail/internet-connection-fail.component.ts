@@ -11,7 +11,12 @@ import { ModalService } from '../../services/modal.service';
     styleUrls: ['./internet-connection-fail.component.scss'],
 })
 export class InternetConnectionFailComponent {
-    constructor(private router: Router, private loadingController: LoadingController, private alertController: AlertController, private modalService: ModalService) {}
+    constructor(
+        private router: Router,
+        private loadingController: LoadingController,
+        private alertController: AlertController,
+        private modalService: ModalService
+    ) {}
 
     /**
      * * Function to retrieve newtork status

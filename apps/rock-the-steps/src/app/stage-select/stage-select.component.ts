@@ -195,7 +195,11 @@ export class StageSelectComponent implements OnInit {
         },
     ];
 
-    constructor(private router: Router, private modalService: ModalService, private gameConnectService: GameConnectService) {}
+    constructor(
+        private router: Router,
+        private modalService: ModalService,
+        private gameConnectService: GameConnectService
+    ) {}
 
     async ngOnInit() {
         let currentPoints = Number((await Preferences.get({ key: 'TOTAL_POINTS' })).value) || 0;

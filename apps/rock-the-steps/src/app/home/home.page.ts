@@ -25,7 +25,11 @@ export class HomePageComponent implements OnInit {
      * If we don't delay it, the canvas size in preload() and create() will be 0.
      * With the delay the canvas size will be set correctly.
      */
-    constructor(private router: Router, private gameConnectService: GameConnectService, private modalService: ModalService) {}
+    constructor(
+        private router: Router,
+        private gameConnectService: GameConnectService,
+        private modalService: ModalService
+    ) {}
 
     async ngOnInit(): Promise<void> {
         await this.gameCenterLogin();

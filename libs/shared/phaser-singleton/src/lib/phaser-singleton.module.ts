@@ -21,7 +21,10 @@ export class PhaserSingletonService {
     public static activeGame: Phaser.Game; // * Property to set the active game
     private static ngZone: NgZone; // * Property to set the ngZone class
 
-    constructor(private _ngZone: NgZone, @Optional() @SkipSelf() parentModule?: PhaserSingletonService) {
+    constructor(
+        private _ngZone: NgZone,
+        @Optional() @SkipSelf() parentModule?: PhaserSingletonService
+    ) {
         if (parentModule) {
             console.error('Phaser Singleton is already loaded. Import it in the AppModule only');
         } else {
