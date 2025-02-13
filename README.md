@@ -8,6 +8,10 @@
 
 # Rock The Steps
 
+<p align="center">
+  <img src="https://github.com/openforge/rock-the-steps-app/blob/develop/screenshot.png"/>
+</p>
+
 For install the dependencies `npm install`.  
 Note: In case you are running issues becase the Macs M1/Intel chip variations try deleting package.lock and install again.  
 For run on web browser `npm run start`
